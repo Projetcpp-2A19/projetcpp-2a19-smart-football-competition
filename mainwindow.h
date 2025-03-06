@@ -2,9 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QString>
-#include <QMessageBox>
-#include "joueur.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -20,15 +18,13 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-
 private slots:
-    void on_pushButton_ajouter_clicked();
-
-    void on_pushButton_7_clicked();
-
-    void on_pushButton_8_clicked();
+    void on_pushButton_clicked();
+private slots:
+    void openDialog();
 
 private:
     Ui::MainWindow *ui;
+
 };
 #endif // MAINWINDOW_H

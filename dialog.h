@@ -2,8 +2,6 @@
 #define DIALOG_H
 
 #include <QDialog>
-#include <QMessageBox>
-#include "joueur.h"
 
 namespace Ui {
 class Dialog;
@@ -17,12 +15,8 @@ public:
     explicit Dialog(QWidget *parent = nullptr);
     ~Dialog();
 
-private slots:
-    void on_pushButton_clicked();
-
 private:
     Ui::Dialog *ui;
-    Joueur Jtmp;
 };
 
 #endif // DIALOG_H

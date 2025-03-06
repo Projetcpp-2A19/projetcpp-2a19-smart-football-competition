@@ -1,0 +1,4 @@
+<RCC>
+    <qresource lang="xml" prefix="/new/prefix1"/>
+    <qresource prefix="/new/prefix1"/>
+</RCC>

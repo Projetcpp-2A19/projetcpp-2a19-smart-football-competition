@@ -1,44 +1,108 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include "dialog.h"
-#include "dialog2.h"
-#include "ui_dialog2.h"
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+connect(ui->page, &QPushButton::clicked, this, &MainWindow::openDialog);
 
-    QPixmap first(":/images/logo.png");
-    ui->first->setPixmap(first);
-    ui->first->setScaledContents(true);
-
-
-    QPixmap logoo(":/logo.png");
+    QPixmap image("C:\\Users\\rayen\\Downloads\\Screenshot_2025-01-26_014639-removebg-preview.png");
 
 
-    ui->logoo->setPixmap(logoo);
+ ui->logoo->setPixmap(image);
 
 
     ui->logoo->setScaledContents(true);
 
+ QTableWidget *tableWidget = new QTableWidget(3, 4);
+ tableWidget->setHorizontalHeaderLabels({"", "Rang", "Score", "Pays d’origine"});
+ QPixmap home("C:\\Users\\rayen\\Downloads\\Screenshot_2025-02-13_021115-removebg-preview.png");
 
 
-    ui->first->setScaledContents(true);
-
-    QPixmap chart(":/logo.png");
+ ui->home->setPixmap(home);
 
 
-    ui->chart->setPixmap(chart);
+ ui->home->setScaledContents(true);
+ QPixmap set("C:\\Users\\rayen\\Downloads\\Screenshot_2025-02-13_021120-removebg-preview.png");
 
 
-    ui->chart->setScaledContents(true);
+ ui->set->setPixmap(set);
 
 
-    ui->tableWidget->resizeColumnsToContents();  // Automatically resize columns based on their content
-    ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);  // Stretch columns to fill space
-    ui->tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);    // Stretch rows to fill space
+ ui->set->setScaledContents(true);
+
+
+ QPixmap filter("C:\\Users\\rayen\\Downloads\\Screenshot_2025-02-12_212956-removebg-preview.png");
+
+
+ ui->filter->setPixmap(filter);
+
+
+ ui->filter->setScaledContents(true);
+
+ QPixmap pattern("C:\\Users\\rayen\\Downloads\\Screenshot_2025-02-12_212952-removebg-preview.png");
+
+
+ ui->pattern->setPixmap(pattern);
+
+
+ ui->pattern->setScaledContents(true);
+
+
+
+ QPixmap chart("C:\\Users\\rayen\\Downloads\\Screenshot_2025-02-12_215513-removebg-preview.png");
+
+
+ ui->chart->setPixmap(chart);
+
+
+ ui->chart->setScaledContents(true);
+
+
+
+ QPixmap first("C:\\Users\\rayen\\Downloads\\Screenshot_2025-02-12_220804-removebg-preview.png");
+
+
+ ui->first->setPixmap(first);
+
+
+ ui->first->setScaledContents(true);
+
+ QPixmap ysar("C:\\Users\\rayen\\Downloads\\Screenshot_2025-02-12_223231-removebg-preview.png");
+
+
+ ui->ysar->setPixmap(ysar);
+
+
+ ui->ysar->setScaledContents(true);
+
+
+ QPixmap ymin("C:\\Users\\rayen\\Downloads\\Screenshot_2025-02-12_223234-removebg-preview.png");
+
+
+ ui->ymin->setPixmap(ymin);
+
+
+ ui->ymin->setScaledContents(true);
+
+
+
+
+
+    // Set manual column widths
+    /*tab->setColumnWidth(0, 100);  // First column width = 100px
+    tab->setColumnWidth(1, 50);   // Second column width = 50px
+
+    // Automatically resize columns to their contents (removes extra space)
+    tab->resizeColumnsToContents();*/
+
+
+ ui->tableWidget->resizeColumnsToContents();  // Automatically resize columns based on their content
+ ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);  // Stretch columns to fill space
+ ui->tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);    // Stretch rows to fill space
+
 
 
 }
@@ -48,46 +112,9 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
-
-
-void MainWindow::on_pushButton_ajouter_clicked()
+void MainWindow::openDialog()
 {
-    int id = ui->lineEdit_id->text().toInt();
-    QString nom = ui->lineEdit_nom->text();
-    QString prenom = ui->lineEdit_prenom->text();
-    QString poste = ui->lineEdit_poste->text();
-    int nbr_but = ui->lineEdit_but->text().toInt();
-    int nbr_passe = ui->lineEdit_passe->text().toInt();
-    int carton_j = ui->lineEdit_cartonJ->text().toInt();
-    int carton_r = ui->lineEdit_cartonR->text().toInt();
-
-    Joueur J(id,nom,prenom,poste,nbr_but,nbr_passe,carton_j,carton_r);
-
-    bool test = J.ajouter();
-    if(test){
-        QMessageBox::information(nullptr, QObject::tr("OK"),
-                                 QObject::tr("Ajout effectué \n"), QMessageBox::Cancel);
-    }
-    else{
-        QMessageBox::critical(nullptr, QObject::tr("Not OK"),
-                              QObject::tr("Ajout non effectué \n"), QMessageBox::Cancel);
-    }
-}
-
-
-void MainWindow::on_pushButton_7_clicked()
-{
-    Dialog *dialog = new Dialog(this);
-    dialog->setWindowTitle("Supprimer un joueur");
-    dialog->exec();
-}
-
-
-void MainWindow::on_pushButton_8_clicked()
-{
-    Dialog2 *dialog = new Dialog2(this);
-    dialog->setWindowTitle("Afficher les joueurs");
-    dialog->exec();
+    Dialog dialog(this);  // This assumes Dialog is already instantiated elsewhere
+    dialog.exec(); // Show the Dialog in a modal way
 }
 

@@ -5,6 +5,12 @@
 #include <QString>
 #include <QMessageBox>
 #include "joueur.h"
+#include "dialog.h"
+#include "dialog2.h"
+#include "ui_dialog2.h"
+#include <QRegularExpressionValidator>
+#include <QSqlQuery>
+#include <QDebug>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -22,13 +28,19 @@ public:
 
 
 private slots:
+     void on_lineEdit_nom_textChanged(const QString &text);
+     void on_lineEdit_prenom_textChanged(const QString &text);
+
     void on_pushButton_ajouter_clicked();
-
-    void on_pushButton_7_clicked();
-
-    void on_pushButton_8_clicked();
+    void on_pushButton_supp_clicked();
+    void on_tableView_clicked(const QModelIndex &index);
+    void on_pushButton_modifier_clicked();
 
 private:
     Ui::MainWindow *ui;
+    Joueur Jtmp;
+public:
+    int getNextId();
+    void remplirComboBoxEquipe();
 };
 #endif // MAINWINDOW_H

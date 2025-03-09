@@ -11,25 +11,23 @@ CONFIG += c++17
 
 SOURCES += \
     connection.cpp \
-    dialog.cpp \
-    dialog2.cpp \
     joueur.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     connection.h \
-    dialog.h \
-    dialog2.h \
     joueur.h \
     mainwindow.h
 
 FORMS += \
-    dialog.ui \
-    dialog2.ui \
     mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    image.qrc \
+    image.qrc

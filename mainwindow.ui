@@ -14,26 +14,13 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="ymin">
-    <property name="geometry">
-     <rect>
-      <x>800</x>
-      <y>20</y>
-      <width>31</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>TextLabel</string>
-    </property>
-   </widget>
    <widget class="QLineEdit" name="lineEdit_prenom">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>210</y>
+      <x>230</x>
+      <y>90</y>
       <width>141</width>
-      <height>21</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -45,8 +32,8 @@ color: rgb(46, 52, 76);</string>
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>130</y>
+      <x>230</x>
+      <y>120</y>
       <width>111</width>
       <height>31</height>
      </rect>
@@ -59,30 +46,26 @@ font: 14pt &quot;Haettenschweiler&quot;;</string>
      <string>Nom</string>
     </property>
    </widget>
-   <widget class="QLabel" name="filter">
+   <widget class="QLabel" name="back">
     <property name="geometry">
      <rect>
-      <x>710</x>
-      <y>20</y>
+      <x>750</x>
+      <y>10</y>
       <width>31</width>
       <height>31</height>
      </rect>
     </property>
-    <property name="text">
-     <string>TextLabel</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="pattern">
-    <property name="geometry">
-     <rect>
-      <x>670</x>
-      <y>20</y>
-      <width>31</width>
-      <height>31</height>
-     </rect>
+    <property name="styleSheet">
+     <string notr="true">image: url(:/pic/back.jpeg);</string>
     </property>
     <property name="text">
-     <string>TextLabel</string>
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap resource="image.qrc">:/pic/back.jpeg</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton">
@@ -130,9 +113,9 @@ font: 12pt &quot;Haettenschweiler&quot;;
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>220</x>
-      <y>10</y>
-      <width>201</width>
+      <x>210</x>
+      <y>0</y>
+      <width>191</width>
       <height>51</height>
      </rect>
     </property>
@@ -156,8 +139,8 @@ QLabel {
    <widget class="QLabel" name="label_8">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>330</y>
+      <x>220</x>
+      <y>300</y>
       <width>161</width>
       <height>31</height>
      </rect>
@@ -167,10 +150,10 @@ QLabel {
 font: 14pt &quot;Haettenschweiler&quot;;</string>
     </property>
     <property name="text">
-     <string>Goal    Assist      R          J</string>
+     <string>     Goal                         Assist                </string>
     </property>
    </widget>
-   <widget class="QLabel" name="logoo">
+   <widget class="QLabel" name="logo">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -179,16 +162,26 @@ font: 14pt &quot;Haettenschweiler&quot;;</string>
       <height>141</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">
+image: url(:/pic/logo.png);</string>
+    </property>
     <property name="text">
-     <string>logo</string>
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>logo.png</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_cartonR">
     <property name="geometry">
      <rect>
-      <x>330</x>
-      <y>360</y>
-      <width>31</width>
+      <x>230</x>
+      <y>390</y>
+      <width>51</width>
       <height>31</height>
      </rect>
     </property>
@@ -202,10 +195,10 @@ font: 14pt &quot;Haettenschweiler&quot;;</string>
    <widget class="QPushButton" name="pushButton_ajouter">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>400</y>
-      <width>141</width>
-      <height>31</height>
+      <x>230</x>
+      <y>430</y>
+      <width>151</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -217,17 +210,26 @@ color: rgb(255, 254, 242);</string>
      <string>Ajouter</string>
     </property>
    </widget>
-   <widget class="QLabel" name="ysar">
+   <widget class="QLabel" name="filtre">
     <property name="geometry">
      <rect>
-      <x>760</x>
-      <y>20</y>
+      <x>700</x>
+      <y>10</y>
       <width>31</width>
       <height>31</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">image: url(:/pic/filtre.jpeg);</string>
+    </property>
     <property name="text">
-     <string>TextLabel</string>
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>filtre.jpeg</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_3">
@@ -275,8 +277,8 @@ font: 12pt &quot;Haettenschweiler&quot;;
    <widget class="QLabel" name="label_6">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>230</y>
+      <x>230</x>
+      <y>180</y>
       <width>101</width>
       <height>31</height>
      </rect>
@@ -292,8 +294,8 @@ font: 14pt &quot;Haettenschweiler&quot;;</string>
    <widget class="QLineEdit" name="lineEdit_7">
     <property name="geometry">
      <rect>
-      <x>430</x>
-      <y>10</y>
+      <x>420</x>
+      <y>0</y>
       <width>321</width>
       <height>51</height>
      </rect>
@@ -313,204 +315,13 @@ QLineEdit:focus {
 </string>
     </property>
    </widget>
-   <widget class="QTableWidget" name="tableWidget">
-    <property name="geometry">
-     <rect>
-      <x>430</x>
-      <y>70</y>
-      <width>411</width>
-      <height>221</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QTableWidget {
-    background-color: #FDF6D0;
-    color: #2E344C;
-    gridline-color: #2E344C;
-    border: 2px solid #2E344C;
-    border-radius: 10px;
-}
-
-QHeaderView::section {
-    background-color: #2E344C;
-    color: #FDF6D0;
-    padding: 5px;
-    border: 1px solid #2E344C;
-}
-
-QTableWidget QTableCornerButton::section {
-    background-color: #2E344C;
-}
-
-QTableWidget::item {
-    padding: 5px;
-    border: 1px solid #2E344C;
-}
-
-QTableWidget::item:selected {
-    background-color: #2E344C;
-    color: #FDF6D0;
-}
-ui-&gt;tab-&gt;setStyleSheet(
-    &quot;QTableWidget {&quot;
-    &quot;   width: 600px;&quot;   // Set the width of the table
-    &quot;   height: 300px;&quot;  // Set the height of the table
-    &quot;}&quot;
-);</string>
-    </property>
-    <row>
-     <property name="text">
-      <string>Messi</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>Ronaldo</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>Neymar</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>Vinicious</string>
-     </property>
-    </row>
-    <column>
-     <property name="text">
-      <string>Equipe</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Poste</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Goal</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Assist</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Carton J/R</string>
-     </property>
-    </column>
-    <item row="0" column="0">
-     <property name="text">
-      <string>Barcelone</string>
-     </property>
-    </item>
-    <item row="0" column="1">
-     <property name="text">
-      <string>Attaque</string>
-     </property>
-    </item>
-    <item row="0" column="2">
-     <property name="text">
-      <string>14</string>
-     </property>
-    </item>
-    <item row="0" column="3">
-     <property name="text">
-      <string>7</string>
-     </property>
-    </item>
-    <item row="0" column="4">
-     <property name="text">
-      <string>2/0</string>
-     </property>
-    </item>
-    <item row="1" column="0">
-     <property name="text">
-      <string>Real Madrid</string>
-     </property>
-    </item>
-    <item row="1" column="1">
-     <property name="text">
-      <string>Attaque</string>
-     </property>
-    </item>
-    <item row="1" column="2">
-     <property name="text">
-      <string>20</string>
-     </property>
-    </item>
-    <item row="1" column="3">
-     <property name="text">
-      <string>8</string>
-     </property>
-    </item>
-    <item row="1" column="4">
-     <property name="text">
-      <string>3/0</string>
-     </property>
-    </item>
-    <item row="2" column="0">
-     <property name="text">
-      <string>Barcelone</string>
-     </property>
-    </item>
-    <item row="2" column="1">
-     <property name="text">
-      <string>Attaque</string>
-     </property>
-    </item>
-    <item row="2" column="2">
-     <property name="text">
-      <string>18</string>
-     </property>
-    </item>
-    <item row="2" column="3">
-     <property name="text">
-      <string>6</string>
-     </property>
-    </item>
-    <item row="2" column="4">
-     <property name="text">
-      <string>1/2</string>
-     </property>
-    </item>
-    <item row="3" column="0">
-     <property name="text">
-      <string>Real Madrid</string>
-     </property>
-    </item>
-    <item row="3" column="1">
-     <property name="text">
-      <string>Attaque</string>
-     </property>
-    </item>
-    <item row="3" column="2">
-     <property name="text">
-      <string>17</string>
-     </property>
-    </item>
-    <item row="3" column="3">
-     <property name="text">
-      <string>3</string>
-     </property>
-    </item>
-    <item row="3" column="4">
-     <property name="text">
-      <string>2/4</string>
-     </property>
-    </item>
-   </widget>
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>220</x>
-      <y>70</y>
-      <width>201</width>
-      <height>451</height>
+      <x>210</x>
+      <y>60</y>
+      <width>191</width>
+      <height>471</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -526,36 +337,6 @@ QLabel {
     </property>
     <property name="text">
      <string/>
-    </property>
-   </widget>
-   <widget class="QLabel" name="chart">
-    <property name="geometry">
-     <rect>
-      <x>450</x>
-      <y>320</y>
-      <width>231</width>
-      <height>151</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true"/>
-    </property>
-    <property name="text">
-     <string>TextLabel</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="lineEdit_equipe">
-    <property name="geometry">
-     <rect>
-      <x>250</x>
-      <y>310</y>
-      <width>141</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 255, 255);
-color: rgb(46, 52, 76);</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_5">
@@ -602,7 +383,7 @@ background-color: rgb(46, 52, 76);</string>
       <x>190</x>
       <y>0</y>
       <width>661</width>
-      <height>551</height>
+      <height>561</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -612,57 +393,12 @@ background-color: rgb(46, 52, 76);</string>
      <string/>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_poste">
-    <property name="geometry">
-     <rect>
-      <x>250</x>
-      <y>260</y>
-      <width>141</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 255, 255);
-color: rgb(46, 52, 76);</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="first">
-    <property name="geometry">
-     <rect>
-      <x>690</x>
-      <y>320</y>
-      <width>131</width>
-      <height>151</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>TextLabel</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_7">
-    <property name="geometry">
-     <rect>
-      <x>250</x>
-      <y>440</y>
-      <width>141</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(46, 52, 76);
-font: 12pt &quot;Haettenschweiler&quot;;
-color: rgb(255, 254, 242);</string>
-    </property>
-    <property name="text">
-     <string>Supprimer un joueur</string>
-    </property>
-   </widget>
    <widget class="QLineEdit" name="lineEdit_but">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>360</y>
-      <width>31</width>
+      <x>230</x>
+      <y>330</y>
+      <width>51</width>
       <height>31</height>
      </rect>
     </property>
@@ -676,8 +412,8 @@ color: rgb(255, 254, 242);</string>
    <widget class="QLabel" name="label_7">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>280</y>
+      <x>230</x>
+      <y>240</y>
       <width>101</width>
       <height>31</height>
      </rect>
@@ -690,36 +426,12 @@ font: 14pt &quot;Haettenschweiler&quot;;</string>
      <string>Equipe</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_9">
-    <property name="geometry">
-     <rect>
-      <x>430</x>
-      <y>300</y>
-      <width>411</width>
-      <height>191</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QLabel {
-    border-radius: 10px; /* Adjust the value for roundness */
-	background-color: rgb(46, 52, 76);
-}
-QLabel {
-    border: 2px solid #2E344C;  /* Border color */
-    padding: 5px;               /* Optional: Adds space inside the label */
-}
-</string>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
    <widget class="QLineEdit" name="lineEdit_passe">
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>360</y>
-      <width>31</width>
+      <x>330</x>
+      <y>330</y>
+      <width>51</width>
       <height>31</height>
      </rect>
     </property>
@@ -733,9 +445,9 @@ QLabel {
    <widget class="QLineEdit" name="lineEdit_cartonJ">
     <property name="geometry">
      <rect>
-      <x>370</x>
-      <y>360</y>
-      <width>31</width>
+      <x>330</x>
+      <y>390</y>
+      <width>51</width>
       <height>31</height>
      </rect>
     </property>
@@ -749,18 +461,18 @@ QLabel {
    <widget class="QLineEdit" name="lineEdit_nom">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>160</y>
+      <x>230</x>
+      <y>150</y>
       <width>141</width>
-      <height>22</height>
+      <height>31</height>
      </rect>
     </property>
    </widget>
    <widget class="QLabel" name="label_10">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>190</y>
+      <x>230</x>
+      <y>70</y>
       <width>49</width>
       <height>16</height>
      </rect>
@@ -773,23 +485,37 @@ font: 14pt &quot;Haettenschweiler&quot;;</string>
      <string>Prenom</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_id">
+   <widget class="QLabel" name="label_9">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>110</y>
-      <width>141</width>
-      <height>22</height>
+      <x>410</x>
+      <y>370</y>
+      <width>441</width>
+      <height>151</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+    border-radius: 10px; /* Adjust the value for roundness */
+   background-color: rgb(253, 246, 208); /* Optional background color */
+}
+QLabel {
+    border: 2px solid #2E344C;  /* Border color */
+    padding: 5px;               /* Optional: Adds space inside the label */
+}
+</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
    </widget>
-   <widget class="QLabel" name="label_11">
+   <widget class="QLabel" name="label_13">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>90</y>
-      <width>101</width>
-      <height>16</height>
+      <x>420</x>
+      <y>370</y>
+      <width>301</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -798,15 +524,44 @@ font: 14pt &quot;Haettenschweiler&quot;;
 </string>
     </property>
     <property name="text">
-     <string>Identifiant</string>
+     <string>Veuillez saisir l'identifiant du joueur à supprimer :</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_8">
+   <widget class="QLabel" name="label_14">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>480</y>
-      <width>141</width>
+      <x>420</x>
+      <y>440</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(46, 52, 76);
+font: 14pt &quot;Haettenschweiler&quot;;
+
+</string>
+    </property>
+    <property name="text">
+     <string>Identifiant :</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_supp">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>460</y>
+      <width>113</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_supp">
+    <property name="geometry">
+     <rect>
+      <x>744</x>
+      <y>450</y>
+      <width>91</width>
       <height>31</height>
      </rect>
     </property>
@@ -816,49 +571,231 @@ font: 12pt &quot;Haettenschweiler&quot;;
 color: rgb(255, 254, 242);</string>
     </property>
     <property name="text">
-     <string>Afficher les joueurs</string>
+     <string>Supprimer</string>
+    </property>
+   </widget>
+   <widget class="QTableView" name="tableView">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>70</y>
+      <width>431</width>
+      <height>281</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QTableWidget {
+    background-color: #FDF6D0;
+    color: #2E344C;
+    gridline-color: #2E344C;
+    border: 2px solid #2E344C;
+    border-radius: 10px;
+}
+
+QHeaderView::section {
+    background-color: #2E344C;
+    color: #FDF6D0;
+    padding: 5px;
+    border: 1px solid #2E344C;
+}
+
+QTableWidget QTableCornerButton::section {
+    background-color: #2E344C;
+}
+
+QTableWidget::item {
+    padding: 5px;
+    border: 1px solid #2E344C;
+}
+
+QTableWidget::item:selected {
+    background-color: #2E344C;
+    color: #FDF6D0;
+}
+ui-&gt;tab-&gt;setStyleSheet(
+    &quot;QTableWidget {&quot;
+    &quot;   width: 600px;&quot;   // Set the width of the table
+    &quot;   height: 300px;&quot;  // Set the height of the table
+    &quot;}&quot;
+);</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="next">
+    <property name="geometry">
+     <rect>
+      <x>800</x>
+      <y>10</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">image: url(:/pic/next.jpeg);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap resource="image.qrc">:/pic/next.jpeg</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_modifier">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>480</y>
+      <width>151</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(46, 52, 76);
+font: 12pt &quot;Haettenschweiler&quot;;
+color: rgb(255, 254, 242);</string>
+    </property>
+    <property name="text">
+     <string>Modifier</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox_poste">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>210</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);
+color: rgb(46, 52, 76);</string>
+    </property>
+    <item>
+     <property name="text">
+      <string>BU</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>AD</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>AG</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>MC</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>MOC</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>MDC</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>DC</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>DG</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>DD</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>G</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QComboBox" name="comboBox_equipe">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>270</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);
+color: rgb(46, 52, 76);</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_11">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>360</y>
+      <width>181</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(46, 52, 76);
+font: 14pt &quot;Haettenschweiler&quot;;</string>
+    </property>
+    <property name="text">
+     <string>Carton jaune       Carton rouge</string>
     </property>
    </widget>
    <zorder>label_2</zorder>
    <zorder>label_3</zorder>
    <zorder>label</zorder>
-   <zorder>ymin</zorder>
    <zorder>lineEdit_prenom</zorder>
    <zorder>label_5</zorder>
-   <zorder>filter</zorder>
-   <zorder>pattern</zorder>
    <zorder>pushButton</zorder>
    <zorder>pushButton_4</zorder>
    <zorder>label_4</zorder>
    <zorder>label_8</zorder>
-   <zorder>logoo</zorder>
+   <zorder>logo</zorder>
    <zorder>lineEdit_cartonR</zorder>
    <zorder>pushButton_ajouter</zorder>
-   <zorder>ysar</zorder>
    <zorder>pushButton_3</zorder>
    <zorder>pushButton_2</zorder>
    <zorder>label_6</zorder>
    <zorder>lineEdit_7</zorder>
-   <zorder>tableWidget</zorder>
-   <zorder>lineEdit_equipe</zorder>
    <zorder>pushButton_5</zorder>
-   <zorder>lineEdit_poste</zorder>
-   <zorder>pushButton_7</zorder>
    <zorder>lineEdit_but</zorder>
    <zorder>label_7</zorder>
-   <zorder>label_9</zorder>
-   <zorder>first</zorder>
-   <zorder>chart</zorder>
    <zorder>lineEdit_passe</zorder>
    <zorder>lineEdit_cartonJ</zorder>
    <zorder>lineEdit_nom</zorder>
    <zorder>label_10</zorder>
-   <zorder>lineEdit_id</zorder>
+   <zorder>label_9</zorder>
+   <zorder>label_13</zorder>
+   <zorder>label_14</zorder>
+   <zorder>lineEdit_supp</zorder>
+   <zorder>pushButton_supp</zorder>
+   <zorder>tableView</zorder>
+   <zorder>back</zorder>
+   <zorder>next</zorder>
+   <zorder>filtre</zorder>
+   <zorder>pushButton_modifier</zorder>
+   <zorder>comboBox_poste</zorder>
+   <zorder>comboBox_equipe</zorder>
    <zorder>label_11</zorder>
-   <zorder>pushButton_8</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources/>
+ <resources>
+  <include location="image.qrc"/>
+ </resources>
  <connections/>
 </ui>

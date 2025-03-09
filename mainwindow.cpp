@@ -1,46 +1,47 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
-#include "dialog.h"
-#include "dialog2.h"
-#include "ui_dialog2.h"
+#include <QSqlError>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->tableView->setModel(Jtmp.afficher());
+    remplirComboBoxEquipe();
 
-    QPixmap first(":/images/logo.png");
-    ui->first->setPixmap(first);
-    ui->first->setScaledContents(true);
+    ui->tableView->resizeColumnsToContents();  // Automatically resize columns based on their content
+    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);  // Stretch columns to fill space
+    ui->tableView->verticalHeader()->setVisible(false);
+    //Nom :
+    // Valider que le nom ne contient que des lettres et des espaces
+    QRegularExpression regex("^[A-Za-zÀ-ÖØ-öø-ÿ\\s]+$");
+    QRegularExpressionValidator *validator = new QRegularExpressionValidator(regex, this);
+    ui->lineEdit_nom->setValidator(validator);
+    ui->lineEdit_prenom->setValidator(validator);
 
+    // Limiter la longueur du texte
+    ui->lineEdit_nom->setMaxLength(20);
+    ui->lineEdit_prenom->setMaxLength(20);
 
-    QPixmap logoo(":/logo.png");
+    // Connecter le signal textChanged à un slot pour mettre la première lettre en majuscule
+    connect(ui->lineEdit_nom, &QLineEdit::textChanged, this, &MainWindow::on_lineEdit_nom_textChanged);
+    connect(ui->lineEdit_prenom, &QLineEdit::textChanged, this, &MainWindow::on_lineEdit_nom_textChanged);
 
+    QIntValidator *validatorBut = new QIntValidator(this);
+    QIntValidator *validatorPasse = new QIntValidator(this);
+    QIntValidator *validatorCartonJ = new QIntValidator(this);
+    QIntValidator *validatorCartonR = new QIntValidator(this);
 
-    ui->logoo->setPixmap(logoo);
+    ui->lineEdit_but->setValidator(validatorBut);
+    ui->lineEdit_passe->setValidator(validatorPasse);
+    ui->lineEdit_cartonJ->setValidator(validatorCartonJ);
+    ui->lineEdit_cartonR->setValidator(validatorCartonR);
 
-
-    ui->logoo->setScaledContents(true);
-
-
-
-    ui->first->setScaledContents(true);
-
-    QPixmap chart(":/logo.png");
-
-
-    ui->chart->setPixmap(chart);
-
-
-    ui->chart->setScaledContents(true);
-
-
-    ui->tableWidget->resizeColumnsToContents();  // Automatically resize columns based on their content
-    ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);  // Stretch columns to fill space
-    ui->tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);    // Stretch rows to fill space
-
-
+    validatorBut->setRange(0, 999);
+    validatorPasse->setRange(0, 999);
+    validatorCartonJ->setRange(0, 99);
+    validatorCartonR->setRange(0, 99);
 }
 
 MainWindow::~MainWindow()
@@ -48,46 +49,228 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+int MainWindow::getNextId() {
+    QSqlQuery query;
+    query.prepare("SELECT MAX(id_joueur) FROM joueur"); // Récupère le maximum des id_joueur existants
 
+    if (query.exec() && query.next()) {
+        int maxId = query.value(0).toInt(); // Récupère la valeur maximale
+        return maxId + 1; // Retourne l'id suivant
+    } else {
+        qDebug() << "Erreur lors de la récupération du prochain ID :" << query.lastError().text();
+        return 1; // Retourne 1 si la table est vide ou en cas d'erreur
+    }
+}
 
-
-void MainWindow::on_pushButton_ajouter_clicked()
+//controle de saisie
+void MainWindow::on_lineEdit_nom_textChanged(const QString &text)
 {
-    int id = ui->lineEdit_id->text().toInt();
+    if (!text.isEmpty()) {
+        // Met la première lettre en majuscule
+        QString formattedText = text;
+        formattedText[0] = formattedText[0].toUpper();
+
+        // Si le texte a changé (pour éviter une boucle infinie)
+        if (formattedText != text) {
+            ui->lineEdit_nom->setText(formattedText);
+        }
+    }
+}
+void MainWindow::on_lineEdit_prenom_textChanged(const QString &text)
+{
+    if (!text.isEmpty()) {
+        // Met la première lettre en majuscule
+        QString formattedText = text;
+        formattedText[0] = formattedText[0].toUpper();
+
+        // Si le texte a changé (pour éviter une boucle infinie)
+        if (formattedText != text) {
+            ui->lineEdit_prenom->setText(formattedText);
+        }
+    }
+}
+
+void MainWindow::remplirComboBoxEquipe() {
+    QSqlQueryModel *model = new QSqlQueryModel(this); // Créer un modèle
+
+    model->setQuery("SELECT nom_equipe FROM equipe"); // Exécuter la requête
+
+    if (model->lastError().isValid()) {
+        qDebug() << "Erreur lors de l'exécution de la requête :" << model->lastError().text();
+        return;
+    }
+
+    ui->comboBox_equipe->setModel(model); // Associer le modèle au QComboBox
+    ui->comboBox_equipe->setModelColumn(0); // Afficher la première colonne (nom)
+}
+
+void MainWindow::on_pushButton_ajouter_clicked() {
+    // Récupération des données saisies
     QString nom = ui->lineEdit_nom->text();
     QString prenom = ui->lineEdit_prenom->text();
-    QString poste = ui->lineEdit_poste->text();
+    QString poste = ui->comboBox_poste->currentText();
     int nbr_but = ui->lineEdit_but->text().toInt();
     int nbr_passe = ui->lineEdit_passe->text().toInt();
     int carton_j = ui->lineEdit_cartonJ->text().toInt();
     int carton_r = ui->lineEdit_cartonR->text().toInt();
 
-    Joueur J(id,nom,prenom,poste,nbr_but,nbr_passe,carton_j,carton_r);
+    // Récupération de l'id_equipe
+    QString nomEquipe = ui->comboBox_equipe->currentText();
+    QSqlQuery query;
+    query.prepare("SELECT id_equipe FROM equipe WHERE nom_equipe = :nom");
+    query.bindValue(":nom", nomEquipe);
 
+    if (!query.exec()) {
+        QMessageBox::critical(nullptr, QObject::tr("Erreur"),
+                              QObject::tr("Erreur lors de la récupération de l'équipe.\n"), QMessageBox::Cancel);
+        return;
+    }
+
+    int id_equipe = -1; // Valeur par défaut en cas d'échec
+    if (query.next()) {
+        id_equipe = query.value(0).toInt();
+    } else {
+        QMessageBox::critical(nullptr, QObject::tr("Erreur"),
+                              QObject::tr("Aucune équipe trouvée avec ce nom.\n"), QMessageBox::Cancel);
+        return;
+    }
+
+    // Création de l'objet Joueur (l'id est généré automatiquement dans ajouter())
+    Joueur J(0, nom, prenom, poste, nbr_but, nbr_passe, carton_j, carton_r, id_equipe);
+
+    // Ajout du joueur
     bool test = J.ajouter();
-    if(test){
+    if (test) {
+        // Mise à jour de la table
+        ui->tableView->setModel(Jtmp.afficher());
+
+        // Réinitialisation des champs
+        ui->lineEdit_nom->clear();          // Efface le champ nom
+        ui->lineEdit_prenom->clear();       // Efface le champ prénom
+        ui->comboBox_poste->setCurrentIndex(0); // Réinitialise le comboBox poste
+        ui->lineEdit_but->clear();          // Efface le champ buts
+        ui->lineEdit_passe->clear();        // Efface le champ passes
+        ui->lineEdit_cartonJ->clear();      // Efface le champ cartons jaunes
+        ui->lineEdit_cartonR->clear();      // Efface le champ cartons rouges
+        ui->comboBox_equipe->setCurrentIndex(0); // Réinitialise le comboBox équipe
+
+        // Message de succès
         QMessageBox::information(nullptr, QObject::tr("OK"),
                                  QObject::tr("Ajout effectué \n"), QMessageBox::Cancel);
-    }
-    else{
+    } else {
+        // Message d'erreur
         QMessageBox::critical(nullptr, QObject::tr("Not OK"),
                               QObject::tr("Ajout non effectué \n"), QMessageBox::Cancel);
     }
 }
 
 
-void MainWindow::on_pushButton_7_clicked()
+
+void MainWindow::on_pushButton_supp_clicked()
 {
-    Dialog *dialog = new Dialog(this);
-    dialog->setWindowTitle("Supprimer un joueur");
-    dialog->exec();
+    int id = ui->lineEdit_supp->text().toInt();
+    bool test = Jtmp.supprimer(id);
+
+    if(test){
+        if(test){
+            ui->tableView->setModel(Jtmp.afficher());
+            QMessageBox::information(nullptr, QObject::tr("OK"),
+                                     QObject::tr("Le joueur à été supprimé \n"), QMessageBox::Cancel);
+        }
+        else{
+            QMessageBox::critical(nullptr, QObject::tr("Not OK"),
+                                  QObject::tr("Le joueur n'as pas été supprimé \n"), QMessageBox::Cancel);
+        }
+    }
 }
 
+void MainWindow::on_pushButton_modifier_clicked() {
+    // Récupération de l'ID du joueur à partir de la ligne sélectionnée dans le tableView
+    QModelIndexList selectedIndexes = ui->tableView->selectionModel()->selectedIndexes();
+    if (selectedIndexes.isEmpty()) {
+        QMessageBox::warning(this, "Avertissement", "Veuillez sélectionner un joueur à modifier.");
+        return;
+    }
 
-void MainWindow::on_pushButton_8_clicked()
-{
-    Dialog2 *dialog = new Dialog2(this);
-    dialog->setWindowTitle("Afficher les joueurs");
-    dialog->exec();
+    int row = selectedIndexes.first().row(); // Récupère la ligne sélectionnée
+    int id = ui->tableView->model()->index(row, 0).data().toInt(); // Supposons que l'ID est dans la colonne 0
+
+    // Récupération des autres données saisies
+    QString nom = ui->lineEdit_nom->text();
+    QString prenom = ui->lineEdit_prenom->text();
+    QString poste = ui->comboBox_poste->currentText();
+    int nbr_but = ui->lineEdit_but->text().toInt();
+    int nbr_passe = ui->lineEdit_passe->text().toInt();
+    int carton_j = ui->lineEdit_cartonJ->text().toInt();
+    int carton_r = ui->lineEdit_cartonR->text().toInt();
+
+    // Récupération de l'id_equipe
+    QString nomEquipe = ui->comboBox_equipe->currentText();
+    QSqlQuery query;
+    query.prepare("SELECT id_equipe FROM equipe WHERE nom_equipe = :nom");
+    query.bindValue(":nom", nomEquipe);
+
+    if (!query.exec()) {
+        QMessageBox::critical(nullptr, QObject::tr("Erreur"),
+                              QObject::tr("Erreur lors de la récupération de l'équipe.\n"), QMessageBox::Cancel);
+        return;
+    }
+
+    int id_equipe = -1; // Valeur par défaut en cas d'échec
+    if (query.next()) {
+        id_equipe = query.value(0).toInt();
+    } else {
+        QMessageBox::critical(nullptr, QObject::tr("Erreur"),
+                              QObject::tr("Aucune équipe trouvée avec ce nom.\n"), QMessageBox::Cancel);
+        return;
+    }
+
+    // Création de l'objet Joueur
+    Joueur J(id, nom, prenom, poste, nbr_but, nbr_passe, carton_j, carton_r, id_equipe);
+
+    // Appel de la méthode modifier()
+    bool test = J.modifier();
+    if (test) {
+        ui->tableView->setModel(Jtmp.afficher()); // Mise à jour de la table
+        QMessageBox::information(nullptr, QObject::tr("OK"),
+                                 QObject::tr("Modification effectuée \n"), QMessageBox::Cancel);
+    } else {
+        QMessageBox::critical(nullptr, QObject::tr("Not OK"),
+                              QObject::tr("Modification non effectuée \n"), QMessageBox::Cancel);
+    }
 }
 
+void MainWindow::on_tableView_clicked(const QModelIndex &index) {
+    int row = index.row();
+
+    // Récupération des données du joueur
+    ui->lineEdit_nom->setText(ui->tableView->model()->index(row, 1).data().toString());
+    ui->lineEdit_prenom->setText(ui->tableView->model()->index(row, 2).data().toString());
+    QString poste = ui->tableView->model()->index(row, 3).data().toString();
+    int comboIndex = ui->comboBox_poste->findText(poste);
+    if (comboIndex != -1) {
+        ui->comboBox_poste->setCurrentIndex(comboIndex);
+    } else {
+        qDebug() << "La valeur" << poste << "n'a pas été trouvée dans le QComboBox.";
+    }
+    ui->lineEdit_but->setText(ui->tableView->model()->index(row, 4).data().toString());
+    ui->lineEdit_passe->setText(ui->tableView->model()->index(row, 5).data().toString());
+    ui->lineEdit_cartonJ->setText(ui->tableView->model()->index(row, 6).data().toString());
+    ui->lineEdit_cartonR->setText(ui->tableView->model()->index(row, 7).data().toString());
+
+    // Récupération de l'id_equipe du joueur
+    int id_equipe = ui->tableView->model()->index(row, 8).data().toInt(); // Supposons que l'id_equipe est dans la colonne 8
+
+    // Requête SQL pour récupérer le nom de l'équipe correspondante
+    QSqlQuery query;
+    query.prepare("SELECT nom_equipe FROM equipe WHERE id_equipe = :id_equipe");
+    query.bindValue(":id_equipe", id_equipe);
+
+    if (query.exec() && query.next()) {
+        QString nomEquipe = query.value(0).toString(); // Récupère le nom de l'équipe
+        ui->comboBox_equipe->setCurrentText(nomEquipe); // Affiche le nom de l'équipe dans le QComboBox
+    } else {
+        qDebug() << "Erreur lors de la récupération de l'équipe :" << query.lastError().text();
+        ui->comboBox_equipe->setCurrentIndex(-1); // Efface la sélection si l'équipe n'est pas trouvée
+    }
+}

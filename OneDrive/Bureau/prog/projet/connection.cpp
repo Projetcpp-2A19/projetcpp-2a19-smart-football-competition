@@ -1,17 +1,18 @@
 #include "connection.h"
 #include <QSqlError>
-#include <QSqlQuery>
+#include <QDebug>
 
 Connection::Connection() {
     db = QSqlDatabase::addDatabase("QODBC");
 }
 
 bool Connection::createConnection() {
-    db.setDatabaseName("SFC");
-    db.setUserName("rayen");
-    db.setPassword("rayen");
+    db.setDatabaseName("SFC"); // Your database name
+    db.setUserName("rayen");   // Your username
+    db.setPassword("rayen");   // Your password
 
     if (!db.open()) {
+        qDebug() << "Database error:" << db.lastError().text();
         return false;
     }
     return true;

@@ -1,0 +1,811 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>851</width>
+    <height>531</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>201</width>
+      <height>601</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(46, 52, 76);
+background-color: rgb(46, 52, 76);</string>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>0</y>
+      <width>661</width>
+      <height>551</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 254, 242);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="logoo">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>20</y>
+      <width>161</width>
+      <height>141</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>logo</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>180</y>
+      <width>141</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(46, 52, 76);
+background-color: rgb(253, 246, 208);
+
+font: 12pt &quot;Haettenschweiler&quot;;
+
+</string>
+    </property>
+    <property name="text">
+     <string>Equipes</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_2">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>240</y>
+      <width>141</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(46, 52, 76);
+background-color: rgb(253, 246, 208);
+
+font: 12pt &quot;Haettenschweiler&quot;;
+
+</string>
+    </property>
+    <property name="text">
+     <string>Matchs</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_5">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>420</y>
+      <width>141</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(46, 52, 76);
+background-color: rgb(253, 246, 208);
+
+font: 12pt &quot;Haettenschweiler&quot;;
+
+</string>
+    </property>
+    <property name="text">
+     <string>Supporter</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_4">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>360</y>
+      <width>141</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(46, 52, 76);
+background-color: rgb(253, 246, 208);
+
+font: 12pt &quot;Haettenschweiler&quot;;
+
+</string>
+    </property>
+    <property name="text">
+     <string>Joueus</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_3">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>300</y>
+      <width>141</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(46, 52, 76);
+background-color: rgb(253, 246, 208);
+
+font: 12pt &quot;Haettenschweiler&quot;;
+
+</string>
+    </property>
+    <property name="text">
+     <string>Billets</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>70</y>
+      <width>201</width>
+      <height>421</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+    border-radius: 10px; /* Adjust the value for roundness */
+   background-color: rgb(253, 246, 208); /* Optional background color */
+}
+QLabel {
+    border: 2px solid #2E344C;  /* Border color */
+    padding: 5px;               /* Optional: Adds space inside the label */
+}
+</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>10</y>
+      <width>201</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+    border-radius: 10px; /* Adjust the value for roundness */
+   background-color: rgb(253, 246, 208); /* Optional background color */
+font: 14pt &quot;Haettenschweiler&quot;;
+color: rgb(46, 52, 76);
+}
+QLabel {
+    border: 2px solid #2E344C;  /* Border color */
+    padding: 5px;               /* Optional: Adds space inside the label */
+}
+</string>
+    </property>
+    <property name="text">
+     <string>           Ajouter une équipe</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>120</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);
+border-color: rgb(46, 52, 68);</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>90</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(46, 52, 76);
+font: 14pt &quot;Haettenschweiler&quot;;</string>
+    </property>
+    <property name="text">
+     <string>Nom d'équipe</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>160</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(46, 52, 76);
+font: 14pt &quot;Haettenschweiler&quot;;</string>
+    </property>
+    <property name="text">
+     <string>Pays d'origine</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_2">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>190</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_3">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>260</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_7">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>230</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(46, 52, 76);
+font: 14pt &quot;Haettenschweiler&quot;;</string>
+    </property>
+    <property name="text">
+     <string>Rang</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_8">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>300</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(46, 52, 76);
+font: 14pt &quot;Haettenschweiler&quot;;</string>
+    </property>
+    <property name="text">
+     <string>Score</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_4">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>330</y>
+      <width>41</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string>  W</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_5">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>330</y>
+      <width>41</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string>   L</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_6">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>330</y>
+      <width>41</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string>   D</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_6">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>380</y>
+      <width>141</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(46, 52, 76);
+font: 12pt &quot;Haettenschweiler&quot;;
+color: rgb(255, 254, 242);</string>
+    </property>
+    <property name="text">
+     <string>Enregistrer</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_7">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>430</y>
+      <width>141</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(46, 52, 76);
+font: 12pt &quot;Haettenschweiler&quot;;
+color: rgb(255, 254, 242);</string>
+    </property>
+    <property name="text">
+     <string>Reset</string>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="tableWidget">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>70</y>
+      <width>411</width>
+      <height>221</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QTableWidget {
+    background-color: #FDF6D0;
+    color: #2E344C;
+    gridline-color: #2E344C;
+    border: 2px solid #2E344C;
+    border-radius: 10px;
+}
+
+QHeaderView::section {
+    background-color: #2E344C;
+    color: #FDF6D0;
+    padding: 5px;
+    border: 1px solid #2E344C;
+}
+
+QTableWidget QTableCornerButton::section {
+    background-color: #2E344C;
+}
+
+QTableWidget::item {
+    padding: 5px;
+    border: 1px solid #2E344C;
+}
+
+QTableWidget::item:selected {
+    background-color: #2E344C;
+    color: #FDF6D0;
+}
+ui-&gt;tab-&gt;setStyleSheet(
+    &quot;QTableWidget {&quot;
+    &quot;   width: 600px;&quot;   // Set the width of the table
+    &quot;   height: 300px;&quot;  // Set the height of the table
+    &quot;}&quot;
+);</string>
+    </property>
+    <row>
+     <property name="text">
+      <string>Equipe 1</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Equipe 2</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Equipe 3</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Equipe 4</string>
+     </property>
+    </row>
+    <column>
+     <property name="text">
+      <string>Rang</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Score</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Pays d'origine</string>
+     </property>
+    </column>
+    <item row="0" column="0">
+     <property name="text">
+      <string>1</string>
+     </property>
+    </item>
+    <item row="0" column="1">
+     <property name="text">
+      <string>14-2-0</string>
+     </property>
+    </item>
+    <item row="0" column="2">
+     <property name="text">
+      <string>France</string>
+     </property>
+    </item>
+    <item row="1" column="0">
+     <property name="text">
+      <string>2</string>
+     </property>
+    </item>
+    <item row="1" column="1">
+     <property name="text">
+      <string>15-9-6</string>
+     </property>
+    </item>
+    <item row="1" column="2">
+     <property name="text">
+      <string>Tunisie</string>
+     </property>
+    </item>
+    <item row="2" column="0">
+     <property name="text">
+      <string>3</string>
+     </property>
+    </item>
+    <item row="2" column="1">
+     <property name="text">
+      <string>12-2-2</string>
+     </property>
+    </item>
+    <item row="2" column="2">
+     <property name="text">
+      <string>Belgique</string>
+     </property>
+    </item>
+    <item row="3" column="0">
+     <property name="text">
+      <string>4</string>
+     </property>
+    </item>
+    <item row="3" column="1">
+     <property name="text">
+      <string>8-0-1</string>
+     </property>
+    </item>
+    <item row="3" column="2">
+     <property name="text">
+      <string>France</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_7">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>10</y>
+      <width>321</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLineEdit {
+    background-color: white;        /* White background */
+    border: 2px solid #2E344C;      /* Border color */
+    border-radius: 10px;            /* Rounded corners */
+    padding: 5px;                   /* Padding inside the line edit */
+    color: #2E344C;                 /* Text color */
+}
+
+QLineEdit:focus {
+    border: 2px solid #2E344C;      /* Keep border color when focused */
+}
+</string>
+    </property>
+    <property name="text">
+     <string>    Rechercher</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="pattern">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>20</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="filter">
+    <property name="geometry">
+     <rect>
+      <x>710</x>
+      <y>20</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_9">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>300</y>
+      <width>411</width>
+      <height>191</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+    border-radius: 10px; /* Adjust the value for roundness */
+	background-color: rgb(46, 52, 76);
+}
+QLabel {
+    border: 2px solid #2E344C;  /* Border color */
+    padding: 5px;               /* Optional: Adds space inside the label */
+}
+</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_10">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>310</y>
+      <width>231</width>
+      <height>171</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+    border-radius: 10px; /* Adjust the value for roundness */
+   background-color: rgb(253, 246, 208); /* Optional background color */
+}
+QLabel {
+    border: 2px solid #2E344C;  /* Border color */
+    padding: 5px;               /* Optional: Adds space inside the label */
+}
+</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_11">
+    <property name="geometry">
+     <rect>
+      <x>680</x>
+      <y>310</y>
+      <width>151</width>
+      <height>171</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+    border-radius: 10px; /* Adjust the value for roundness */
+   background-color: rgb(253, 246, 208); /* Optional background color */
+}
+QLabel {
+    border: 2px solid #2E344C;  /* Border color */
+    padding: 5px;               /* Optional: Adds space inside the label */
+}
+</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="chart">
+    <property name="geometry">
+     <rect>
+      <x>450</x>
+      <y>310</y>
+      <width>231</width>
+      <height>151</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="first">
+    <property name="geometry">
+     <rect>
+      <x>690</x>
+      <y>320</y>
+      <width>131</width>
+      <height>151</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="ysar">
+    <property name="geometry">
+     <rect>
+      <x>760</x>
+      <y>20</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="ymin">
+    <property name="geometry">
+     <rect>
+      <x>800</x>
+      <y>20</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="page">
+    <property name="geometry">
+     <rect>
+      <x>830</x>
+      <y>490</y>
+      <width>20</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>PushButton</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="home">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>470</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="set">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>470</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
+   <zorder>label_2</zorder>
+   <zorder>label_9</zorder>
+   <zorder>label_3</zorder>
+   <zorder>label</zorder>
+   <zorder>logoo</zorder>
+   <zorder>pushButton</zorder>
+   <zorder>pushButton_2</zorder>
+   <zorder>pushButton_5</zorder>
+   <zorder>pushButton_4</zorder>
+   <zorder>pushButton_3</zorder>
+   <zorder>label_4</zorder>
+   <zorder>lineEdit</zorder>
+   <zorder>label_5</zorder>
+   <zorder>label_6</zorder>
+   <zorder>lineEdit_2</zorder>
+   <zorder>lineEdit_3</zorder>
+   <zorder>label_7</zorder>
+   <zorder>label_8</zorder>
+   <zorder>lineEdit_4</zorder>
+   <zorder>lineEdit_5</zorder>
+   <zorder>lineEdit_6</zorder>
+   <zorder>pushButton_6</zorder>
+   <zorder>pushButton_7</zorder>
+   <zorder>tableWidget</zorder>
+   <zorder>lineEdit_7</zorder>
+   <zorder>pattern</zorder>
+   <zorder>filter</zorder>
+   <zorder>label_10</zorder>
+   <zorder>label_11</zorder>
+   <zorder>chart</zorder>
+   <zorder>first</zorder>
+   <zorder>ysar</zorder>
+   <zorder>ymin</zorder>
+   <zorder>page</zorder>
+   <zorder>home</zorder>
+   <zorder>set</zorder>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

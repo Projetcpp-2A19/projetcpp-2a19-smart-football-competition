@@ -8,18 +8,18 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    // Create a Connection object and attempt to connect to the database
-    Connection c;
-    bool test = c.createConnection(); // Use your original function name
 
-    // Create the main window
+    Connection c;
+    bool test = c.createConnection();
+
+
     MainWindow w;
 
     // Check if the database connection was successful
     if (test) {
         w.show(); // Show the main window
         QMessageBox::information(nullptr, QObject::tr("Database is open"),
-                                 QObject::tr("Connection successful.\n"), QMessageBox::Cancel);
+                     QObject::tr("Connection successful.\n"), QMessageBox::Cancel);
     }
     else {
         QMessageBox::critical(nullptr, QObject::tr("Database is not open"),

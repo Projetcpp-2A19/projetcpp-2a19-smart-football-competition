@@ -7,9 +7,9 @@ Connection::Connection() {
 }
 
 bool Connection::createConnection() {
-    db.setDatabaseName("SFC"); // Your database name
-    db.setUserName("rayen");   // Your username
-    db.setPassword("rayen");   // Your password
+    db.setDatabaseName("SFC");
+    db.setUserName("rayen");
+    db.setPassword("rayen");
 
     if (!db.open()) {
         qDebug() << "Database error:" << db.lastError().text();

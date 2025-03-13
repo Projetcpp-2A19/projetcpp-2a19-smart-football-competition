@@ -9,8 +9,8 @@
 #include <QRegularExpressionValidator>
 #include <QSqlQuery>
 #include <QDebug>
-#include <QMenu>  // Added for context menu
-#include <QAction>  // Added for context menu
+#include <QMenu>
+#include <QAction>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -50,6 +50,9 @@ private:
 
     // Function to delete a row
     void deleteRow(int row);  // Added for deleting rows
+
+    // Function to validate input fields
+    bool validateInput();
 };
 
 #endif // MAINWINDOW_H

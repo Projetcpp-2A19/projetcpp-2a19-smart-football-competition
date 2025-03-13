@@ -9,12 +9,12 @@ using namespace std;
 
 class Equipes {
 private:
-    int ID_Equipe;       // ID of the team
-    QString Nom_Equipe;  // Name of the team
-    int Score;           // Score of the team (calculated from W, L, D)
-    QString Origine;     // Origin of the team
-    int Rang;            // Rank of the team
-    QString lastError;   // Store the last error message
+    int ID_Equipe;       // ID
+    QString Nom_Equipe;  // Name
+    int Score;           // Score
+    QString Origine;     // Origin
+    int Rang;            // Rank
+    QString lastError;   // error message
 
 public:
     // Constructors and Destructor
@@ -38,11 +38,11 @@ public:
     void setRang(int rang) { Rang = rang; }
 
     // Database operations
-    bool create();                      // Add a new team to the database
-    QSqlQueryModel* read();             // Display all teams
-    bool update(int id);                // Update a team's information
-    bool delet(int id);                 // Delete a team from the database
-    bool checkIfEquipeExists(int id);   // Check if a team exists
+    bool create();                      // Create
+    QSqlQueryModel* read();             // Read
+    bool update(int id);                // Update
+    bool delet(int id);                 // Delete
+    bool checkIfEquipeExists(int id);
 
     // Static method to calculate score
     static int calculateScore(int wins, int losses, int draws);

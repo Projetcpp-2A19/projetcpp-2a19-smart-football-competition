@@ -24,15 +24,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->tableWidget->verticalHeader()->setVisible(false);
 
-    // Set up input validation for the team name and origin
-    QRegularExpression regex("^[A-Za-zÀ-ÖØ-öø-ÿ\\s]+$");
-    QRegularExpressionValidator *validator = new QRegularExpressionValidator(regex, this);
-    ui->lineEdit_Nom->setValidator(validator);
-    ui->lineEdit_Origin->setValidator(validator);
-
     // Set maximum length for input fields
-    ui->lineEdit_Nom->setMaxLength(50);
-    ui->lineEdit_Origin->setMaxLength(50);
+    ui->lineEdit_Nom->setMaxLength(20);
+    ui->lineEdit_Origin->setMaxLength(20);
 
     // Connect textChanged signals to slots for formatting
     connect(ui->lineEdit_Nom, &QLineEdit::textChanged, this, &MainWindow::on_lineEdit_Nom_textChanged);
@@ -158,20 +152,64 @@ void MainWindow::on_lineEdit_Origin_textChanged(const QString &text)
     }
 }
 
+bool MainWindow::validateInput()
+{
+    // Validate Nom d'équipe
+    QString nom = ui->lineEdit_Nom->text();
+    QRegularExpression nomRegex("^[A-Za-zÀ-ÖØ-öø-ÿ\\s]+$");
+    if (!nomRegex.match(nom).hasMatch()) {
+        QMessageBox::warning(this, "Invalid Input", "Nom d'équipe should only contain letters and spaces.");
+        return false;
+    }
+
+    // Validate Origine
+    QString origin = ui->lineEdit_Origin->text();
+    QRegularExpression originRegex("^[A-Za-zÀ-ÖØ-öø-ÿ\\s]+$");
+    if (!originRegex.match(origin).hasMatch()) {
+        QMessageBox::warning(this, "Invalid Input", "Origine should only contain letters and spaces.");
+        return false;
+    }
+
+    // Validate Rang
+    bool isRangValid;
+    int rang = ui->lineEdit_Rang->text().toInt(&isRangValid);
+    if (!isRangValid || rang <= 0) {
+        QMessageBox::warning(this, "Invalid Input", "Rang should be a positive number.");
+        return false;
+    }
+
+    // Validate W, L, D
+    bool isWValid, isLValid, isDValid;
+    int wins = ui->lineEdit_W->text().toInt(&isWValid);
+    int losses = ui->lineEdit_L->text().toInt(&isLValid);
+    int draws = ui->lineEdit_D->text().toInt(&isDValid);
+
+    if (!isWValid || !isLValid || !isDValid || wins < 0 || losses < 0 || draws < 0) {
+        QMessageBox::warning(this, "Invalid Input", "W, L, D should be positive numbers.");
+        return false;
+    }
+
+    // Validate string lengths
+    if (nom.length() > 20 || origin.length() > 20) {
+        QMessageBox::warning(this, "Invalid Input", "Nom d'équipe and Origine should be less than 20 characters.");
+        return false;
+    }
+
+    return true;
+}
+
 void MainWindow::on_buttonEnregistrer_clicked()
 {
+    if (!validateInput()) {
+        return;
+    }
+
     QString nom = ui->lineEdit_Nom->text();
     QString origin = ui->lineEdit_Origin->text();
     int rang = ui->lineEdit_Rang->text().toInt();
     int wins = ui->lineEdit_W->text().toInt();
     int losses = ui->lineEdit_L->text().toInt();
     int draws = ui->lineEdit_D->text().toInt();
-
-    if (nom.isEmpty() || origin.isEmpty() || ui->lineEdit_Rang->text().isEmpty() ||
-        ui->lineEdit_W->text().isEmpty() || ui->lineEdit_L->text().isEmpty() || ui->lineEdit_D->text().isEmpty()) {
-        QMessageBox::warning(this, "Warning", "Please fill in all fields.");
-        return;
-    }
 
     int score = Equipes::calculateScore(wins, losses, draws);
 
@@ -196,6 +234,10 @@ void MainWindow::on_buttonEnregistrer_clicked()
 
 void MainWindow::on_pushButton_modifier_clicked()
 {
+    if (!validateInput()) {
+        return;
+    }
+
     int row = ui->tableWidget->currentRow();
     if (row == -1) {
         QMessageBox::warning(this, "Warning", "Please select a team to modify.");

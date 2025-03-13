@@ -12,7 +12,7 @@ Equipes::Equipes(int id, QString nom, int score, QString origine, int rang)
 // Destructor
 Equipes::~Equipes() {}
 
-// Create method (equivalent to ajouter in joueur.cpp)
+
 bool Equipes::create() {
     QSqlQuery query;
 
@@ -23,7 +23,7 @@ bool Equipes::create() {
         qDebug() << "Error fetching next ID:" << lastError;
         return false;
     }
-    int nextId = query.value(0).toInt() + 1; // Increment the maximum ID
+    int nextId = query.value(0).toInt() + 1; // Increment
 
     // Prepare the insert query
     query.prepare("INSERT INTO EQUIPE (ID_EQUIPE, NOM_EQUIPE, SCORE, ORIGINE, RANG) "
@@ -45,11 +45,11 @@ bool Equipes::create() {
     return true;
 }
 
-// Read method (equivalent to afficher in joueur.cpp)
+// Read method
 QSqlQueryModel* Equipes::read() {
     QSqlQueryModel* model = new QSqlQueryModel();
 
-    // Fetch data from the database, sorted by "Rang" in ascending order
+    // Fetch data from the database
     model->setQuery("SELECT * FROM EQUIPE ORDER BY RANG ASC");
 
     // Set headers
@@ -62,7 +62,7 @@ QSqlQueryModel* Equipes::read() {
     return model;
 }
 
-// Update method (equivalent to modifier in joueur.cpp)
+// Update method
 bool Equipes::update(int id) {
     QSqlQuery query;
     QString res = QString::number(id);
@@ -78,7 +78,7 @@ bool Equipes::update(int id) {
     return query.exec();
 }
 
-// Delete method (equivalent to supprimer in joueur.cpp)
+// Delete method
 bool Equipes::delet(int id) {
     QSqlQuery query;
     QString res = QString::number(id);
@@ -89,7 +89,7 @@ bool Equipes::delet(int id) {
     return query.exec();
 }
 
-// Check if Equipe exists (equivalent to checkIfJoueurExists in joueur.cpp)
+// Check if Equipe exists
 bool Equipes::checkIfEquipeExists(int id) {
     QSqlQuery query;
     query.prepare("SELECT ID_EQUIPE FROM EQUIPE WHERE ID_EQUIPE = :id");
@@ -101,7 +101,7 @@ bool Equipes::checkIfEquipeExists(int id) {
     return false;  // Equipe does not exist
 }
 
-// Static method to calculate score
+//calculate score
 int Equipes::calculateScore(int wins, int losses, int draws) {
     return (wins * 3) + (losses * -1) + (draws * 1);
 }

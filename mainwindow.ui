@@ -215,7 +215,7 @@ QLabel {
      <string>           Ajouter une équipe</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit">
+   <widget class="QLineEdit" name="lineEdit_Nom">
     <property name="geometry">
      <rect>
       <x>250</x>
@@ -225,8 +225,9 @@ QLabel {
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 255, 255);
-border-color: rgb(46, 52, 68);</string>
+     <string notr="true">background-color: rgb(255, 255, 255);r
+border-color: rgb(46, 52, 68);
+color:rgb(0, 0, 0)</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_5">
@@ -263,7 +264,7 @@ font: 14pt &quot;Haettenschweiler&quot;;</string>
      <string>Pays d'origine</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_2">
+   <widget class="QLineEdit" name="lineEdit_Origin">
     <property name="geometry">
      <rect>
       <x>250</x>
@@ -273,10 +274,12 @@ font: 14pt &quot;Haettenschweiler&quot;;</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 255, 255);</string>
+     <string notr="true">background-color: rgb(255, 255, 255);r
+border-color: rgb(46, 52, 68);
+color:rgb(0, 0, 0)</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_3">
+   <widget class="QLineEdit" name="lineEdit_Rang">
     <property name="geometry">
      <rect>
       <x>250</x>
@@ -286,7 +289,9 @@ font: 14pt &quot;Haettenschweiler&quot;;</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 255, 255);</string>
+     <string notr="true">background-color: rgb(255, 255, 255);r
+border-color: rgb(46, 52, 68);
+color:rgb(0, 0, 0)</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_7">
@@ -323,7 +328,7 @@ font: 14pt &quot;Haettenschweiler&quot;;</string>
      <string>Score</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_4">
+   <widget class="QLineEdit" name="lineEdit_W">
     <property name="geometry">
      <rect>
       <x>250</x>
@@ -333,13 +338,15 @@ font: 14pt &quot;Haettenschweiler&quot;;</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 255, 255);</string>
+     <string notr="true">background-color: rgb(255, 255, 255);r
+border-color: rgb(46, 52, 68);
+color:rgb(0, 0, 0)</string>
     </property>
     <property name="text">
-     <string>  W</string>
+     <string/>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_5">
+   <widget class="QLineEdit" name="lineEdit_L">
     <property name="geometry">
      <rect>
       <x>300</x>
@@ -349,13 +356,15 @@ font: 14pt &quot;Haettenschweiler&quot;;</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 255, 255);</string>
+     <string notr="true">background-color: rgb(255, 255, 255);r
+border-color: rgb(46, 52, 68);
+color:rgb(0, 0, 0)</string>
     </property>
     <property name="text">
-     <string>   L</string>
+     <string/>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_6">
+   <widget class="QLineEdit" name="lineEdit_D">
     <property name="geometry">
      <rect>
       <x>350</x>
@@ -365,13 +374,15 @@ font: 14pt &quot;Haettenschweiler&quot;;</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 255, 255);</string>
+     <string notr="true">background-color: rgb(255, 255, 255);r
+border-color: rgb(46, 52, 68);
+color:rgb(0, 0, 0)</string>
     </property>
     <property name="text">
-     <string>   D</string>
+     <string/>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_6">
+   <widget class="QPushButton" name="buttonEnregistrer">
     <property name="geometry">
      <rect>
       <x>250</x>
@@ -548,7 +559,7 @@ ui-&gt;tab-&gt;setStyleSheet(
      </property>
     </item>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_7">
+   <widget class="QLineEdit" name="search">
     <property name="geometry">
      <rect>
       <x>430</x>
@@ -572,7 +583,7 @@ QLineEdit:focus {
 </string>
     </property>
     <property name="text">
-     <string>    Rechercher</string>
+     <string>    </string>
     </property>
    </widget>
    <widget class="QLabel" name="pattern">
@@ -777,20 +788,20 @@ QLabel {
    <zorder>pushButton_3</zorder>
    <zorder>label_3</zorder>
    <zorder>label_4</zorder>
-   <zorder>lineEdit</zorder>
+   <zorder>lineEdit_Nom</zorder>
    <zorder>label_5</zorder>
    <zorder>label_6</zorder>
-   <zorder>lineEdit_2</zorder>
-   <zorder>lineEdit_3</zorder>
+   <zorder>lineEdit_Origin</zorder>
+   <zorder>lineEdit_Rang</zorder>
    <zorder>label_7</zorder>
    <zorder>label_8</zorder>
-   <zorder>lineEdit_4</zorder>
-   <zorder>lineEdit_5</zorder>
-   <zorder>lineEdit_6</zorder>
-   <zorder>pushButton_6</zorder>
+   <zorder>lineEdit_W</zorder>
+   <zorder>lineEdit_L</zorder>
+   <zorder>lineEdit_D</zorder>
+   <zorder>buttonEnregistrer</zorder>
    <zorder>pushButton_7</zorder>
    <zorder>tableWidget</zorder>
-   <zorder>lineEdit_7</zorder>
+   <zorder>search</zorder>
    <zorder>pattern</zorder>
    <zorder>filter</zorder>
    <zorder>label_9</zorder>

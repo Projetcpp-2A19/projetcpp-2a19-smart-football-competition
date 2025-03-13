@@ -77,7 +77,7 @@ public:
         tab->setObjectName("tab");
         tab_matches = new QTableView(tab);
         tab_matches->setObjectName("tab_matches");
-        tab_matches->setGeometry(QRect(470, 90, 481, 431));
+        tab_matches->setGeometry(QRect(490, 90, 481, 431));
         pb_ajouter = new QPushButton(tab);
         pb_ajouter->setObjectName("pb_ajouter");
         pb_ajouter->setGeometry(QRect(480, 570, 161, 41));
@@ -143,7 +143,7 @@ public:
         label_3->setStyleSheet(QString::fromUtf8("border-image: url(:/img/img/1.jpg);"));
         label_12 = new QLabel(tab);
         label_12->setObjectName("label_12");
-        label_12->setGeometry(QRect(50, 410, 111, 31));
+        label_12->setGeometry(QRect(50, 410, 121, 31));
         label_12->setStyleSheet(QString::fromUtf8("font: 12pt \"Haettenschweiler\";\n"
 "color: rgb(46, 52, 76);\n"
 ""));
@@ -155,7 +155,7 @@ public:
 ""));
         label_14 = new QLabel(tab);
         label_14->setObjectName("label_14");
-        label_14->setGeometry(QRect(50, 480, 111, 31));
+        label_14->setGeometry(QRect(50, 480, 121, 31));
         label_14->setStyleSheet(QString::fromUtf8("font: 12pt \"Haettenschweiler\";\n"
 "color: rgb(46, 52, 76);\n"
 ""));
@@ -220,8 +220,7 @@ public:
         label_7->setObjectName("label_7");
         label_7->setGeometry(QRect(30, 10, 181, 151));
         label_7->setAcceptDrops(true);
-        label_7->setStyleSheet(QString::fromUtf8("image: url(:/logo/logo.png);"));
-        label_7->setPixmap(QPixmap(QString::fromUtf8("logo.png")));
+        label_7->setPixmap(QPixmap(QString::fromUtf8("../../Desktop/wetransfer_gmatches_2025-03-05_1214/Gmatches/logo.png")));
         label_7->setScaledContents(true);
         label_7->setOpenExternalLinks(true);
         pushButton_3 = new QPushButton(centralwidget);
@@ -275,11 +274,11 @@ public:
         label->raise();
         tabWidget->raise();
         pushButton_2->raise();
-        label_7->raise();
         pushButton_3->raise();
         pushButton_5->raise();
         pushButton->raise();
         pushButton_4->raise();
+        label_7->raise();
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
         menubar->setGeometry(QRect(0, 0, 1401, 26));
@@ -311,7 +310,7 @@ public:
         label_3->setText(QString());
         label_12->setText(QCoreApplication::translate("MainWindow", "nom_equipe1 ", nullptr));
         label_13->setText(QCoreApplication::translate("MainWindow", "score ", nullptr));
-        label_14->setText(QCoreApplication::translate("MainWindow", "nom_equipe12", nullptr));
+        label_14->setText(QCoreApplication::translate("MainWindow", "nom_equipe2", nullptr));
         label_4->setText(QString());
         tabWidget->setTabText(tabWidget->indexOf(tab), QCoreApplication::translate("MainWindow", "main page", nullptr));
         pushButton_2->setText(QCoreApplication::translate("MainWindow", "Equipes", nullptr));

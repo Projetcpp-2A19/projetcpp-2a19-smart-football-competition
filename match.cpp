@@ -12,12 +12,12 @@ Match::Match() {
     date_match = QDate();
     heure_match = "";
     stade = "";
-    score = 0;
+    score = "";
     nom_equipe1 = "";
     nom_equipe2 = "";
 }
 
-Match::Match(int id_match, QDate date_match, QString heure_match, QString stade, int score, QString nom_equipe1, QString nom_equipe2) {
+Match::Match(int id_match, QDate date_match, QString heure_match, QString stade, QString score, QString nom_equipe1, QString nom_equipe2) {
     this->id_match = id_match;
     this->date_match = date_match;
     this->heure_match = heure_match;
@@ -31,7 +31,7 @@ int Match::getIdMatch() { return id_match; }
 QDate Match::getDateMatch() { return date_match; }
 QString Match::getHeureMatch() { return heure_match; }
 QString Match::getStade() { return stade; }
-int Match::getScore() { return score; }
+QString Match::getScore() { return score; }
 QString Match::getNomEquipe1() { return nom_equipe1; }
 QString Match::getNomEquipe2() { return nom_equipe2; }
 
@@ -39,14 +39,16 @@ void Match::setIdMatch(int id_match) { this->id_match = id_match; }
 void Match::setDateMatch(QDate date_match) { this->date_match = date_match; }
 void Match::setHeureMatch(QString heure_match) { this->heure_match = heure_match; }
 void Match::setStade(QString stade) { this->stade = stade; }
-void Match::setScore(int score) { this->score = score; }
+void Match::setScore(QString score) { this->score = score; }
 void Match::setNomEquipe1(QString nom_equipe1) { this->nom_equipe1 = nom_equipe1; }
 void Match::setNomEquipe2(QString nom_equipe2) { this->nom_equipe2 = nom_equipe2; }
 
-bool Match::ajouter() {
+bool Match::ajouter()
+{
     QSqlQuery query;
     query.prepare("INSERT INTO MATCHES (ID_MATCH, DATE_MATCH, HEURE_MATCH, STADE, SCORE, NOM_EQUIPE1, NOM_EQUIPE2) "
                   "VALUES (:id_match, :date_match, :heure_match, :stade, :score, :nom_equipe1, :nom_equipe2)");
+
     query.bindValue(":id_match", id_match);
     query.bindValue(":date_match", date_match);
     query.bindValue(":heure_match", heure_match);
@@ -55,12 +57,29 @@ bool Match::ajouter() {
     query.bindValue(":nom_equipe1", nom_equipe1);
     query.bindValue(":nom_equipe2", nom_equipe2);
 
-    return query.exec();
+    if (!query.exec()) {
+        qDebug() << "Error inserting match: " << query.lastError().text();
+        return false;
+    }
+
+    return true;
 }
 
-QSqlQueryModel* Match::afficher() {
+
+QSqlQueryModel* Match::afficher()
+{
     QSqlQueryModel* model = new QSqlQueryModel();
-    model->setQuery("SELECT * FROM MATCHES");
+    QSqlQuery query;
+
+    query.prepare("SELECT ID_MATCH, TO_CHAR(DATE_MATCH, 'YYYY-MM-DD') AS DATE_MATCH, HEURE_MATCH, STADE, SCORE, NOM_EQUIPE1, NOM_EQUIPE2 FROM MATCHES");
+    if (!query.exec()) {
+        qDebug() << "Query execution failed: " << query.lastError().text();  // Log any SQL errors
+        return nullptr;  // Return nullptr if the query fails
+    }
+
+    model->setQuery(query);
+
+    // Set the headers if the query is successful
     model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID_MATCH"));
     model->setHeaderData(1, Qt::Horizontal, QObject::tr("DATE_MATCH"));
     model->setHeaderData(2, Qt::Horizontal, QObject::tr("HEURE_MATCH"));
@@ -71,6 +90,7 @@ QSqlQueryModel* Match::afficher() {
 
     return model;
 }
+
 
 bool Match::supprimer(int id_match) {
     QSqlQuery query;

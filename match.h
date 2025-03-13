@@ -8,13 +8,13 @@
 class Match {
 public:
     Match();
-    Match(int, QDate, QString, QString, int, QString, QString);
+    Match(int, QDate, QString, QString, QString, QString, QString);
 
     int getIdMatch();
     QDate getDateMatch();
     QString getHeureMatch();
     QString getStade();
-    int getScore();
+    QString getScore();
     QString getNomEquipe1();
     QString getNomEquipe2();
 
@@ -22,7 +22,7 @@ public:
     void setDateMatch(QDate);
     void setHeureMatch(QString);
     void setStade(QString);
-    void setScore(int);
+    void setScore(QString);
     void setNomEquipe1(QString);
     void setNomEquipe2(QString);
 
@@ -37,7 +37,7 @@ private:
     QDate date_match;
     QString heure_match;
     QString stade;
-    int score;
+    QString score;
     QString nom_equipe1;
     QString nom_equipe2;
 };

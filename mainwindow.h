@@ -5,13 +5,16 @@
 #include <QString>
 #include <QMessageBox>
 #include "joueur.h"
-#include "dialog.h"
-#include "dialog2.h"
-#include "ui_dialog2.h"
+
 #include <QRegularExpressionValidator>
 #include <QSqlQuery>
 #include <QDebug>
 #include <QSortFilterProxyModel>
+#include <QList>
+
+#include <QTextDocument>
+#include <QPrinter>
+#include <QFileDialog>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -39,6 +42,8 @@ private slots:
 
     void on_TrieButton_clicked();
 
+    void on_pushButton_pdf_clicked();
+
 private:
     Ui::MainWindow *ui;
     Joueur Jtmp;
@@ -47,5 +52,8 @@ private:
 public:
     int getNextId();
     void remplirComboBoxEquipe();
+    void afficherProfil (int id);
+    void rechercherJoueur();
+    void genererPDF();
 };
 #endif // MAINWINDOW_H

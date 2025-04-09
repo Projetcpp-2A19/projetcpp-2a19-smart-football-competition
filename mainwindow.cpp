@@ -12,6 +12,13 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tableView->setModel(proxyModel);
     ui->tableView->setSortingEnabled(true);
 
+
+    ui->lineEditRecherche->setFocus();
+    connect(ui->pushButton_retour, &QPushButton::clicked, this, [this]() {
+        ui->stackedWidget->setCurrentIndex(0); // Retour à l'accueil
+    });
+    connect(ui->lineEditRecherche, &QLineEdit::returnPressed, this, &MainWindow::rechercherJoueur);
+
     remplirComboBoxEquipe();
 
     ui->tableView->resizeColumnsToContents();  // Automatically resize columns based on their content
@@ -330,4 +337,169 @@ void MainWindow::trierLignes(int colonne, bool croissant)
     if (proxyModel) {
         proxyModel->sort(colonne, croissant ? Qt::AscendingOrder : Qt::DescendingOrder);
     }
+}
+
+void MainWindow::afficherProfil(int id) {
+    QSqlQuery query;
+    query.prepare("SELECT nom, prenom, poste, nbr_but, nbr_passe, carton_j, carton_r FROM joueur WHERE id_joueur = ?");
+    query.addBindValue(id);
+
+    if (!query.exec()) {
+        // Affiche l'erreur SQL précise
+        qDebug() << "Erreur SQL:" << query.lastError().text();
+        QMessageBox::critical(this, "Erreur", "Problème de base de données: " + query.lastError().text());
+        return;
+    }
+
+    if (query.next()) {
+        // Les indices commencent à 0 pour la première colonne sélectionnée
+        QString nom = query.value(0).toString();        // nom (1ère colonne)
+        QString prenom = query.value(1).toString();     // prenom (2e colonne)
+        QString poste = query.value(2).toString();      // poste (3e colonne)
+        int buts = query.value(3).toInt();              // nbr_but (4e)
+        int passes = query.value(4).toInt();            // nbr_passe (5e)
+        int cartonsJ = query.value(5).toInt();          // carton_j (6e)
+        int cartonsR = query.value(6).toInt();          // carton_r (7e)
+
+        ui->label_nom->setText(nom);
+        ui->label_prenom->setText(prenom);
+        ui->label_poste->setText(poste);
+        ui->label_but->setText(QString::number(buts));
+        ui->label_passe->setText(QString::number(passes));
+        ui->label_cartonJ->setText(QString::number(cartonsJ));
+        ui->label_cartonR->setText(QString::number(cartonsR));
+
+        ui->stackedWidget->setCurrentWidget(ui->page_profil);
+        ui->radarWidget->setStats(buts, passes, cartonsJ, cartonsR);
+    } else {
+        qDebug() << "Aucun joueur trouvé avec ID:" << id;
+        QMessageBox::information(this, "Non trouvé", "Aucun joueur avec cet ID");
+    }
+}
+
+void MainWindow:: rechercherJoueur(){
+    QString recherche = ui->lineEditRecherche->text();
+    QSqlQuery query;
+    query.prepare("SELECT id_joueur FROM joueur WHERE LOWER(nom) LIKE LOWER(?) OR LOWER(prenom) LIKE LOWER(?)");
+    query.addBindValue("%" + recherche + "%");
+    query.addBindValue("%" + recherche + "%");
+
+    if (query.exec() && query.next()) {
+        int idJoueur = query.value(0).toInt();
+        afficherProfil(idJoueur);  // Bascule vers le profil
+    } else {
+        QMessageBox::warning(this, "Erreur", "Joueur non trouvé.");
+    }
+    if (recherche.isEmpty()) {
+        QMessageBox::warning(this, "Erreur", "Veuillez entrer un nom");
+        return;
+    }
+}
+
+void MainWindow::genererPDF(){
+    QSqlQuery query;
+    query.prepare("SELECT nom, prenom, poste, nbr_but, nbr_passe, carton_j, carton_r FROM joueur ORDER BY nom");
+    if (!query.exec()) {
+        QMessageBox::critical(this, "Erreur", "Échec de la requête SQL");
+        return;
+    }
+
+    QString html;
+    html += "<h1>Liste des Joueurs</h1>";
+    html += "<table border='1'><tr><th>ID</th><th>Nom</th><th>Prénom</th><th>Poste</th></tr>";
+
+    while (query.next()) {
+        html += QString("<tr><td>%1</td><td>%2</td><td>%3</td><td>%4</td></tr>")
+        .arg(query.value(0).toString())
+            .arg(query.value(1).toString())
+            .arg(query.value(2).toString())
+            .arg(query.value(3).toString());
+    }
+    html += "</table>";
+
+    // Préparer le document
+    QTextDocument document;
+    document.setHtml(html);
+
+    // Configurer l'impression PDF
+    QString fileName = QFileDialog::getSaveFileName(this, "Enregistrer PDF", QDir::homePath(), "PDF (*.pdf)");
+    if (fileName.isEmpty()) return;
+
+    QPrinter printer(QPrinter::HighResolution);
+    printer.setOutputFormat(QPrinter::PdfFormat);
+    printer.setOutputFileName(fileName);
+
+    // Générer le PDF
+    document.print(&printer);
+    QMessageBox::information(this, "Succès", "PDF généré avec succès !");
+
+}
+
+void MainWindow::on_pushButton_pdf_clicked()
+{
+    QSqlQuery query;
+    if(!query.exec("SELECT nom, prenom, poste, nbr_but, nbr_passe, carton_j, carton_r FROM joueur")) {
+        QMessageBox::critical(this, "Erreur", "Échec de la requête SQL: " + query.lastError().text());
+        return;
+    }
+
+    QString html = "<h1>Liste des Joueurs</h1>"
+                   "<table border='1' style='width:100%; border-collapse:collapse;'>"
+                   "<tr>"
+                   "<th>Nom</th>"
+                   "<th>Prénom</th>"
+                   "<th>Poste</th>"
+                   "<th>Buts</th>"
+                   "<th>Passes</th>"
+                   "<th>Cartons J</th>"
+                   "<th>Cartons R</th>"
+                   "</tr>";
+
+    while (query.next()) {
+        html += QString("<tr>"
+                        "<td>%1</td>"
+                        "<td>%2</td>"
+                        "<td>%3</td>"
+                        "<td>%4</td>"
+                        "<td>%5</td>"
+                        "<td>%6</td>"
+                        "<td>%7</td>"
+                        "</tr>")
+                    .arg(query.value(0).toString())
+                    .arg(query.value(1).toString())
+                    .arg(query.value(2).toString())
+                    .arg(query.value(3).toString())
+                    .arg(query.value(4).toString())
+                    .arg(query.value(5).toString())
+                    .arg(query.value(6).toString());
+    }
+    html += "</table>";
+
+    QTextDocument doc;
+    doc.setHtml(html);
+
+    QString fichier = QFileDialog::getSaveFileName(
+        this,
+        "Enregistrer le PDF",
+        QDir::homePath() + "/liste_joueurs.pdf",
+        "Fichiers PDF (*.pdf)");
+
+    if (fichier.isEmpty()) return;
+
+    QPrinter printer(QPrinter::HighResolution);
+    printer.setPageSize(QPageSize(QPageSize::A4));
+    printer.setOutputFormat(QPrinter::PdfFormat);
+    printer.setOutputFileName(fichier);
+
+    // Ajout des marges
+    QMargins margins(20, 20, 20, 20); // left, top, right, bottom
+    QPageLayout pageLayout;
+    pageLayout.setMargins(margins);
+    pageLayout.setMode(QPageLayout::StandardMode);
+    printer.setPageLayout(pageLayout);
+
+    doc.setPageSize(printer.pageRect(QPrinter::Point).size());
+    doc.print(&printer);
+
+    QMessageBox::information(this, "Succès", "PDF généré avec succès !");
 }

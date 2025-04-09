@@ -1,5 +1,6 @@
 QT       += core gui
 QT += sql
+QT += printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -13,12 +14,14 @@ SOURCES += \
     connection.cpp \
     joueur.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    radarwidget.cpp
 
 HEADERS += \
     connection.h \
     joueur.h \
-    mainwindow.h
+    mainwindow.h \
+    radarwidget.h
 
 FORMS += \
     mainwindow.ui

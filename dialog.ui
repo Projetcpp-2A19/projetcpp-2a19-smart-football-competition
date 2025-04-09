@@ -611,7 +611,7 @@ QLabel {
     <string>TextLabel</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit_7">
+  <widget class="QLineEdit" name="searchbar">
    <property name="geometry">
     <rect>
      <x>230</x>
@@ -643,6 +643,15 @@ QLineEdit:focus {
      <width>41</width>
      <height>41</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel#tri {
+    border: 1px solid transparent;
+}
+QLabel#tri:hover {
+    border: 1px solid #2E344C;
+    background-color: #FDF6D0;
+}</string>
    </property>
    <property name="text">
     <string>TextLabel</string>
@@ -781,7 +790,7 @@ QLabel {
   <zorder>set</zorder>
   <zorder>label_11</zorder>
   <zorder>pushButton_6</zorder>
-  <zorder>lineEdit_7</zorder>
+  <zorder>searchbar</zorder>
   <zorder>pattern</zorder>
   <zorder>label_13</zorder>
   <zorder>label_12</zorder>

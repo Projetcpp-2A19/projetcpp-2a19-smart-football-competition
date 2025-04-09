@@ -9,19 +9,23 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Find Qt5 or Qt6 and include Widgets and SQL modules
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Sql)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Sql)
+# Find Qt5 or Qt6 and include required modules
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Sql Charts PrintSupport)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Sql Charts PrintSupport)
 
 set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
-        dialog.h dialog.cpp dialog.ui
+        dialog.h 
+        dialog.cpp 
+        dialog.ui
         resc.qrc
-        equipes.h equipes.cpp
-        connection.h connection.cpp
+        equipes.h 
+        equipes.cpp
+        connection.h 
+        connection.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -29,7 +33,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         ../../../../Downloads/Atelier_Connexion.zip
-
     )
 else()
     if(ANDROID)
@@ -43,8 +46,13 @@ else()
     endif()
 endif()
 
-# Link the Qt SQL module along with Qt Widgets module
-target_link_libraries(projet PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Sql)
+# Link the Qt modules including PrintSupport
+target_link_libraries(projet PRIVATE 
+    Qt${QT_VERSION_MAJOR}::Widgets 
+    Qt${QT_VERSION_MAJOR}::Sql
+    Qt${QT_VERSION_MAJOR}::Charts
+    Qt${QT_VERSION_MAJOR}::PrintSupport
+)
 
 # Bundle and macOS/Windows specific properties
 set_target_properties(projet PROPERTIES

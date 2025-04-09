@@ -11,6 +11,7 @@
 #include <QRegularExpressionValidator>
 #include <QSqlQuery>
 #include <QDebug>
+#include <QSortFilterProxyModel>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -36,9 +37,13 @@ private slots:
     void on_tableView_clicked(const QModelIndex &index);
     void on_pushButton_modifier_clicked();
 
+    void on_TrieButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     Joueur Jtmp;
+    QSortFilterProxyModel *proxyModel;
+    void trierLignes(int colonne, bool croissant);
 public:
     int getNextId();
     void remplirComboBoxEquipe();

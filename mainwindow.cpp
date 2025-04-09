@@ -5,15 +5,19 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , proxyModel(new QSortFilterProxyModel(this))
 {
     ui->setupUi(this);
-    ui->tableView->setModel(Jtmp.afficher());
+    proxyModel->setSourceModel(Jtmp.afficher());
+    ui->tableView->setModel(proxyModel);
+    ui->tableView->setSortingEnabled(true);
+
     remplirComboBoxEquipe();
 
     ui->tableView->resizeColumnsToContents();  // Automatically resize columns based on their content
     ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);  // Stretch columns to fill space
     ui->tableView->verticalHeader()->setVisible(false);
-    //Nom :
+
     // Valider que le nom ne contient que des lettres et des espaces
     QRegularExpression regex("^[A-Za-zÀ-ÖØ-öø-ÿ\\s]+$");
     QRegularExpressionValidator *validator = new QRegularExpressionValidator(regex, this);
@@ -26,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Connecter le signal textChanged à un slot pour mettre la première lettre en majuscule
     connect(ui->lineEdit_nom, &QLineEdit::textChanged, this, &MainWindow::on_lineEdit_nom_textChanged);
-    connect(ui->lineEdit_prenom, &QLineEdit::textChanged, this, &MainWindow::on_lineEdit_nom_textChanged);
+    connect(ui->lineEdit_prenom, &QLineEdit::textChanged, this, &MainWindow::on_lineEdit_prenom_textChanged);
 
     QIntValidator *validatorBut = new QIntValidator(this);
     QIntValidator *validatorPasse = new QIntValidator(this);
@@ -142,7 +146,7 @@ void MainWindow::on_pushButton_ajouter_clicked() {
     bool test = J.ajouter();
     if (test) {
         // Mise à jour de la table
-        ui->tableView->setModel(Jtmp.afficher());
+        proxyModel->setSourceModel(Jtmp.afficher());
 
         // Réinitialisation des champs
         ui->lineEdit_nom->clear();          // Efface le champ nom
@@ -173,7 +177,7 @@ void MainWindow::on_pushButton_supp_clicked()
 
     if(test){
         if(test){
-            ui->tableView->setModel(Jtmp.afficher());
+            proxyModel->setSourceModel(Jtmp.afficher());
             QMessageBox::information(nullptr, QObject::tr("OK"),
                                      QObject::tr("Le joueur à été supprimé \n"), QMessageBox::Cancel);
         }
@@ -231,9 +235,21 @@ void MainWindow::on_pushButton_modifier_clicked() {
     // Appel de la méthode modifier()
     bool test = J.modifier();
     if (test) {
-        ui->tableView->setModel(Jtmp.afficher()); // Mise à jour de la table
+        proxyModel->setSourceModel(Jtmp.afficher()); // Mise à jour de la table
         QMessageBox::information(nullptr, QObject::tr("OK"),
                                  QObject::tr("Modification effectuée \n"), QMessageBox::Cancel);
+        // Mise à jour de la table
+        proxyModel->setSourceModel(Jtmp.afficher());
+
+        // Réinitialisation des champs
+        ui->lineEdit_nom->clear();          // Efface le champ nom
+        ui->lineEdit_prenom->clear();       // Efface le champ prénom
+        ui->comboBox_poste->setCurrentIndex(0); // Réinitialise le comboBox poste
+        ui->lineEdit_but->clear();          // Efface le champ buts
+        ui->lineEdit_passe->clear();        // Efface le champ passes
+        ui->lineEdit_cartonJ->clear();      // Efface le champ cartons jaunes
+        ui->lineEdit_cartonR->clear();      // Efface le champ cartons rouges
+        ui->comboBox_equipe->setCurrentIndex(0); // Réinitialise le comboBox équipe
     } else {
         QMessageBox::critical(nullptr, QObject::tr("Not OK"),
                               QObject::tr("Modification non effectuée \n"), QMessageBox::Cancel);
@@ -272,5 +288,46 @@ void MainWindow::on_tableView_clicked(const QModelIndex &index) {
     } else {
         qDebug() << "Erreur lors de la récupération de l'équipe :" << query.lastError().text();
         ui->comboBox_equipe->setCurrentIndex(-1); // Efface la sélection si l'équipe n'est pas trouvée
+    }
+}
+
+void MainWindow::on_TrieButton_clicked()
+{
+    QMessageBox msgBox;
+    msgBox.setWindowTitle("Options de tri");
+    msgBox.setText("Trier par :");
+
+    QPushButton *nomBtn = msgBox.addButton("Nom", QMessageBox::ActionRole);
+    QPushButton *prenomBtn = msgBox.addButton("Prénom", QMessageBox::ActionRole);
+    QPushButton *posteBtn = msgBox.addButton("Poste", QMessageBox::ActionRole);
+    QPushButton *butBtn = msgBox.addButton("But", QMessageBox::ActionRole);
+    QPushButton *passeBtn = msgBox.addButton("Passe", QMessageBox::ActionRole);
+    QPushButton *cartonJBtn = msgBox.addButton("Carton Jaune", QMessageBox::ActionRole);
+    QPushButton *cartonRBtn = msgBox.addButton("Carton Rouge", QMessageBox::ActionRole);
+    msgBox.addButton("Annuler", QMessageBox::RejectRole);
+
+    msgBox.exec();
+
+    if (msgBox.clickedButton() == nomBtn) {
+        trierLignes(1,true);
+    } else if (msgBox.clickedButton() == prenomBtn) {
+        trierLignes(2,true);
+    } else if (msgBox.clickedButton() == posteBtn) {
+        trierLignes(3,false);
+    } else if (msgBox.clickedButton() == butBtn) {
+        trierLignes(4,false);
+    } else if (msgBox.clickedButton() == passeBtn) {
+        trierLignes(5,false);
+    } else if (msgBox.clickedButton() == cartonJBtn) {
+        trierLignes(6,false);
+    }else if (msgBox.clickedButton() == cartonRBtn) {
+        trierLignes(7,false);
+    }
+}
+
+void MainWindow::trierLignes(int colonne, bool croissant)
+{
+    if (proxyModel) {
+        proxyModel->sort(colonne, croissant ? Qt::AscendingOrder : Qt::DescendingOrder);
     }
 }

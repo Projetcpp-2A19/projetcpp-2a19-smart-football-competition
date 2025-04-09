@@ -63,6 +63,7 @@ public:
     QComboBox *comboBox_poste;
     QComboBox *comboBox_equipe;
     QLabel *label_11;
+    QPushButton *TrieButton;
     QStatusBar *statusbar;
 
     void setupUi(QMainWindow *MainWindow)
@@ -350,6 +351,9 @@ public:
         label_11->setGeometry(QRect(220, 360, 181, 31));
         label_11->setStyleSheet(QString::fromUtf8("color: rgb(46, 52, 76);\n"
 "font: 14pt \"Haettenschweiler\";"));
+        TrieButton = new QPushButton(centralwidget);
+        TrieButton->setObjectName("TrieButton");
+        TrieButton->setGeometry(QRect(690, 0, 51, 51));
         MainWindow->setCentralWidget(centralwidget);
         label_2->raise();
         label_3->raise();
@@ -382,11 +386,12 @@ public:
         tableView->raise();
         back->raise();
         next->raise();
-        filtre->raise();
         pushButton_modifier->raise();
         comboBox_poste->raise();
         comboBox_equipe->raise();
         label_11->raise();
+        TrieButton->raise();
+        filtre->raise();
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName("statusbar");
         MainWindow->setStatusBar(statusbar);
@@ -439,6 +444,7 @@ public:
         comboBox_poste->setItemText(9, QCoreApplication::translate("MainWindow", "G", nullptr));
 
         label_11->setText(QCoreApplication::translate("MainWindow", "Carton jaune       Carton rouge", nullptr));
+        TrieButton->setText(QString());
     } // retranslateUi
 
 };

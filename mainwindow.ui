@@ -755,6 +755,19 @@ font: 14pt &quot;Haettenschweiler&quot;;</string>
      <string>Carton jaune       Carton rouge</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="TrieButton">
+    <property name="geometry">
+     <rect>
+      <x>690</x>
+      <y>0</y>
+      <width>51</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
    <zorder>label_2</zorder>
    <zorder>label_3</zorder>
    <zorder>label</zorder>
@@ -786,11 +799,12 @@ font: 14pt &quot;Haettenschweiler&quot;;</string>
    <zorder>tableView</zorder>
    <zorder>back</zorder>
    <zorder>next</zorder>
-   <zorder>filtre</zorder>
    <zorder>pushButton_modifier</zorder>
    <zorder>comboBox_poste</zorder>
    <zorder>comboBox_equipe</zorder>
    <zorder>label_11</zorder>
+   <zorder>TrieButton</zorder>
+   <zorder>filtre</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

@@ -11,6 +11,14 @@
 #include <QPainter>
 #include <QFileDialog>
 #include <QSqlQuery>
+#include <QtCharts/QChartView>
+#include <QtCharts/QPieSeries>
+#include <QtCharts/QPieSlice>
+#include <QSqlRecord>
+#include <QVBoxLayout>
+#include <QLayout>
+#include <QLayoutItem>
+#include <QInputDialog>
 
 
 
@@ -19,30 +27,46 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    // Load team names and set up validation
+    loadTeamNames();
+    setupTeamComboValidation();
 
+    // Validators
     ui->id_match->setValidator(new QIntValidator(1, 99999, this));
+
     QRegularExpressionValidator *heureValidator = new QRegularExpressionValidator(
         QRegularExpression("^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$"), this);
     ui->heure_match->setValidator(heureValidator);
-    QRegularExpressionValidator *nameValidator = new QRegularExpressionValidator(
-        QRegularExpression("^[A-Za-zÀ-ÖØ-öø-ÿ ]{2,20}$"), this);
-    ui->nom_equipe1->setValidator(nameValidator);
-    ui->nom_equipe2->setValidator(nameValidator);
+
     QRegularExpressionValidator *scoreValidator = new QRegularExpressionValidator(
         QRegularExpression("^\\d{1,2}-\\d{1,2}$"), this);
     ui->score->setValidator(scoreValidator);
 
-    QStringList stadiums = {"Veuillez sélectionner un stade.","Stade de France", "Camp Nou", "Wembley", "San Siro", "Old Trafford"};
+    // Populate stadium choices
+    QStringList stadiums = {
+        "Veuillez sélectionner un stade.",
+        "Stade de France", "Camp Nou", "Wembley", "San Siro", "Old Trafford"
+    };
     ui->stade->addItems(stadiums);
-    connect(ui->search_button, &QPushButton::clicked, this, &MainWindow::searchMatch);
 
+    // Button connections
     connect(ui->pb_afficher, &QPushButton::clicked, this, &MainWindow::displayTable);
-    connect(ui->pb_tri, &QPushButton::clicked, this, &MainWindow::on_pb_tri_clicked);
-    connect(ui->pb_export_pdf, &QPushButton::clicked, this, &MainWindow::exportToPDF);
+    connect(ui->pb_export_pdf, &QPushButton::clicked, this, &MainWindow::exportToHTML);
+    connect(ui->comboBox_tri, &QComboBox::currentTextChanged, this, &MainWindow::on_comboBox_tri_currentIndexChanged);
+    connect(ui->search_lineedit, &QLineEdit::textChanged, this, [this](const QString &text) {
+        QString currentField = ui->comboBox_chercher->currentText();
+        if (currentField != "-- Chercher par --") {
+            searchMatchesBy(currentField, text.trimmed());
+        }
+    });
 
-      // Initialize the table view
-      displayTable();  // This will populate the table when the window is created
-  }
+    // Initialize the table view
+    displayTable();
+
+    ui->tab_matches->verticalHeader()->setVisible(false);
+    ui->tab_matches->horizontalHeader()->sectionResizeMode(QHeaderView::Stretch);
+}
+
 
 MainWindow::~MainWindow()
 {
@@ -53,21 +77,28 @@ MainWindow::~MainWindow()
 // Slot to add a match
 void MainWindow::on_pb_ajouter_clicked()
 {
+
     int id_match = ui->id_match->text().toInt();
     QDate date_match = ui->date_match->date();
     QString heure_match = ui->heure_match->text().trimmed();
     QString stade = ui->stade->currentText();
     QString score = ui->score->text().trimmed();
-    QString nom_equipe1 = ui->nom_equipe1->text().trimmed();
-    QString nom_equipe2 = ui->nom_equipe2->text().trimmed();
+    QString nom_equipe1 = ui->nom_equipe1_combo->currentText().trimmed();
+    QString nom_equipe2 = ui->nom_equipe2_combo->currentText().trimmed();
+    if (ui->nom_equipe1_combo->currentIndex() == 0 || ui->nom_equipe2_combo->currentIndex() == 0) {
+        QMessageBox::warning(this, "Erreur", "Veuillez sélectionner tous les équipes.");
+        return;
+    }
+    if (nom_equipe1 == nom_equipe2) {
+        QMessageBox::warning(this, "Erreur", "Les deux équipes doivent être différentes.");
+        return;
+    }
 
-    // Validate ID Match (Must be a number)
     if (ui->id_match->text().isEmpty()) {
         QMessageBox::warning(this, "Erreur", "L'ID du match est requis.");
         return;
     }
 
-    // Validate Date Match (Must be 2015 or later)
     if (date_match.year() < 2015) {
         QMessageBox::warning(this, "Erreur", "La date du match doit être en 2015 ou plus.");
         return;
@@ -144,8 +175,9 @@ void MainWindow::on_pb_modifier_clicked()
     QString heure_match = ui->heure_match->text().trimmed();
     QString stade = ui->stade->currentText();
     QString score = ui->score->text().trimmed();
-    QString nom_equipe1 = ui->nom_equipe1->text().trimmed();
-    QString nom_equipe2 = ui->nom_equipe2->text().trimmed();
+    QString nom_equipe1 = ui->nom_equipe1_combo->currentText().trimmed();
+    QString nom_equipe2 = ui->nom_equipe2_combo->currentText().trimmed();
+
 
     // Check if the match exists
     if (!match->checkIfMatchExists(id_match)) {
@@ -156,6 +188,14 @@ void MainWindow::on_pb_modifier_clicked()
     // Validate ID Match
     if (ui->id_match->text().isEmpty()) {
         QMessageBox::warning(this, "Erreur", "L'ID du match est requis.");
+        return;
+    }
+    if (ui->nom_equipe1_combo->currentIndex() == 0 || ui->nom_equipe2_combo->currentIndex() == 0) {
+        QMessageBox::warning(this, "Erreur", "Veuillez sélectionner tous les équipes.");
+        return;
+    }
+    if (nom_equipe1 == nom_equipe2) {
+        QMessageBox::warning(this, "Erreur", "Les deux équipes doivent être différentes.");
         return;
     }
 
@@ -222,8 +262,8 @@ void MainWindow::on_tab_matches_clicked(const QModelIndex &index)
     ui->heure_match->setText(ui->tab_matches->model()->index(row, 2).data().toString());
     ui->stade->setCurrentText(ui->tab_matches->model()->index(row, 3).data().toString());
     ui->score->setText(ui->tab_matches->model()->index(row, 4).data().toString());
-    ui->nom_equipe1->setText(ui->tab_matches->model()->index(row, 5).data().toString());
-    ui->nom_equipe2->setText(ui->tab_matches->model()->index(row, 6).data().toString());
+    ui->nom_equipe1_combo->setCurrentText(ui->tab_matches->model()->index(row, 5).data().toString());
+    ui->nom_equipe2_combo->setCurrentText(ui->tab_matches->model()->index(row, 6).data().toString());
 }
 
 // Slot to refresh the table view
@@ -238,13 +278,107 @@ void MainWindow::displayTable()
     }
     ui->tab_matches->setModel(model);
 }
-void MainWindow::on_pb_tri_clicked()
+void MainWindow::on_stat_clicked()
 {
+    QSqlQuery query;
+    query.prepare(R"(
+        SELECT nom_equipe, COUNT(*) AS total_matches
+        FROM (
+            SELECT nom_equipe1 AS nom_equipe FROM MATCHES
+            UNION ALL
+            SELECT nom_equipe2 AS nom_equipe FROM MATCHES
+        )
+        GROUP BY nom_equipe
+    )");
+
+    if (!query.exec()) {
+        QMessageBox::critical(this, "Erreur", "Échec de récupération des données de statistiques.");
+        return;
+    }
+
+    QPieSeries *series = new QPieSeries();
+
+    while (query.next()) {
+        QString team = query.value("nom_equipe").toString();
+        int count = query.value("total_matches").toInt();
+        series->append(team, count);
+    }
+
+    QChart *chart = new QChart();
+    chart->addSeries(series);
+    chart->setTitle("Nombre de matchs joués par chaque équipe");
+    chart->legend()->setAlignment(Qt::AlignRight);
+
+    QChartView *chartView = new QChartView(chart);
+    chartView->setRenderHint(QPainter::Antialiasing);
+
+    QWidget *page2 = ui->stackedWidget->widget(1);
+    QVBoxLayout *layout = qobject_cast<QVBoxLayout *>(page2->layout());
+    if (!layout) {
+        layout = new QVBoxLayout(page2);
+        page2->setLayout(layout);
+    }
+
+    // Clear only chart views from the layout, keep the Back button
+    QList<QWidget*> widgetsToRemove;
+    for (int i = 0; i < layout->count(); ++i) {
+        QWidget *w = layout->itemAt(i)->widget();
+        if (w && qobject_cast<QChartView *>(w)) {
+            widgetsToRemove.append(w);
+        }
+    }
+
+    for (QWidget *w : widgetsToRemove) {
+        layout->removeWidget(w);
+        delete w;
+    }
+
+    // Add the chart view *below* any existing widgets (like the back button)
+    layout->addWidget(chartView);
+
+    // Check if the retour button already exists
+    QPushButton *backButton = nullptr;
+    for (int i = 0; i < layout->count(); ++i) {
+        QWidget *widget = layout->itemAt(i)->widget();
+        if (widget && widget->objectName() == "retourButton") {
+            backButton = qobject_cast<QPushButton *>(widget);
+            break;
+        }
+    }
+
+    // If the retour button does not exist, create it
+    if (!backButton) {
+        backButton = new QPushButton("Retour à la page principale", page2);
+        backButton->setObjectName("retourButton");  // Set an object name to identify it
+        layout->addWidget(backButton);
+    }
+
+    // Connect the back button's clicked signal to switch to Page 1
+    connect(backButton, &QPushButton::clicked, this, [=]() {
+        ui->stackedWidget->setCurrentIndex(0);  // Switch to Page 1 (index 0)
+    });
+
+    // Switch to Page 2
+    ui->stackedWidget->setCurrentIndex(1);
+}
+void MainWindow::sortMatchesBy(const QString &criteria)
+{
+    QString orderBy;
+    if (criteria == "ID") {
+        orderBy = "ID_MATCH";
+    } else if (criteria == "Date") {
+        orderBy = "DATE_MATCH";
+    } else if (criteria == "Stade") {
+        orderBy = "STADE";
+    } else {
+        QMessageBox::warning(this, "Erreur", "Critère de tri inconnu.");
+        return;
+    }
+
     QSqlQueryModel *model = new QSqlQueryModel();
     QSqlQuery query;
-
-    // Query to fetch matches sorted by date
-    query.prepare("SELECT * FROM MATCHES ORDER BY DATE_MATCH DESC");
+    query.prepare(QString("SELECT ID_MATCH, TO_CHAR(DATE_MATCH, 'YYYY-MM-DD') AS DATE_MATCH, HEURE_MATCH, STADE, SCORE, NOM_EQUIPE1, NOM_EQUIPE2 "
+                          "FROM MATCHES ORDER BY %1 ASC").arg(orderBy));
 
     if (!query.exec()) {
         QMessageBox::critical(this, "Erreur", "Échec du tri des matchs.");
@@ -252,26 +386,23 @@ void MainWindow::on_pb_tri_clicked()
     }
 
     model->setQuery(query);
-    ui->tab_matches->setModel(model); // Update the table with sorted results
+    ui->tab_matches->setModel(model);
 }
-void MainWindow::exportToPDF()
+void MainWindow::on_comboBox_tri_currentIndexChanged(const QString &text)
 {
-    QString filePath = QFileDialog::getSaveFileName(this, "Enregistrer le PDF", "", "PDF Files (*.pdf)");
+    if (text == "-- Trier par --")
+        return;
+
+    sortMatchesBy(text);
+}
+
+void MainWindow::exportToHTML()
+{
+    QString filePath = QFileDialog::getSaveFileName(this, "Enregistrer le HTML", "", "HTML Files (*.html)");
 
     if (filePath.isEmpty())
         return;
 
-    QPrinter printer(QPrinter::HighResolution);
-    printer.setOutputFormat(QPrinter::PdfFormat);
-    printer.setOutputFileName(filePath);
-
-    QPainter painter(&printer);
-
-    int rowHeight = 30;
-    int y = 100;
-    int x = 50;
-
-    // Get data from the table
     QSqlQueryModel *model = match->afficher();
 
     if (!model) {
@@ -279,48 +410,57 @@ void MainWindow::exportToPDF()
         return;
     }
 
-    // Set font for header
-    painter.setFont(QFont("Arial", 10, QFont::Bold));
-    painter.drawText(x, y, "ID");
-    painter.drawText(x + 50, y, "Date");
-    painter.drawText(x + 150, y, "Heure");
-    painter.drawText(x + 250, y, "Stade");
-    painter.drawText(x + 400, y, "Score");
-    painter.drawText(x + 500, y, "Equipe 1");
-    painter.drawText(x + 650, y, "Equipe 2");
-
-    y += rowHeight;
-
-    painter.setFont(QFont("Arial", 9));
+    QString html;
+    html += "<!DOCTYPE html><html><head><meta charset='utf-8'><style>";
+    html += "table { border-collapse: collapse; width: 100%; font-family: Arial; }";
+    html += "th, td { border: 1px solid #000; padding: 8px; text-align: left; }";
+    html += "th { background-color: #f2f2f2; }";
+    html += "</style></head><body>";
+    html += "<h2>Liste des Matchs</h2>";
+    html += "<table>";
+    html += "<tr><th>ID</th><th>Date</th><th>Heure</th><th>Stade</th><th>Score</th><th>Equipe 1</th><th>Equipe 2</th></tr>";
 
     for (int i = 0; i < model->rowCount(); ++i) {
-        painter.drawText(x, y, model->index(i, 0).data().toString());
-        painter.drawText(x + 50, y, model->index(i, 1).data().toString());
-        painter.drawText(x + 150, y, model->index(i, 2).data().toString());
-        painter.drawText(x + 250, y, model->index(i, 3).data().toString());
-        painter.drawText(x + 400, y, model->index(i, 4).data().toString());
-        painter.drawText(x + 500, y, model->index(i, 5).data().toString());
-        painter.drawText(x + 650, y, model->index(i, 6).data().toString());
-        y += rowHeight;
+        html += "<tr>";
+        for (int j = 0; j < model->columnCount(); ++j) {
+            html += "<td>" + model->index(i, j).data().toString() + "</td>";
+        }
+        html += "</tr>";
     }
 
-    QMessageBox::information(this, "Succès", "Le fichier PDF a été généré avec succès.");
-}
-void MainWindow::searchMatch()
-{
-    QString searchText = ui->search_lineedit->text().trimmed();  // Get the text from QLineEdit
+    html += "</table></body></html>";
 
-    if (searchText.isEmpty()) {
-        QMessageBox::warning(this, "Erreur", "Veuillez entrer un nom d'équipe.");
+    QFile file(filePath);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream out(&file);
+        out << html;
+        file.close();
+        QMessageBox::information(this, "Succès", "Le fichier HTML a été généré avec succès.");
+    } else {
+        QMessageBox::critical(this, "Erreur", "Impossible d'enregistrer le fichier HTML.");
+    }
+}
+
+void MainWindow::searchMatchesBy(const QString &field, const QString &value)
+{
+
+    QString sqlField;
+    if (field == "ID") {
+        sqlField = "ID_MATCH";
+    } else if (field == "Nom Équipe") {
+        sqlField = "NOM_EQUIPE1 || ' ' || NOM_EQUIPE2";  // Check both teams
+    } else if (field == "Stade") {
+        sqlField = "STADE";
+    } else {
+        QMessageBox::warning(this, "Erreur", "Critère de recherche inconnu.");
         return;
     }
 
     QSqlQueryModel *model = new QSqlQueryModel();
     QSqlQuery query;
-
-    // SQL query to search for matches where the team name matches
-    query.prepare("SELECT * FROM MATCHES WHERE NOM_EQUIPE1 LIKE :search OR NOM_EQUIPE2 LIKE :search");
-    query.bindValue(":search", "%" + searchText + "%");
+    QString queryString = QString("SELECT ID_MATCH, TO_CHAR(DATE_MATCH, 'YYYY-MM-DD') AS DATE_MATCH, HEURE_MATCH, STADE, SCORE, NOM_EQUIPE1, NOM_EQUIPE2 FROM MATCHES WHERE %1 LIKE :val").arg(sqlField);
+    query.prepare(queryString);
+    query.bindValue(":val", "%" + value + "%");
 
     if (!query.exec()) {
         QMessageBox::critical(this, "Erreur", "Échec de la recherche.");
@@ -328,13 +468,50 @@ void MainWindow::searchMatch()
     }
 
     model->setQuery(query);
-    ui->tab_matches->setModel(model);  // Update the table view with search results
-
-    qDebug() << "Search completed for:" << searchText;
+    ui->tab_matches->setModel(model);
 }
+void MainWindow::on_comboBox_chercher_currentIndexChanged(const QString &text)
+{
+    if (text == "-- Chercher par --")
+        return;
 
+    QString value = ui->search_lineedit->text().trimmed();
+    searchMatchesBy(text, value);
+}
+void MainWindow::loadTeamNames() {
+    // Clear in case it's being reloaded
+    ui->nom_equipe1_combo->clear();
+    ui->nom_equipe2_combo->clear();
 
+    // Add default option
+    QString defaultText = "Veuillez sélectionner l'équipe";
+    ui->nom_equipe1_combo->addItem(defaultText);
+    ui->nom_equipe2_combo->addItem(defaultText);
 
-// Slot to search for matches
+    // Load actual team names from the database
+    QSqlQuery query("SELECT nom_equipe FROM EQUIPE");
+    while (query.next()) {
+        QString teamName = query.value(0).toString();
+        ui->nom_equipe1_combo->addItem(teamName);
+        ui->nom_equipe2_combo->addItem(teamName);
+    }
 
-// Manually connect the signal and slot in MainWindow constructor
+    // Set default selected index
+    ui->nom_equipe1_combo->setCurrentIndex(0);
+    ui->nom_equipe2_combo->setCurrentIndex(0);
+}
+void MainWindow::setupTeamComboValidation() {
+    connect(ui->nom_equipe1_combo, &QComboBox::currentTextChanged, this, [=]() {
+        if (ui->nom_equipe1_combo->currentText() == ui->nom_equipe2_combo->currentText()) {
+            QMessageBox::warning(this, "Erreur", "Les deux équipes ne peuvent pas être identiques.");
+            ui->nom_equipe2_combo->setCurrentIndex(-1); // Deselect
+        }
+    });
+
+    connect(ui->nom_equipe2_combo, &QComboBox::currentTextChanged, this, [=]() {
+        if (ui->nom_equipe1_combo->currentText() == ui->nom_equipe2_combo->currentText()) {
+            QMessageBox::warning(this, "Erreur", "Les deux équipes ne peuvent pas être identiques.");
+            ui->nom_equipe1_combo->setCurrentIndex(-1); // Deselect
+        }
+    });
+}

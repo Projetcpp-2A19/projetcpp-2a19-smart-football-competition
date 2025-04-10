@@ -7,6 +7,7 @@
 #include <QString>
 #include <QComboBox>
 
+
 Match::Match() {
     id_match = 0;
     date_match = QDate();
@@ -80,13 +81,13 @@ QSqlQueryModel* Match::afficher()
     model->setQuery(query);
 
     // Set the headers if the query is successful
-    model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID_MATCH"));
-    model->setHeaderData(1, Qt::Horizontal, QObject::tr("DATE_MATCH"));
-    model->setHeaderData(2, Qt::Horizontal, QObject::tr("HEURE_MATCH"));
+    model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
+    model->setHeaderData(1, Qt::Horizontal, QObject::tr("DATE"));
+    model->setHeaderData(2, Qt::Horizontal, QObject::tr("HEURE"));
     model->setHeaderData(3, Qt::Horizontal, QObject::tr("STADE"));
     model->setHeaderData(4, Qt::Horizontal, QObject::tr("SCORE"));
-    model->setHeaderData(5, Qt::Horizontal, QObject::tr("NOM_EQUIPE1"));
-    model->setHeaderData(6, Qt::Horizontal, QObject::tr("NOM_EQUIPE2"));
+    model->setHeaderData(5, Qt::Horizontal, QObject::tr("HOME"));
+    model->setHeaderData(6, Qt::Horizontal, QObject::tr("AWAY"));
 
     return model;
 }

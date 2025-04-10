@@ -20,13 +20,16 @@
       <x>240</x>
       <y>0</y>
       <width>1161</width>
-      <height>621</height>
+      <height>651</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true"/>
     </property>
-    <widget class="QWidget" name="stackedWidgetPage1" native="true">
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="stackedWidgetPage1">
      <widget class="QTableView" name="tab_matches">
       <property name="geometry">
        <rect>
@@ -136,7 +139,7 @@ color: rgb(255, 254, 242);
 font-weight: bold;</string>
       </property>
       <property name="text">
-       <string>supprimer</string>
+       <string>Supprimer</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_2">
@@ -316,42 +319,6 @@ font-weight: bold;
        <string>équipe à l'extérieur</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="nom_equipe2">
-      <property name="geometry">
-       <rect>
-        <x>50</x>
-        <y>530</y>
-        <width>241</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">border-radius: 10px;
-border: none;
-background-color: rgb(255, 255, 255);
-border-color: rgb(46, 52, 68);
-
-</string>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="nom_equipe1">
-      <property name="geometry">
-       <rect>
-        <x>50</x>
-        <y>450</y>
-        <width>241</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">border-radius: 10px;
-border: none;
-background-color: rgb(255, 255, 255);
-border-color: rgb(46, 52, 68);
-
-</string>
-      </property>
-     </widget>
      <widget class="QLineEdit" name="score">
       <property name="geometry">
        <rect>
@@ -424,9 +391,9 @@ QDateEdit::drop-down {
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>50</y>
+        <y>40</y>
         <width>431</width>
-        <height>561</height>
+        <height>551</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -471,7 +438,7 @@ border: none;
      <widget class="QPushButton" name="pb_export_pdf">
       <property name="geometry">
        <rect>
-        <x>650</x>
+        <x>730</x>
         <y>80</y>
         <width>181</width>
         <height>41</height>
@@ -487,48 +454,6 @@ font-weight: bold;</string>
       </property>
       <property name="text">
        <string>Exporter en PDF</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="pb_tri">
-      <property name="geometry">
-       <rect>
-        <x>520</x>
-        <y>80</y>
-        <width>121</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(46, 52, 76);
-font: 12pt &quot;Haettenschweiler&quot;;
-color: rgb(255, 254, 242);
- border-radius: 10px;
-    border: none;
-font-weight: bold;</string>
-      </property>
-      <property name="text">
-       <string>Tri(date)</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="search_button">
-      <property name="geometry">
-       <rect>
-        <x>930</x>
-        <y>20</y>
-        <width>141</width>
-        <height>51</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(46, 52, 76);
-font: 12pt &quot;Haettenschweiler&quot;;
-color: rgb(255, 254, 242);
- border-radius: 10px;
-    border: none;
-font-weight: bold;</string>
-      </property>
-      <property name="text">
-       <string>Chercher</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="search_lineedit">
@@ -549,6 +474,139 @@ border-color: rgb(46, 52, 68);
 </string>
       </property>
      </widget>
+     <widget class="QPushButton" name="stat">
+      <property name="geometry">
+       <rect>
+        <x>930</x>
+        <y>80</y>
+        <width>181</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(46, 52, 76);
+font: 12pt &quot;Haettenschweiler&quot;;
+color: rgb(255, 254, 242);
+ border-radius: 10px;
+    border: none;
+font-weight: bold;</string>
+      </property>
+      <property name="text">
+       <string>Statistique</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="comboBox_tri">
+      <property name="geometry">
+       <rect>
+        <x>530</x>
+        <y>80</y>
+        <width>171</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(46, 52, 76);
+font: 12pt &quot;Haettenschweiler&quot;;
+color: rgb(255, 254, 242);
+ border-radius: 10px;
+    border: none;
+font-weight: bold;</string>
+      </property>
+      <item>
+       <property name="text">
+        <string>-- Trier par --</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>ID</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Date</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Stade</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QComboBox" name="comboBox_chercher">
+      <property name="geometry">
+       <rect>
+        <x>940</x>
+        <y>30</y>
+        <width>201</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(46, 52, 76);
+font: 12pt &quot;Haettenschweiler&quot;;
+color: rgb(255, 254, 242);
+ border-radius: 10px;
+    border: none;
+font-weight: bold;</string>
+      </property>
+      <item>
+       <property name="text">
+        <string>-- Chercher par --</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>ID</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Nom Équipe</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Stade</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QComboBox" name="nom_equipe1_combo">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>450</y>
+        <width>191</width>
+        <height>26</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(46, 52, 76);
+font: 12pt &quot;Haettenschweiler&quot;;
+color: rgb(255, 254, 242);
+ border-radius: 10px;
+    border: none;
+font-weight: bold;</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="nom_equipe2_combo">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>540</y>
+        <width>191</width>
+        <height>26</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(46, 52, 76);
+font: 12pt &quot;Haettenschweiler&quot;;
+color: rgb(255, 254, 242);
+ border-radius: 10px;
+    border: none;
+font-weight: bold;</string>
+      </property>
+     </widget>
      <zorder>label_4</zorder>
      <zorder>tab_matches</zorder>
      <zorder>pb_ajouter</zorder>
@@ -562,18 +620,20 @@ border-color: rgb(46, 52, 68);
      <zorder>label_12</zorder>
      <zorder>label_13</zorder>
      <zorder>label_14</zorder>
-     <zorder>nom_equipe2</zorder>
-     <zorder>nom_equipe1</zorder>
      <zorder>score</zorder>
      <zorder>heure_match</zorder>
      <zorder>date_match</zorder>
      <zorder>pb_modifier</zorder>
      <zorder>stade</zorder>
      <zorder>pb_export_pdf</zorder>
-     <zorder>pb_tri</zorder>
-     <zorder>search_button</zorder>
      <zorder>search_lineedit</zorder>
+     <zorder>stat</zorder>
+     <zorder>comboBox_tri</zorder>
+     <zorder>comboBox_chercher</zorder>
+     <zorder>nom_equipe1_combo</zorder>
+     <zorder>nom_equipe2_combo</zorder>
     </widget>
+    <widget class="QWidget" name="page"/>
    </widget>
    <widget class="QPushButton" name="pushButton_2">
     <property name="enabled">
@@ -744,8 +804,8 @@ font: 12pt &quot;Haettenschweiler&quot;;
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>310</y>
+      <x>220</x>
+      <y>370</y>
       <width>1541</width>
       <height>1191</height>
      </rect>

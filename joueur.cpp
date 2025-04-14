@@ -80,8 +80,8 @@ QSqlQueryModel * Joueur::afficher(){
     model->setHeaderData(3,Qt::Horizontal,QObject::tr("Poste"));
     model->setHeaderData(4,Qt::Horizontal,QObject::tr("Goals"));
     model->setHeaderData(5,Qt::Horizontal,QObject::tr("Assits"));
-    model->setHeaderData(6,Qt::Horizontal,QObject::tr("Carton J"));
-    model->setHeaderData(7,Qt::Horizontal,QObject::tr("Carton R"));
+    model->setHeaderData(6,Qt::Horizontal,QObject::tr("Carton R"));
+    model->setHeaderData(7,Qt::Horizontal,QObject::tr("Carton J"));
     model->setHeaderData(8,Qt::Horizontal,QObject::tr("Equipe"));
 
     return model;

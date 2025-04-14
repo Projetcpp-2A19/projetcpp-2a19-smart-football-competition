@@ -15,12 +15,22 @@
 #include <QTextDocument>
 #include <QPrinter>
 #include <QFileDialog>
+#include <qstandardpaths.h>
+
+#include <QPixmap>
+#include <QLabel>
+#include <QImage>
+
+#include <QVector>
+#include <QTabWidget>
+#include <QRandomGenerator>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
 }
 QT_END_NAMESPACE
+
 
 class MainWindow : public QMainWindow
 {
@@ -40,20 +50,30 @@ private slots:
     void on_tableView_clicked(const QModelIndex &index);
     void on_pushButton_modifier_clicked();
 
-    void on_TrieButton_clicked();
 
     void on_pushButton_pdf_clicked();
+
+    void on_pushButton_photo_clicked();
+
+    void on_comboBox_trie_currentIndexChanged(int index);
 
 private:
     Ui::MainWindow *ui;
     Joueur Jtmp;
     QSortFilterProxyModel *proxyModel;
     void trierLignes(int colonne, bool croissant);
+    QString m_photoTemp;
+    int m_joueurId;
 public:
     int getNextId();
     void remplirComboBoxEquipe();
     void afficherProfil (int id);
     void rechercherJoueur();
     void genererPDF();
+    void loadImageToDatabase(const QString &filePath);
+    void afficherPhotoJoueur(int idJoueur, QLabel* labelPhoto);
+    double calculerNoteParMatch(int joueurId, int matchId);
+    void afficherNotesDansTable(int idJoueur);
 };
+
 #endif // MAINWINDOW_H

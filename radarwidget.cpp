@@ -42,7 +42,7 @@ void RadarWidget::paintEvent(QPaintEvent *) {
     }
 
     // Dessine les lignes d'axes
-    QStringList labels = {"Buts", "Passes", "Cartons J", "Cartons R"};
+    QStringList labels = {"Passes", "Buts", "Cartons J", "Cartons R"};
     for (int i = 0; i < 4; ++i) {
         double angle = 2 * M_PI * i / 4;
         int x = centerX + size/2 * cos(angle);
@@ -64,3 +64,4 @@ void RadarWidget::paintEvent(QPaintEvent *) {
 
 
 }
+

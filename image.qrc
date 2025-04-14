@@ -4,5 +4,6 @@
         <file>back.jpeg</file>
         <file>next.jpeg</file>
         <file>filtre.jpeg</file>
+        <file>default.jpg</file>
     </qresource>
 </RCC>

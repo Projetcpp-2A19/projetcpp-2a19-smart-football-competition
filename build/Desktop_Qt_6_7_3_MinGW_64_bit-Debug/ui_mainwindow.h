@@ -19,6 +19,7 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QTableView>
+#include <QtWidgets/QTableWidget>
 #include <QtWidgets/QWidget>
 #include "radarwidget.h"
 
@@ -30,7 +31,6 @@ public:
     QWidget *centralwidget;
     QStackedWidget *stackedWidget;
     QWidget *page_acceuil;
-    QPushButton *TrieButton;
     QPushButton *pushButton_2;
     QPushButton *pushButton_5;
     QLineEdit *lineEdit_cartonJ;
@@ -68,6 +68,7 @@ public:
     QLabel *label_11;
     QTableView *tableView;
     QPushButton *pushButton_pdf;
+    QComboBox *comboBox_trie;
     QWidget *page_profil;
     QLabel *label_12;
     QPushButton *pushButton_6;
@@ -81,7 +82,6 @@ public:
     QLabel *label_17;
     QLabel *label_18;
     QLabel *label_19;
-    QLineEdit *lineEdit_8;
     QLineEdit *lineEdit_9;
     QLineEdit *lineEdit_10;
     QLabel *label_20;
@@ -90,7 +90,7 @@ public:
     QLabel *label_23;
     QLabel *label_24;
     QLabel *label_25;
-    QPushButton *pushButton_supp_2;
+    QPushButton *pushButton_photo;
     QLabel *label_prenom;
     QLabel *label_poste;
     QLabel *label_nom;
@@ -101,6 +101,8 @@ public:
     QPushButton *pushButton_retour;
     RadarWidget *radarWidget;
     QLineEdit *lineEdit_11;
+    QLabel *label_photo;
+    QTableWidget *tableNotesJoueurs;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -114,9 +116,6 @@ public:
         stackedWidget->setGeometry(QRect(-10, 0, 891, 581));
         page_acceuil = new QWidget();
         page_acceuil->setObjectName("page_acceuil");
-        TrieButton = new QPushButton(page_acceuil);
-        TrieButton->setObjectName("TrieButton");
-        TrieButton->setGeometry(QRect(695, -1, 51, 51));
         pushButton_2 = new QPushButton(page_acceuil);
         pushButton_2->setObjectName("pushButton_2");
         pushButton_2->setGeometry(QRect(35, 239, 141, 41));
@@ -154,7 +153,7 @@ public:
         lineEdit_passe->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);"));
         filtre = new QLabel(page_acceuil);
         filtre->setObjectName("filtre");
-        filtre->setGeometry(QRect(705, 9, 31, 31));
+        filtre->setGeometry(QRect(680, 0, 51, 51));
         filtre->setStyleSheet(QString::fromUtf8("image: url(:/pic/filtre.jpeg);"));
         filtre->setPixmap(QPixmap(QString::fromUtf8("filtre.jpeg")));
         filtre->setScaledContents(true);
@@ -221,7 +220,7 @@ public:
         next->setScaledContents(true);
         lineEditRecherche = new QLineEdit(page_acceuil);
         lineEditRecherche->setObjectName("lineEditRecherche");
-        lineEditRecherche->setGeometry(QRect(425, -1, 321, 51));
+        lineEditRecherche->setGeometry(QRect(425, 0, 321, 51));
         lineEditRecherche->setStyleSheet(QString::fromUtf8("QLineEdit {\n"
 "    background-color: white;        /* White background */\n"
 "    border: 2px solid #2E344C;      /* Border color */\n"
@@ -361,24 +360,104 @@ public:
         tableView = new QTableView(page_acceuil);
         tableView->setObjectName("tableView");
         tableView->setGeometry(QRect(410, 80, 441, 281));
+        tableView->setStyleSheet(QString::fromUtf8("QTableWidget {\n"
+"    background-color: #FDF6D0;\n"
+"    color: #2E344C;\n"
+"    gridline-color: #2E344C;\n"
+"    border: 2px solid #2E344C;\n"
+"    border-radius: 10px;\n"
+"}\n"
+"\n"
+"QHeaderView::section {\n"
+"    background-color: #2E344C;\n"
+"    color: #FDF6D0;\n"
+"    padding: 5px;\n"
+"    border: 1px solid #2E344C;\n"
+"}\n"
+"\n"
+"QTableWidget QTableCornerButton::section {\n"
+"    background-color: #2E344C;\n"
+"}\n"
+"\n"
+"QTableWidget::item {\n"
+"    padding: 5px;\n"
+"    border: 1px solid #2E344C;\n"
+"}\n"
+"\n"
+"QTableWidget::item:selected {\n"
+"    background-color: #2E344C;\n"
+"    color: #FDF6D0;\n"
+"}\n"
+"ui->tab->setStyleSheet(\n"
+"    \"QTableWidget {\"\n"
+"    \"   width: 600px;\"   // Set the width of the table\n"
+"    \"   height: 300px;\"  // Set the height of the table\n"
+"    \"}\"\n"
+");\n"
+""));
         pushButton_pdf = new QPushButton(page_acceuil);
         pushButton_pdf->setObjectName("pushButton_pdf");
         pushButton_pdf->setGeometry(QRect(760, 330, 91, 31));
         pushButton_pdf->setStyleSheet(QString::fromUtf8("background-color: rgb(46, 52, 76);\n"
 "font: 12pt \"Haettenschweiler\";\n"
 "color: rgb(255, 254, 242);"));
+        comboBox_trie = new QComboBox(page_acceuil);
+        comboBox_trie->addItem(QString());
+        comboBox_trie->addItem(QString());
+        comboBox_trie->addItem(QString());
+        comboBox_trie->addItem(QString());
+        comboBox_trie->addItem(QString());
+        comboBox_trie->addItem(QString());
+        comboBox_trie->addItem(QString());
+        comboBox_trie->setObjectName("comboBox_trie");
+        comboBox_trie->setGeometry(QRect(690, 0, 61, 51));
+        comboBox_trie->setStyleSheet(QString::fromUtf8("QComboBox::drop-down {\n"
+"    subcontrol-origin: padding;\n"
+"    subcontrol-position: top right;\n"
+"    width: 25px;\n"
+"    border-left-width: 1px;\n"
+"    border-left-color: #2E344C;\n"
+"    border-left-style: solid;\n"
+"    border-top-right-radius: 3px;\n"
+"    border-bottom-right-radius: 3px;\n"
+"}\n"
+"\n"
+"\n"
+"QComboBox QAbstractItemView {\n"
+"    background-color: #FDF6D0;\n"
+"    color: #2E344C;\n"
+"    selection-background-color: #2E344C;\n"
+"    selection-color: #FDF6D0;\n"
+"    border: 2px solid #2E344C;\n"
+"    border-radius: 5px;\n"
+"    padding: 5px;\n"
+"}\n"
+"\n"
+"QComboBox:on { /* Style lorsque le menu d\303\251roulant est ouvert */\n"
+"    border: 2px solid #4C566A;\n"
+"}\n"
+"\n"
+"QComboBox::down-arrow {\n"
+"    width: 12px;\n"
+"    height: 12px;\n"
+"    /* Pas d'image, on utilise la fl\303\250che native mais on change sa couleur */\n"
+"}\n"
+"\n"
+"QComboBox::down-arrow:on {\n"
+"    image: none; /* D\303\251sactive toute ic\303\264ne personnalis\303\251e */\n"
+"    color: #2E344C; /* Couleur"
+                        " de la fl\303\250che (bleu fonc\303\251) */\n"
+"}"));
         stackedWidget->addWidget(page_acceuil);
         label_2->raise();
         lineEditRecherche->raise();
         label_3->raise();
         label->raise();
-        TrieButton->raise();
         pushButton_2->raise();
         pushButton_5->raise();
         lineEdit_cartonJ->raise();
         pushButton->raise();
         lineEdit_passe->raise();
-        filtre->raise();
         pushButton_modifier->raise();
         comboBox_equipe->raise();
         pushButton_4->raise();
@@ -406,6 +485,8 @@ public:
         label_11->raise();
         tableView->raise();
         pushButton_pdf->raise();
+        comboBox_trie->raise();
+        filtre->raise();
         page_profil = new QWidget();
         page_profil->setObjectName("page_profil");
         label_12 = new QLabel(page_profil);
@@ -522,21 +603,6 @@ public:
 "    padding: 5px;               /* Optional: Adds space inside the label */\n"
 "}\n"
 ""));
-        lineEdit_8 = new QLineEdit(page_profil);
-        lineEdit_8->setObjectName("lineEdit_8");
-        lineEdit_8->setGeometry(QRect(220, 150, 181, 161));
-        lineEdit_8->setStyleSheet(QString::fromUtf8("QLineEdit {\n"
-"    background-color: white;        /* White background */\n"
-"    border: 2px solid #2E344C;      /* Border color */\n"
-"    border-radius: 10px;            /* Rounded corners */\n"
-"    padding: 5px;                   /* Padding inside the line edit */\n"
-"    color: #2E344C;                 /* Text color */\n"
-"}\n"
-"\n"
-"QLineEdit:focus {\n"
-"    border: 2px solid #2E344C;      /* Keep border color when focused */\n"
-"}\n"
-""));
         lineEdit_9 = new QLineEdit(page_profil);
         lineEdit_9->setObjectName("lineEdit_9");
         lineEdit_9->setGeometry(QRect(530, 80, 331, 51));
@@ -603,10 +669,10 @@ public:
         label_25->setGeometry(QRect(400, 490, 71, 16));
         label_25->setStyleSheet(QString::fromUtf8("color: rgb(46, 52, 76);\n"
 "font: 14pt \"Haettenschweiler\";"));
-        pushButton_supp_2 = new QPushButton(page_profil);
-        pushButton_supp_2->setObjectName("pushButton_supp_2");
-        pushButton_supp_2->setGeometry(QRect(410, 260, 101, 51));
-        pushButton_supp_2->setStyleSheet(QString::fromUtf8("background-color: rgb(46, 52, 76);\n"
+        pushButton_photo = new QPushButton(page_profil);
+        pushButton_photo->setObjectName("pushButton_photo");
+        pushButton_photo->setGeometry(QRect(410, 260, 101, 51));
+        pushButton_photo->setStyleSheet(QString::fromUtf8("background-color: rgb(46, 52, 76);\n"
 "font: 12pt \"Haettenschweiler\";\n"
 "color: rgb(255, 254, 242);"));
         label_prenom = new QLabel(page_profil);
@@ -757,10 +823,10 @@ public:
 "color: rgb(255, 254, 242);"));
         radarWidget = new RadarWidget(page_profil);
         radarWidget->setObjectName("radarWidget");
-        radarWidget->setGeometry(QRect(530, 140, 321, 191));
+        radarWidget->setGeometry(QRect(550, 130, 291, 161));
         lineEdit_11 = new QLineEdit(page_profil);
         lineEdit_11->setObjectName("lineEdit_11");
-        lineEdit_11->setGeometry(QRect(530, 360, 331, 51));
+        lineEdit_11->setGeometry(QRect(530, 310, 331, 51));
         lineEdit_11->setStyleSheet(QString::fromUtf8("QLineEdit {\n"
 "    background-color: white;        /* White background */\n"
 "    border: 2px solid #2E344C;      /* Border color */\n"
@@ -776,12 +842,41 @@ public:
 "    border: 2px solid #2E344C;      /* Keep border color when focused */\n"
 "}\n"
 ""));
+        label_photo = new QLabel(page_profil);
+        label_photo->setObjectName("label_photo");
+        label_photo->setGeometry(QRect(240, 140, 161, 151));
+        tableNotesJoueurs = new QTableWidget(page_profil);
+        tableNotesJoueurs->setObjectName("tableNotesJoueurs");
+        tableNotesJoueurs->setGeometry(QRect(535, 360, 321, 192));
+        tableNotesJoueurs->setStyleSheet(QString::fromUtf8("/* Style minimaliste pour QTableWidget */\n"
+"QTableWidget {\n"
+"    background-color: white;\n"
+"    border: 1px solid #ccc;\n"
+"    gridline-color: #ddd;\n"
+"}\n"
+"\n"
+"QHeaderView::section {\n"
+"    background-color: #2E344C;\n"
+"    color: white;\n"
+"    padding: 5px;\n"
+"    border: none;\n"
+"}\n"
+"\n"
+"QTableWidget::item {\n"
+"    padding: 3px;\n"
+"    border: none;\n"
+"}\n"
+"\n"
+"QTableWidget::item:selected {\n"
+"    background-color: #2E344C;\n"
+"    color: white;\n"
+"}"));
         stackedWidget->addWidget(page_profil);
         MainWindow->setCentralWidget(centralwidget);
 
         retranslateUi(MainWindow);
 
-        stackedWidget->setCurrentIndex(0);
+        stackedWidget->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -790,7 +885,6 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
-        TrieButton->setText(QString());
         pushButton_2->setText(QCoreApplication::translate("MainWindow", "Matchs", nullptr));
         pushButton_5->setText(QCoreApplication::translate("MainWindow", "Supporter", nullptr));
         lineEdit_cartonJ->setText(QString());
@@ -832,6 +926,14 @@ public:
         pushButton_supp->setText(QCoreApplication::translate("MainWindow", "Supprimer", nullptr));
         label_11->setText(QCoreApplication::translate("MainWindow", "Carton jaune       Carton rouge", nullptr));
         pushButton_pdf->setText(QCoreApplication::translate("MainWindow", "PDF", nullptr));
+        comboBox_trie->setItemText(0, QCoreApplication::translate("MainWindow", "Nom", nullptr));
+        comboBox_trie->setItemText(1, QCoreApplication::translate("MainWindow", "Pr\303\251nom", nullptr));
+        comboBox_trie->setItemText(2, QCoreApplication::translate("MainWindow", "Poste", nullptr));
+        comboBox_trie->setItemText(3, QCoreApplication::translate("MainWindow", "But", nullptr));
+        comboBox_trie->setItemText(4, QCoreApplication::translate("MainWindow", "Passe", nullptr));
+        comboBox_trie->setItemText(5, QCoreApplication::translate("MainWindow", "Jaune", nullptr));
+        comboBox_trie->setItemText(6, QCoreApplication::translate("MainWindow", "Rouge", nullptr));
+
         label_12->setText(QCoreApplication::translate("MainWindow", "TextLabel", nullptr));
         pushButton_6->setText(QCoreApplication::translate("MainWindow", "Equipes", nullptr));
         pushButton_7->setText(QCoreApplication::translate("MainWindow", "Supporter", nullptr));
@@ -844,7 +946,6 @@ public:
         label_17->setText(QString());
         label_18->setText(QString());
         label_19->setText(QString());
-        lineEdit_8->setText(QString());
         lineEdit_9->setText(QCoreApplication::translate("MainWindow", "Statistique :", nullptr));
         lineEdit_10->setText(QCoreApplication::translate("MainWindow", "Photo de profil :", nullptr));
         label_20->setText(QCoreApplication::translate("MainWindow", "Prenom", nullptr));
@@ -853,7 +954,7 @@ public:
         label_23->setText(QCoreApplication::translate("MainWindow", "Buts", nullptr));
         label_24->setText(QCoreApplication::translate("MainWindow", "Passes", nullptr));
         label_25->setText(QCoreApplication::translate("MainWindow", "Carton R/J", nullptr));
-        pushButton_supp_2->setText(QCoreApplication::translate("MainWindow", "Ajouter une photo", nullptr));
+        pushButton_photo->setText(QCoreApplication::translate("MainWindow", "Ajouter une photo", nullptr));
         label_prenom->setText(QString());
         label_poste->setText(QString());
         label_nom->setText(QString());
@@ -862,7 +963,8 @@ public:
         label_but->setText(QString());
         label_cartonR->setText(QString());
         pushButton_retour->setText(QCoreApplication::translate("MainWindow", "Retour", nullptr));
-        lineEdit_11->setText(QCoreApplication::translate("MainWindow", "Derni\303\251re confrontation : ", nullptr));
+        lineEdit_11->setText(QCoreApplication::translate("MainWindow", "Derni\303\251re performances : ", nullptr));
+        label_photo->setText(QString());
     } // retranslateUi
 
 };

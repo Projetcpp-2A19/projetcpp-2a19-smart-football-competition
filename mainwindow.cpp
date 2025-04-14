@@ -19,11 +19,17 @@ MainWindow::MainWindow(QWidget *parent)
     });
     connect(ui->lineEditRecherche, &QLineEdit::returnPressed, this, &MainWindow::rechercherJoueur);
 
+    m_joueurId = -1;
+    afficherPhotoJoueur(m_joueurId, ui->label_photo);
+
     remplirComboBoxEquipe();
 
     ui->tableView->resizeColumnsToContents();  // Automatically resize columns based on their content
     ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);  // Stretch columns to fill space
     ui->tableView->verticalHeader()->setVisible(false);
+    int lastColumn = ui->tableView->model()->columnCount() - 1;
+    ui->tableView->setColumnHidden(lastColumn, true);
+    ui->tableNotesJoueurs->verticalHeader()->setVisible(false);
 
     // Valider que le nom ne contient que des lettres et des espaces
     QRegularExpression regex("^[A-Za-zÀ-ÖØ-öø-ÿ\\s]+$");
@@ -298,40 +304,6 @@ void MainWindow::on_tableView_clicked(const QModelIndex &index) {
     }
 }
 
-void MainWindow::on_TrieButton_clicked()
-{
-    QMessageBox msgBox;
-    msgBox.setWindowTitle("Options de tri");
-    msgBox.setText("Trier par :");
-
-    QPushButton *nomBtn = msgBox.addButton("Nom", QMessageBox::ActionRole);
-    QPushButton *prenomBtn = msgBox.addButton("Prénom", QMessageBox::ActionRole);
-    QPushButton *posteBtn = msgBox.addButton("Poste", QMessageBox::ActionRole);
-    QPushButton *butBtn = msgBox.addButton("But", QMessageBox::ActionRole);
-    QPushButton *passeBtn = msgBox.addButton("Passe", QMessageBox::ActionRole);
-    QPushButton *cartonJBtn = msgBox.addButton("Carton Jaune", QMessageBox::ActionRole);
-    QPushButton *cartonRBtn = msgBox.addButton("Carton Rouge", QMessageBox::ActionRole);
-    msgBox.addButton("Annuler", QMessageBox::RejectRole);
-
-    msgBox.exec();
-
-    if (msgBox.clickedButton() == nomBtn) {
-        trierLignes(1,true);
-    } else if (msgBox.clickedButton() == prenomBtn) {
-        trierLignes(2,true);
-    } else if (msgBox.clickedButton() == posteBtn) {
-        trierLignes(3,false);
-    } else if (msgBox.clickedButton() == butBtn) {
-        trierLignes(4,false);
-    } else if (msgBox.clickedButton() == passeBtn) {
-        trierLignes(5,false);
-    } else if (msgBox.clickedButton() == cartonJBtn) {
-        trierLignes(6,false);
-    }else if (msgBox.clickedButton() == cartonRBtn) {
-        trierLignes(7,false);
-    }
-}
-
 void MainWindow::trierLignes(int colonne, bool croissant)
 {
     if (proxyModel) {
@@ -339,7 +311,40 @@ void MainWindow::trierLignes(int colonne, bool croissant)
     }
 }
 
+void MainWindow::on_comboBox_trie_currentIndexChanged(int index)
+{
+    switch(index) {
+    case 0: // "Nom"
+        trierLignes(1, true);
+        break;
+    case 1: // "Prénom"
+        trierLignes(2, true);
+        break;
+    case 2: // "Poste"
+        trierLignes(3, false);
+        break;
+    case 3: // "But"
+        trierLignes(4, false);
+        break;
+    case 4: // "Passe"
+        trierLignes(5, false);
+        break;
+    case 5: // "Carton Jaune"
+        trierLignes(6, false);
+        break;
+    case 6: // "Carton Rouge"
+        trierLignes(7, false);
+        break;
+    default:
+        break;
+    }
+}
+
+
+
 void MainWindow::afficherProfil(int id) {
+    m_joueurId = id;
+
     QSqlQuery query;
     query.prepare("SELECT nom, prenom, poste, nbr_but, nbr_passe, carton_j, carton_r FROM joueur WHERE id_joueur = ?");
     query.addBindValue(id);
@@ -352,14 +357,13 @@ void MainWindow::afficherProfil(int id) {
     }
 
     if (query.next()) {
-        // Les indices commencent à 0 pour la première colonne sélectionnée
-        QString nom = query.value(0).toString();        // nom (1ère colonne)
-        QString prenom = query.value(1).toString();     // prenom (2e colonne)
-        QString poste = query.value(2).toString();      // poste (3e colonne)
-        int buts = query.value(3).toInt();              // nbr_but (4e)
-        int passes = query.value(4).toInt();            // nbr_passe (5e)
-        int cartonsJ = query.value(5).toInt();          // carton_j (6e)
-        int cartonsR = query.value(6).toInt();          // carton_r (7e)
+        QString nom = query.value(0).toString();        // nom
+        QString prenom = query.value(1).toString();     // prenom
+        QString poste = query.value(2).toString();      // poste
+        int buts = query.value(3).toInt();              // nbr_but
+        int passes = query.value(4).toInt();            // nbr_passe
+        int cartonsJ = query.value(5).toInt();          // carton_j
+        int cartonsR = query.value(6).toInt();          // carton_r
 
         ui->label_nom->setText(nom);
         ui->label_prenom->setText(prenom);
@@ -371,6 +375,9 @@ void MainWindow::afficherProfil(int id) {
 
         ui->stackedWidget->setCurrentWidget(ui->page_profil);
         ui->radarWidget->setStats(buts, passes, cartonsJ, cartonsR);
+
+        afficherPhotoJoueur(m_joueurId, ui->label_photo);
+        afficherNotesDansTable(m_joueurId);
     } else {
         qDebug() << "Aucun joueur trouvé avec ID:" << id;
         QMessageBox::information(this, "Non trouvé", "Aucun joueur avec cet ID");
@@ -443,17 +450,59 @@ void MainWindow::on_pushButton_pdf_clicked()
         return;
     }
 
-    QString html = "<h1>Liste des Joueurs</h1>"
-                   "<table border='1' style='width:100%; border-collapse:collapse;'>"
-                   "<tr>"
-                   "<th>Nom</th>"
-                   "<th>Prénom</th>"
-                   "<th>Poste</th>"
-                   "<th>Buts</th>"
-                   "<th>Passes</th>"
-                   "<th>Cartons J</th>"
-                   "<th>Cartons R</th>"
-                   "</tr>";
+    // Chemin vers le logo - à adapter
+    QString logoPath = "C:\\Users\\emnag\\OneDrive\\Bureau\\Ali\\Projet_Qt\\logo.png";
+
+    // Chargement et redimensionnement du logo
+    QPixmap logo(logoPath);
+    if(!logo.isNull()) {
+        logo = logo.scaled(45, 45, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    }
+
+    // Sauvegarde temporaire du logo redimensionné
+    QString tempLogoPath;
+    if(!logo.isNull()) {
+        tempLogoPath = QDir::tempPath() + "/temp_logo.png";
+        if(!logo.save(tempLogoPath)) {
+            tempLogoPath.clear();
+        }
+    }
+
+    // Construction du HTML avec le style original du tableau
+    QString html = "<html>"
+                   "<head>"
+                   "<style>"
+                   "body { font-family: Arial, sans-serif; font-size: 8pt; }"
+                   "h1 { color: #333333; text-align: center; font-size: 12pt; margin-bottom: 5px; }"
+                   "table { width: 100%; border-collapse: collapse; margin-top: 10px; }"
+                   "th { background-color: #f2f2f2; color: #333333; padding: 4px; text-align: left; font-size: 4pt; border: 1px solid #ddd; }"
+                   "td { padding: 4px; border: 1px solid #ddd; font-size: 3pt; }"
+                   ".header { display: flex; justify-content: center; align-items: center; margin-bottom: 10px; }"
+                   ".title-container { text-align: center; }"
+                   "</style>"
+                   "</head>"
+                   "<body>"
+                   "<div class='header'>";
+
+    if(!tempLogoPath.isEmpty()) {
+        html += "<img class='logo' src='" + tempLogoPath + "' />";
+    }
+
+    html += "<div class='title-container'>"
+            "<h1>Liste des Joueurs</h1>"
+            "<div style='font-size: 7pt; color: #666;'>Généré le " + QDate::currentDate().toString("dd/MM/yyyy") + "</div>"
+                                                            "</div>"
+                                                            "</div>"
+                                                            "<table>"
+                                                            "<tr>"
+                                                            "<th>Nom</th>"
+                                                            "<th>Prénom</th>"
+                                                            "<th>Poste</th>"
+                                                            "<th>Buts</th>"
+                                                            "<th>Passes</th>"
+                                                            "<th>Cartons J</th>"
+                                                            "<th>Cartons R</th>"
+                                                            "</tr>";
 
     while (query.next()) {
         html += QString("<tr>"
@@ -473,7 +522,7 @@ void MainWindow::on_pushButton_pdf_clicked()
                     .arg(query.value(5).toString())
                     .arg(query.value(6).toString());
     }
-    html += "</table>";
+    html += "</table></body></html>";
 
     QTextDocument doc;
     doc.setHtml(html);
@@ -484,22 +533,329 @@ void MainWindow::on_pushButton_pdf_clicked()
         QDir::homePath() + "/liste_joueurs.pdf",
         "Fichiers PDF (*.pdf)");
 
-    if (fichier.isEmpty()) return;
+    if (fichier.isEmpty()) {
+        // Nettoyer le fichier temporaire si l'utilisateur annule
+        if(!tempLogoPath.isEmpty()) QFile::remove(tempLogoPath);
+        return;
+    }
 
     QPrinter printer(QPrinter::HighResolution);
     printer.setPageSize(QPageSize(QPageSize::A4));
     printer.setOutputFormat(QPrinter::PdfFormat);
     printer.setOutputFileName(fichier);
 
-    // Ajout des marges
-    QMargins margins(20, 20, 20, 20); // left, top, right, bottom
+    // Marges réduites pour gagner de l'espace
+    QMargins margins(10, 10, 10, 10);
     QPageLayout pageLayout;
     pageLayout.setMargins(margins);
     pageLayout.setMode(QPageLayout::StandardMode);
     printer.setPageLayout(pageLayout);
 
-    doc.setPageSize(printer.pageRect(QPrinter::Point).size());
+    // Ajustement de la taille du document
+    doc.setPageSize(printer.pageRect(QPrinter::Millimeter).size());
+
+    // Impression du document
     doc.print(&printer);
 
+    // Nettoyer le fichier temporaire
+    if(!tempLogoPath.isEmpty()) QFile::remove(tempLogoPath);
+
     QMessageBox::information(this, "Succès", "PDF généré avec succès !");
+}
+
+void MainWindow::on_pushButton_photo_clicked()
+{
+    QString filePath = QFileDialog::getOpenFileName(this,
+                                                    tr("Sélectionner une image"),
+                                                    QDir::homePath(),
+                                                    tr("Images (*.png *.jpg *.jpeg *.bmp *.gif)"));
+
+    if (!filePath.isEmpty()) {
+        loadImageToDatabase(filePath);
+
+        // Optionnel: afficher l'image dans un QLabel
+        QPixmap pixmap(filePath);
+        ui->label_photo->setPixmap(pixmap.scaled(100, 100, Qt::KeepAspectRatio));
+    }
+}
+
+void MainWindow::loadImageToDatabase(const QString &filePath)
+{
+    // [1] Vérification visuelle de l'ID
+    qDebug() << "ID joueur en cours :" << Jtmp.getId();
+
+    // [2] Vérification dans la base
+    QSqlQuery checkQuery;
+    checkQuery.prepare("SELECT COUNT(*) FROM joueur WHERE id_joueur = ?");
+    checkQuery.addBindValue(m_joueurId);
+
+    if (!checkQuery.exec() || !checkQuery.next()) {
+        QMessageBox::warning(this, "Erreur", "Échec de vérification de l'ID");
+        return;
+    }
+
+    int count = checkQuery.value(0).toInt();
+    qDebug() << "Nombre de joueurs trouvés avec cet ID :" << count;
+
+    if (count == 0) {
+        QMessageBox::warning(this, "Erreur",
+                             QString("Aucun joueur avec l'ID %1").arg(m_joueurId));
+        return;
+    }
+
+    // [3] Exécution de la mise à jour
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly)) {
+        QMessageBox::warning(this, "Erreur", "Impossible d'ouvrir l'image");
+        return;
+    }
+
+    QByteArray imageData = file.readAll();
+    file.close();
+
+    QSqlQuery updateQuery;
+    updateQuery.prepare("UPDATE joueur SET photo = ? WHERE id_joueur = ?");
+    updateQuery.addBindValue(imageData);
+    updateQuery.addBindValue(m_joueurId);
+
+    if (!updateQuery.exec()) {
+        QMessageBox::critical(this, "Erreur SQL", updateQuery.lastError().text());
+        return;
+    }
+
+    // [4] Vérification des lignes affectées
+    int rowsAffected = updateQuery.numRowsAffected();
+    qDebug() << "Lignes modifiées :" << rowsAffected;
+
+    if (rowsAffected > 0) {
+        QMessageBox::information(this, "Succès", "Photo mise à jour");
+    } else {
+        QMessageBox::warning(this, "Avertissement",
+                             "La photo n'a pas été mise à jour (l'ID existe mais aucune modification)");
+    }
+}
+
+void MainWindow::afficherPhotoJoueur(int idJoueur, QLabel* labelPhoto) {
+    QSqlQuery query;
+    query.prepare("SELECT photo FROM joueur WHERE id_joueur = :id");
+    query.bindValue(":id", idJoueur);
+
+    if (!query.exec() || !query.next() || query.isNull("photo")) {
+        labelPhoto->setPixmap(QPixmap(":/pic/default.jpg").scaled(labelPhoto->size(), Qt::KeepAspectRatio));
+
+        return;
+    }
+
+    QByteArray imageData = query.value("photo").toByteArray();
+    QImage image;
+    if (image.loadFromData(imageData)) {
+        labelPhoto->setPixmap(QPixmap::fromImage(image).scaled(labelPhoto->size(), Qt::KeepAspectRatio));
+    } else {
+        labelPhoto->setPixmap(QPixmap(":/pic/default.jpg").scaled(labelPhoto->size(), Qt::KeepAspectRatio));
+    }
+}
+
+void MainWindow::afficherNotesDansTable(int idJoueur)
+{
+    // 1. Préparation de la table
+    ui->tableNotesJoueurs->clear();
+    ui->tableNotesJoueurs->setColumnCount(3);
+    ui->tableNotesJoueurs->setHorizontalHeaderLabels({"Date", "Adversaire", "Note"});
+    ui->tableNotesJoueurs->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->tableNotesJoueurs->setRowCount(0);
+
+    // 2. Récupération de l'équipe du joueur
+    QSqlQuery queryEquipe;
+    queryEquipe.prepare("SELECT ID_EQUIPE FROM JOUEUR WHERE ID_JOUEUR = ?");
+    queryEquipe.addBindValue(idJoueur);
+
+    if (!queryEquipe.exec()) {
+        ui->tableNotesJoueurs->setRowCount(1);
+        ui->tableNotesJoueurs->setItem(0, 0, new QTableWidgetItem("Erreur de base de données"));
+        return;
+    }
+
+    if (!queryEquipe.next()) {
+        ui->tableNotesJoueurs->setRowCount(1);
+        ui->tableNotesJoueurs->setItem(0, 0, new QTableWidgetItem("Joueur non trouvé"));
+        return;
+    }
+
+    int idEquipeJoueur = queryEquipe.value(0).toInt();
+
+    // 3. Récupération du nom de l'équipe
+    QSqlQuery queryNomEquipe;
+    queryNomEquipe.prepare("SELECT NOM_EQUIPE FROM EQUIPE WHERE ID_EQUIPE = ?");
+    queryNomEquipe.addBindValue(idEquipeJoueur);
+
+    if (!queryNomEquipe.exec() || !queryNomEquipe.next()) {
+        ui->tableNotesJoueurs->setRowCount(1);
+        ui->tableNotesJoueurs->setItem(0, 0, new QTableWidgetItem("Erreur de base de données"));
+        return;
+    }
+
+    QString nomEquipeJoueur = queryNomEquipe.value(0).toString();
+
+    // 4. Récupération des matchs
+    QSqlQuery queryMatch;
+    queryMatch.prepare(
+        "SELECT m.ID_MATCH, m.DATE_MATCH, m.SCORE, "
+        "m.NOM_EQUIPE1, m.NOM_EQUIPE2 "
+        "FROM MATCHES m "
+        "WHERE m.NOM_EQUIPE1 = ? OR m.NOM_EQUIPE2 = ? "
+        "ORDER BY m.DATE_MATCH DESC"
+        );
+    queryMatch.addBindValue(nomEquipeJoueur);
+    queryMatch.addBindValue(nomEquipeJoueur);
+
+    if (!queryMatch.exec()) {
+        ui->tableNotesJoueurs->setRowCount(1);
+        ui->tableNotesJoueurs->setItem(0, 0, new QTableWidgetItem("Erreur de base de données"));
+        return;
+    }
+
+    // 5. Traitement des résultats
+    int matchCount = 0;
+    while (queryMatch.next()) {
+        matchCount++;
+        int matchId = queryMatch.value(0).toInt();
+        QDate date = queryMatch.value(1).toDate();
+        QString score = queryMatch.value(2).toString();
+        QString equipe1 = queryMatch.value(3).toString();
+        QString equipe2 = queryMatch.value(4).toString();
+
+        // Calcul de la note
+        double note = calculerNoteParMatch(idJoueur, matchId);
+
+        // Ajout dans la table
+        int row = ui->tableNotesJoueurs->rowCount();
+        ui->tableNotesJoueurs->insertRow(row);
+
+        ui->tableNotesJoueurs->setItem(row, 0, new QTableWidgetItem(date.toString("dd/MM/yyyy")));
+
+        QString adversaire = (nomEquipeJoueur == equipe1) ? equipe2 : equipe1;
+        adversaire += " " + score;
+        ui->tableNotesJoueurs->setItem(row, 1, new QTableWidgetItem(adversaire));
+
+        QTableWidgetItem* noteItem = new QTableWidgetItem(QString::number(note, 'f', 1));
+        noteItem->setTextAlignment(Qt::AlignCenter);
+
+        if (note >= 7.5) noteItem->setBackground(QColor(220, 255, 220));
+        else if (note <= 4.0) noteItem->setBackground(QColor(255, 220, 220));
+
+        ui->tableNotesJoueurs->setItem(row, 2, noteItem);
+    }
+
+    // 6. Gestion du cas vide
+    if (matchCount == 0) {
+        ui->tableNotesJoueurs->setRowCount(1);
+        ui->tableNotesJoueurs->setItem(0, 0, new QTableWidgetItem("Aucun match trouvé"));
+        ui->tableNotesJoueurs->setSpan(0, 0, 1, 3);
+    }
+}
+double MainWindow::calculerNoteParMatch(int idJoueur, int matchId)
+{
+    // 1. Récupération de l'équipe du joueur
+    QSqlQuery queryEquipe;
+    queryEquipe.prepare("SELECT ID_EQUIPE FROM JOUEUR WHERE ID_JOUEUR = ?");
+    queryEquipe.addBindValue(idJoueur);
+
+    if (!queryEquipe.exec() || !queryEquipe.next()) {
+        return 0.0;
+    }
+
+    int idEquipe = queryEquipe.value(0).toInt();
+
+    // 2. Récupération du nom de l'équipe
+    QSqlQuery queryNomEquipe;
+    queryNomEquipe.prepare("SELECT NOM_EQUIPE FROM EQUIPE WHERE ID_EQUIPE = ?");
+    queryNomEquipe.addBindValue(idEquipe);
+
+    if (!queryNomEquipe.exec() || !queryNomEquipe.next()) {
+        return 0.0;
+    }
+
+    QString nomEquipe = queryNomEquipe.value(0).toString();
+
+    // 3. Récupération des infos du match
+    QSqlQuery queryMatch;
+    queryMatch.prepare(
+        "SELECT SCORE, NOM_EQUIPE1, NOM_EQUIPE2 "
+        "FROM MATCHES "
+        "WHERE ID_MATCH = ?"
+        );
+    queryMatch.addBindValue(matchId);
+
+    if (!queryMatch.exec() || !queryMatch.next()) {
+        return 0.0;
+    }
+
+    QString score = queryMatch.value(0).toString();
+    QString equipe1 = queryMatch.value(1).toString();
+    QString equipe2 = queryMatch.value(2).toString();
+
+    // 4. Parsing du score
+    QStringList scores = score.split("-");
+    if (scores.size() != 2) {
+        return 0.0;
+    }
+
+    int score1 = scores[0].toInt();
+    int score2 = scores[1].toInt();
+
+    // 5. Récupération des stats individuelles du joueur
+    QSqlQuery queryStats;
+    queryStats.prepare(
+        "SELECT BUTS, PASSES, CARTON_J, CARTON_R "
+        "FROM JOUEUR "
+        "WHERE ID_JOUEUR = ? AND ID_MATCH = ?"
+        );
+    queryStats.addBindValue(idJoueur);
+    queryStats.addBindValue(matchId);
+
+    int buts = 0, passes = 0, cartonJaune = 0, cartonRouge = 0;
+    if (queryStats.exec() && queryStats.next()) {
+        buts = queryStats.value(0).toInt();
+        passes = queryStats.value(1).toInt();
+        cartonJaune = queryStats.value(2).toInt();
+        cartonRouge = queryStats.value(3).toInt();
+    }
+
+    // 6. Détermination du résultat
+    bool isVictoire;
+    int scoreEquipeJoueur;
+
+    if (nomEquipe == equipe1) {
+        isVictoire = (score1 > score2);
+        scoreEquipeJoueur = score1;
+    } else {
+        isVictoire = (score2 > score1);
+        scoreEquipeJoueur = score2;
+    }
+
+    // 7. Calcul de la note de base
+    double note = 5.0; // Note moyenne de base
+
+    // Bonus/malus selon le résultat
+    note += isVictoire ? 0.5 : -0.5;
+
+    // Bonus selon les buts marqués par l'équipe
+    note += qMin(scoreEquipeJoueur * 0.2, 2.0);
+
+    // Bonus individuels
+    note += buts + 0.8;
+    note += passes + 0.6;
+
+    // Malus pour les cartons
+    note -= cartonJaune - 0.3;
+    note -= cartonRouge - 0.6;
+
+    // 8. Variation aléatoire
+    uint hash = qHash(QString("%1-%2").arg(idJoueur).arg(matchId));
+    double variation = (hash % 20) * 0.1 - 1.0; // Variation entre -1.0 et +1.0
+    note += variation;
+
+    // 9. Normalisation
+    note = qBound(0.0, note, 10.0);
+    return qRound(note * 10) / 10.0;
 }

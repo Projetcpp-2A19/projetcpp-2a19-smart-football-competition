@@ -438,7 +438,7 @@ border: none;
      <widget class="QPushButton" name="pb_export_pdf">
       <property name="geometry">
        <rect>
-        <x>730</x>
+        <x>670</x>
         <y>80</y>
         <width>181</width>
         <height>41</height>
@@ -477,9 +477,9 @@ border-color: rgb(46, 52, 68);
      <widget class="QPushButton" name="stat">
       <property name="geometry">
        <rect>
-        <x>930</x>
+        <x>860</x>
         <y>80</y>
-        <width>181</width>
+        <width>141</width>
         <height>41</height>
        </rect>
       </property>
@@ -498,7 +498,7 @@ font-weight: bold;</string>
      <widget class="QComboBox" name="comboBox_tri">
       <property name="geometry">
        <rect>
-        <x>530</x>
+        <x>490</x>
         <y>80</y>
         <width>171</width>
         <height>41</height>
@@ -607,6 +607,27 @@ color: rgb(255, 254, 242);
 font-weight: bold;</string>
       </property>
      </widget>
+     <widget class="QPushButton" name="chatbot_button">
+      <property name="geometry">
+       <rect>
+        <x>1010</x>
+        <y>80</y>
+        <width>131</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(46, 52, 76);
+font: 12pt &quot;Haettenschweiler&quot;;
+color: rgb(255, 254, 242);
+ border-radius: 10px;
+    border: none;
+font-weight: bold;</string>
+      </property>
+      <property name="text">
+       <string>ChatBot</string>
+      </property>
+     </widget>
      <zorder>label_4</zorder>
      <zorder>tab_matches</zorder>
      <zorder>pb_ajouter</zorder>
@@ -632,8 +653,137 @@ font-weight: bold;</string>
      <zorder>comboBox_chercher</zorder>
      <zorder>nom_equipe1_combo</zorder>
      <zorder>nom_equipe2_combo</zorder>
+     <zorder>chatbot_button</zorder>
     </widget>
-    <widget class="QWidget" name="page"/>
+    <widget class="QWidget" name="page_2"/>
+    <widget class="QWidget" name="page">
+     <widget class="QTextBrowser" name="chat_history">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>70</y>
+        <width>641</width>
+        <height>461</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QTableWidget {
+    background-color: #FDF6D0;
+    color: #2E344C;
+    gridline-color: #2E344C;
+    border: 2px solid #2E344C;
+    border-radius: 10px;
+}
+
+QHeaderView::section {
+    background-color: #2E344C;
+    color: #FDF6D0;
+    padding: 5px;
+    border: 1px solid #2E344C;
+}
+
+QTableWidget QTableCornerButton::section {
+    background-color: #2E344C;
+}
+
+QTableWidget::item {
+    padding: 5px;
+    border: 1px solid #2E344C;
+}
+
+QTableWidget::item:selected {
+    background-color: #2E344C;
+    color: #FDF6D0;
+}
+ui-&gt;tab-&gt;setStyleSheet(
+    &quot;QTableWidget {&quot;
+    &quot;   width: 600px;&quot;   // Set the width of the table
+    &quot;   height: 300px;&quot;  // Set the height of the table
+    &quot;}&quot;
+);</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="chat_input">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>540</y>
+        <width>471</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border-radius: 10px;
+border: none;
+background-color: rgb(255, 255, 255);
+border-color: rgb(46, 52, 68);
+
+</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="chat_send_button">
+      <property name="geometry">
+       <rect>
+        <x>670</x>
+        <y>540</y>
+        <width>161</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(46, 52, 76);
+font: 12pt &quot;Haettenschweiler&quot;;
+color: rgb(255, 254, 242);
+ border-radius: 10px;
+    border: none;
+font-weight: bold;</string>
+      </property>
+      <property name="text">
+       <string>Envoyer</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="chat_return_button">
+      <property name="geometry">
+       <rect>
+        <x>1000</x>
+        <y>570</y>
+        <width>131</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(46, 52, 76);
+font: 12pt &quot;Haettenschweiler&quot;;
+color: rgb(255, 254, 242);
+ border-radius: 10px;
+    border: none;
+font-weight: bold;</string>
+      </property>
+      <property name="text">
+       <string>Retour</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_8">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>30</y>
+        <width>361</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 12pt &quot;Haettenschweiler&quot;;
+color: rgb(46, 52, 76);
+font-weight: bold;
+
+</string>
+      </property>
+      <property name="text">
+       <string>Historique des matchs de l'équipe</string>
+      </property>
+     </widget>
+    </widget>
    </widget>
    <widget class="QPushButton" name="pushButton_2">
     <property name="enabled">

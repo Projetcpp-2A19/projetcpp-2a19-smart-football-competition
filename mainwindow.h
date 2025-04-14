@@ -34,10 +34,17 @@ private slots:
     void on_comboBox_chercher_currentIndexChanged(const QString &text);
     void loadTeamNames();
     void setupTeamComboValidation();
+    void handleChatMessage();
+    void goToChatbotPage();
+
+
 private:
     void searchMatchesBy(const QString &field, const QString &value);
     Ui::MainWindow *ui;
     Match *match;  // Pointer to the Match class
 };
+int levenshteinDistance(const QString &s1, const QString &s2);
+
+QString generateCommentary(const QString &teamName, const QString &score, const QString &opponent);
 
 #endif // MAINWINDOW_H

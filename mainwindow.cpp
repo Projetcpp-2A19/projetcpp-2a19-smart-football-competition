@@ -51,8 +51,13 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Button connections
     connect(ui->pb_afficher, &QPushButton::clicked, this, &MainWindow::displayTable);
+    connect(ui->chatbot_button, &QPushButton::clicked, this, &MainWindow::goToChatbotPage);
     connect(ui->pb_export_pdf, &QPushButton::clicked, this, &MainWindow::exportToHTML);
     connect(ui->comboBox_tri, &QComboBox::currentTextChanged, this, &MainWindow::on_comboBox_tri_currentIndexChanged);
+    connect(ui->chat_send_button, &QPushButton::clicked, this, &MainWindow::handleChatMessage);
+    connect(ui->chat_return_button, &QPushButton::clicked, this, [=]() {
+        ui->stackedWidget->setCurrentIndex(0);  // Back to main page
+    });
     connect(ui->search_lineedit, &QLineEdit::textChanged, this, [this](const QString &text) {
         QString currentField = ui->comboBox_chercher->currentText();
         if (currentField != "-- Chercher par --") {
@@ -72,6 +77,9 @@ MainWindow::~MainWindow()
 {
     delete ui;
     delete match;
+}
+void MainWindow::goToChatbotPage() {
+    ui->stackedWidget->setCurrentIndex(2);  // Page 3 = index 3
 }
 
 // Slot to add a match
@@ -143,6 +151,45 @@ void MainWindow::on_pb_ajouter_clicked()
     } else {
         QMessageBox::critical(this, tr("Erreur"), tr("Échec de l'ajout du match."), QMessageBox::Ok);
     }
+}
+QString generateCommentary(const QString &teamName, const QString &score, const QString &opponent) {
+    if (score.isEmpty()) return "Le score n'a pas été défini pour ce match.";
+
+    QStringList parts = score.split("-");
+    if (parts.size() != 2) return "Score invalide.";
+
+    int score1 = parts[0].toInt();
+    int score2 = parts[1].toInt();
+
+    QString outcome;
+    bool isTeam1 = false;
+
+    // Just in case, determine if the team is likely team1 or team2
+    if (teamName == opponent) {
+        outcome = "Match miroir 😄.";
+    } else if (teamName == "NOM_EQUIPE1") {
+        isTeam1 = true;
+    }
+
+    // Actual logic
+    int myScore = isTeam1 ? score1 : score2;
+    int theirScore = isTeam1 ? score2 : score1;
+
+    if (myScore > theirScore) {
+        if (myScore - theirScore >= 3)
+            outcome = "Victoire écrasante pour " + teamName + " 💪!";
+        else
+            outcome = "Belle victoire de " + teamName + " 👏.";
+    } else if (myScore < theirScore) {
+        if (theirScore - myScore >= 3)
+            outcome = "Défaite lourde pour " + teamName + " 😓.";
+        else
+            outcome = "Défaite serrée, " + teamName + " peut faire mieux la prochaine fois.";
+    } else {
+        outcome = "Match nul entre " + teamName + " et " + opponent + " 🤝.";
+    }
+
+    return outcome;
 }
 
 
@@ -267,6 +314,92 @@ void MainWindow::on_tab_matches_clicked(const QModelIndex &index)
 }
 
 // Slot to refresh the table view
+void MainWindow::handleChatMessage() {
+    QString teamName = ui->chat_input->text().trimmed();
+    if (teamName.isEmpty()) {
+        ui->chat_history->append("<p style='color:red'><b>🤖 Bot:</b> Veuillez entrer un nom d'équipe.</p>");
+        return;
+    }
+
+    ui->chat_history->append("<p style='color:blue;'><b>Vous:</b> " + teamName + "</p>");
+
+    QSqlQuery query;
+    query.prepare(R"(
+        SELECT ID_MATCH, DATE_MATCH, HEURE_MATCH, STADE, SCORE, NOM_EQUIPE1, NOM_EQUIPE2
+        FROM MATCHES
+        WHERE LOWER(NOM_EQUIPE1) LIKE :team OR LOWER(NOM_EQUIPE2) LIKE :team
+        ORDER BY DATE_MATCH DESC
+    )");
+    query.bindValue(":team", "%" + teamName.toLower() + "%");
+
+    if (!query.exec()) {
+        ui->chat_history->append("<p style='color:red'><b>🤖 Bot:</b> Erreur lors de la recherche.</p>");
+        return;
+    }
+
+    int count = 0;
+    QStringList messages;
+
+    while (query.next()) {
+        count++;
+        QString date = query.value("DATE_MATCH").toDate().toString("dd/MM/yyyy");
+        QString stade = query.value("STADE").toString();
+        QString score = query.value("SCORE").toString();
+        QString team1 = query.value("NOM_EQUIPE1").toString();
+        QString team2 = query.value("NOM_EQUIPE2").toString();
+
+        QString vs = (teamName.compare(team1, Qt::CaseInsensitive) == 0) ? team2 : team1;
+        QString analysis = generateCommentary(teamName, score, vs);
+
+        QString commentary = QString("<p style='background:#e6ffe6; padding:8px; border-radius:10px;'>"
+                                     "⚽ <b>Match contre %1</b> au %2, le %3.<br>"
+                                     "📊 <b>Score :</b> %4.<br>"
+                                     "🗣️ <i>%5</i></p>")
+                                 .arg(vs, stade, date,
+                                      score.isEmpty() ? "non défini" : score,
+                                      analysis);
+
+        messages << commentary;
+    }
+
+    if (count > 0) {
+        ui->chat_history->append(QString("<p style='color:green'><b>🤖 Bot:</b> %1 match(s) trouvé(s)</p>").arg(count));
+        for (const QString& msg : messages) {
+            ui->chat_history->append(msg);
+        }
+    } else {
+        ui->chat_history->append("<p style='color:orange'><b>🤖 Bot:</b> Aucun match trouvé.</p>");
+
+        // Suggest closest team name
+        QSqlQuery teamQuery("SELECT nom_equipe FROM EQUIPE");
+        QStringList allTeams;
+        while (teamQuery.next()) {
+            allTeams << teamQuery.value(0).toString();
+        }
+
+        QString bestMatch;
+        int minDistance = INT_MAX;
+        QString input = teamName.toLower();
+
+        for (const QString &team : allTeams) {
+            int distance = levenshteinDistance(input, team.toLower());
+            if (distance < minDistance) {
+                minDistance = distance;
+                bestMatch = team;
+            }
+        }
+
+        if (minDistance <= 3 && bestMatch.compare(teamName, Qt::CaseInsensitive) != 0) {
+            ui->chat_history->append(QString("<p style='color:gray'>🤖 Voulez-vous dire <b>%1</b> ?</p>").arg(bestMatch));
+        }
+    }
+
+    ui->chat_input->clear();
+}
+
+
+
+
 void MainWindow::displayTable()
 {
     qDebug() << "Displaying table...";  // Debug message
@@ -398,7 +531,7 @@ void MainWindow::on_comboBox_tri_currentIndexChanged(const QString &text)
 
 void MainWindow::exportToHTML()
 {
-    QString filePath = QFileDialog::getSaveFileName(this, "Enregistrer le HTML", "", "HTML Files (*.html)");
+    QString filePath = QFileDialog::getSaveFileName(this, "Enregistrer le PDF", "", "PDF Files (*.pdf)");
 
     if (filePath.isEmpty())
         return;
@@ -430,15 +563,17 @@ void MainWindow::exportToHTML()
 
     html += "</table></body></html>";
 
-    QFile file(filePath);
-    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        QTextStream out(&file);
-        out << html;
-        file.close();
-        QMessageBox::information(this, "Succès", "Le fichier HTML a été généré avec succès.");
-    } else {
-        QMessageBox::critical(this, "Erreur", "Impossible d'enregistrer le fichier HTML.");
-    }
+    QTextDocument document;
+    document.setHtml(html);
+
+    QPrinter printer(QPrinter::PrinterResolution);
+    printer.setOutputFormat(QPrinter::PdfFormat);
+    printer.setOutputFileName(filePath);
+    printer.setPageMargins(QMarginsF(15, 15, 15, 15));
+
+    document.print(&printer);
+
+    QMessageBox::information(this, "Succès", "Le fichier PDF a été généré avec succès.");
 }
 
 void MainWindow::searchMatchesBy(const QString &field, const QString &value)
@@ -514,4 +649,26 @@ void MainWindow::setupTeamComboValidation() {
             ui->nom_equipe1_combo->setCurrentIndex(-1); // Deselect
         }
     });
+}
+int levenshteinDistance(const QString &s1, const QString &s2) {
+    const int len1 = s1.length();
+    const int len2 = s2.length();
+    QVector<QVector<int>> d(len1 + 1, QVector<int>(len2 + 1));
+
+    for (int i = 0; i <= len1; ++i)
+        d[i][0] = i;
+    for (int j = 0; j <= len2; ++j)
+        d[0][j] = j;
+
+    for (int i = 1; i <= len1; ++i) {
+        for (int j = 1; j <= len2; ++j) {
+            int cost = (s1[i - 1] == s2[j - 1]) ? 0 : 1;
+            d[i][j] = std::min({
+                d[i - 1][j] + 1,
+                d[i][j - 1] + 1,
+                d[i - 1][j - 1] + cost
+            });
+        }
+    }
+    return d[len1][len2];
 }

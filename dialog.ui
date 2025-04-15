@@ -63,8 +63,8 @@ font: 14pt &quot;Haettenschweiler&quot;;</string>
   <widget class="QLabel" name="chart">
    <property name="geometry">
     <rect>
-     <x>540</x>
-     <y>60</y>
+     <x>330</x>
+     <y>120</y>
      <width>291</width>
      <height>171</height>
     </rect>
@@ -635,28 +635,6 @@ QLineEdit:focus {
 </string>
    </property>
   </widget>
-  <widget class="QLabel" name="pattern">
-   <property name="geometry">
-    <rect>
-     <x>460</x>
-     <y>20</y>
-     <width>41</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QLabel#tri {
-    border: 1px solid transparent;
-}
-QLabel#tri:hover {
-    border: 1px solid #2E344C;
-    background-color: #FDF6D0;
-}</string>
-   </property>
-   <property name="text">
-    <string>TextLabel</string>
-   </property>
-  </widget>
   <widget class="QLabel" name="label_13">
    <property name="geometry">
     <rect>
@@ -765,6 +743,19 @@ QLabel {
     <string>TextLabel</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="trii">
+   <property name="geometry">
+    <rect>
+     <x>460</x>
+     <y>30</y>
+     <width>31</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
   <zorder>label_2</zorder>
   <zorder>stackedWidget</zorder>
   <zorder>pushButton_7</zorder>
@@ -791,7 +782,6 @@ QLabel {
   <zorder>label_11</zorder>
   <zorder>pushButton_6</zorder>
   <zorder>searchbar</zorder>
-  <zorder>pattern</zorder>
   <zorder>label_13</zorder>
   <zorder>label_12</zorder>
   <zorder>pushButton_10</zorder>
@@ -799,6 +789,7 @@ QLabel {
   <zorder>label_14</zorder>
   <zorder>ymin</zorder>
   <zorder>ysar</zorder>
+  <zorder>trii</zorder>
  </widget>
  <resources/>
  <connections/>

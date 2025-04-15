@@ -1,0 +1,511 @@
+#include "gdialog.h"
+#include "ui_gdialog.h"
+#include "dialog.h"
+#include <QMessageBox>
+#include <QTimer>
+#include <QGraphicsLayout>
+#include <QLayout>
+#include <QGraphicsDropShadowEffect>
+#include <qprogressdialog.h>
+#include <QStandardPaths>
+#include <QFileDialog>
+#include <QPrinter>
+#include <QDesktopServices>
+#include <QTextTableCell>
+#include <QBarSet>
+#include <QBarSeries>
+#include <QBarCategoryAxis>
+#include <QValueAxis>
+#include <qapplication.h>
+gdialog::gdialog(QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::gdialog),
+    chartView(nullptr)
+{
+    ui->setupUi(this);
+    //QTimer::singleShot(100, this, &gdialog::updateStatistics);
+}
+
+gdialog::~gdialog()
+{
+    if (chartView) {
+        delete chartView;
+    }
+    delete ui;
+}
+
+void gdialog::on_add_clicked()
+{
+    // Input validation
+    if (ui->num_place->text().isEmpty() ||
+        ui->zone->text().isEmpty() ||
+        ui->nom_stade->text().isEmpty() ||
+        ui->prix_billet->text().isEmpty())
+    {
+        QMessageBox::warning(this, "Champs manquants", "Veuillez remplir tous les champs!");
+        return;
+    }
+
+    // Convert inputs with validation
+    bool ok;
+    int nb = ui->num_place->text().toInt(&ok);
+    if (!ok || nb <= 0)
+    {
+        QMessageBox::warning(this, "Numéro de place invalide", "Le numéro de place doit être un nombre positif!");
+        ui->num_place->setFocus();
+        return;
+    }
+
+    float prix = ui->prix_billet->text().toFloat(&ok);
+    if (!ok || prix <= 0)
+    {
+        QMessageBox::warning(this, "Prix invalide", "Le prix doit être un nombre positif!");
+        ui->prix_billet->setFocus();
+        return;
+    }
+
+    QDateTime date = ui->Date->dateTime();
+    QString zone = ui->zone->text().trimmed();
+    QString stade = ui->nom_stade->text().trimmed();
+
+    // Create and add billet
+    Billet b(stade, zone, prix, date, nb);
+
+    if (b.ajouter_billet())
+    {
+
+        QMessageBox::information(this, "Succès", "Billet ajouté avec succès!");
+
+        // Clear inputs after successful addition
+        ui->num_place->clear();
+        ui->prix_billet->clear();
+        ui->zone->clear();
+        ui->nom_stade->clear();
+        ui->Date->setDateTime(QDateTime::currentDateTime());
+        on_display_clicked();
+
+    }
+    else
+    {
+        QMessageBox::critical(this, "Erreur", "Échec de l'ajout du billet!");
+    }
+}
+
+void gdialog::on_display_clicked()
+{
+    QSqlQueryModel *model = Billet::afficher_billets();
+
+    if (model == nullptr) {
+        QMessageBox::critical(this, "Erreur", "Impossible de charger les billets!");
+        return;
+    }
+    ui->tableView->setModel(model);
+    ui->tableView->resizeColumnsToContents();
+    ui->tableView->setSortingEnabled(true);
+    model->setParent(ui->tableView);
+}
+
+void gdialog::on_delete_2_clicked() {
+    QString idText = ui->id->text().trimmed();
+    if (idText.isEmpty()) {
+        QMessageBox::warning(this, "Champ vide", "Veuillez entrer un ID à supprimer!");
+        ui->id->setFocus();
+        return;
+    }
+    bool ok;
+    int id = idText.toInt(&ok);
+    if (!ok || id <= 0) {
+        QMessageBox::warning(this, "ID invalide", "L'ID doit être un nombre positif!");
+        ui->id->setFocus();
+        return;
+    }
+    if (Billet::supprimer_billet(id, this)) {
+        QMessageBox::information(this, "Succès", "Billet #" + QString::number(id) + " supprimé!");
+        ui->id->clear();
+        on_display_clicked(); // referch your table
+    }
+}
+
+
+void gdialog::on_modif_clicked()
+{
+    // Get and validate ID input
+    QString idText = ui->id->text().trimmed();
+    if (idText.isEmpty()) {
+        QMessageBox::warning(this, "Champ vide", "Veuillez entrer un ID à modifier!");
+        ui->id->setFocus();
+        return;
+    }
+
+    bool ok;
+    int id = idText.toInt(&ok);
+    if (!ok || id <= 0) {
+        QMessageBox::warning(this, "ID invalide", "L'ID doit être un nombre positif!");
+        ui->id->setFocus();
+        return;
+    }
+
+    // Validate other inputs
+    if (ui->nom_stade->text().isEmpty() ||
+        ui->zone->text().isEmpty() ||
+        ui->prix_billet->text().isEmpty() ||
+        ui->num_place->text().isEmpty())
+    {
+        QMessageBox::warning(this, "Champs manquants", "Veuillez remplir tous les champs!");
+        return;
+    }
+
+    // Convert numeric inputs
+    float prix = ui->prix_billet->text().toFloat(&ok);
+    if (!ok || prix <= 0) {
+        QMessageBox::warning(this, "Prix invalide", "Le prix doit être un nombre positif!");
+        ui->prix_billet->setFocus();
+        return;
+    }
+
+    int numPlace = ui->num_place->text().toInt(&ok);
+    if (!ok || numPlace <= 0) {
+        QMessageBox::warning(this, "Numéro de place invalide", "Le numéro de place doit être un entier positif!");
+        ui->num_place->setFocus();
+        return;
+    }
+
+    // Get other values
+    QDateTime date = ui->Date->dateTime();
+    QString zone = ui->zone->text().trimmed();
+    QString stade = ui->nom_stade->text().trimmed();
+
+    // Call the modification function
+    if (Billet::modifier_billet(id, stade, zone, prix, date, numPlace, this)) {
+        QMessageBox::information(this, "Succès", "Billet #" + QString::number(id) + " modifié avec succès!");
+        ui->id->clear();
+        on_display_clicked();  // Refresh the display
+    }
+}
+
+void gdialog::on_export_2_clicked()
+{
+    // Set default file path
+    QString desktopPath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+    QString defaultFileName = QString("/billets_%1.pdf").arg(QDateTime::currentDateTime().toString("yyyyMMdd_HHmmss"));
+
+    // Get save file name
+    QString fileName = QFileDialog::getSaveFileName(
+        this,
+        "Exporter en PDF",
+        desktopPath + defaultFileName,
+        "Fichiers PDF (*.pdf)");
+
+    if (fileName.isEmpty()) {
+        return; // User cancelled
+    }
+
+    // Ensure PDF extension
+    if (!fileName.endsWith(".pdf", Qt::CaseInsensitive)) {
+        fileName += ".pdf";
+    }
+
+    // Create printer
+    QPrinter printer(QPrinter::HighResolution);
+    printer.setOutputFormat(QPrinter::PdfFormat);
+    printer.setOutputFileName(fileName);
+    printer.setPageSize(QPageSize(QPageSize::A4));
+    printer.setPageOrientation(QPageLayout::Landscape);
+
+    // Create text document
+    QTextDocument doc;
+    QTextCursor cursor(&doc);
+
+    // Add title
+    QTextCharFormat titleFormat;
+    titleFormat.setFont(QFont("Arial", 16, QFont::Bold));
+    cursor.insertText("Liste des Billets\n", titleFormat);
+
+    // Add date
+    cursor.insertText(QDateTime::currentDateTime().toString("dd/MM/yyyy HH:mm") + "\n\n");
+
+    // Create table
+    QTextTableFormat tableFormat;
+    tableFormat.setAlignment(Qt::AlignHCenter);
+    tableFormat.setCellPadding(4);
+    tableFormat.setCellSpacing(0);
+    tableFormat.setBorder(1);
+    tableFormat.setBorderStyle(QTextFrameFormat::BorderStyle_Solid);
+    tableFormat.setHeaderRowCount(1);
+
+    QAbstractItemModel *model = ui->tableView->model();
+    if (!model) {
+        QMessageBox::warning(this, "Erreur", "Aucune donnée à exporter!");
+        return;
+    }
+
+    int rows = model->rowCount();
+    int cols = model->columnCount();
+
+    QTextTable *table = cursor.insertTable(rows + 1, cols, tableFormat);
+
+    // Add headers
+    QTextCharFormat headerFormat;
+    headerFormat.setFont(QFont("Arial", 10, QFont::Bold));
+    headerFormat.setBackground(Qt::lightGray);
+
+    for (int col = 0; col < cols; ++col) {
+        QTextTableCell cell = table->cellAt(0, col);
+        QTextCursor cellCursor = cell.firstCursorPosition();
+        cellCursor.insertText(model->headerData(col, Qt::Horizontal).toString(), headerFormat);
+    }
+
+    // Add data
+    QTextCharFormat dataFormat;
+    dataFormat.setFont(QFont("Arial", 9));
+
+    for (int row = 0; row < rows; ++row) {
+        for (int col = 0; col < cols; ++col) {
+            QModelIndex index = model->index(row, col);
+            QTextTableCell cell = table->cellAt(row + 1, col);
+            QTextCursor cellCursor = cell.firstCursorPosition();
+            cellCursor.insertText(model->data(index).toString(), dataFormat);
+        }
+    }
+
+    // Print to PDF
+    doc.setPageSize(printer.pageRect(QPrinter::Point).size());
+    doc.print(&printer);
+
+    // Show success message
+    QMessageBox::information(this, "Export réussi",
+                             QString("Le tableau a été exporté avec succès vers:\n%1").arg(fileName));
+
+    // Open the containing folder
+    QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(fileName).path()));
+}
+
+
+void gdialog::on_search_clicked()
+{
+    // Get the place number from UI
+    QString numPlaceText = ui->recherche->text().trimmed(); // Assuming you have a QLineEdit named searchLineEdit
+
+    if (numPlaceText.isEmpty()) {
+        QMessageBox::warning(this, "Champ vide", "Veuillez entrer un numéro de place à rechercher!");
+        ui->recherche->setFocus();
+        return;
+    }
+
+    bool ok;
+    int numPlace = numPlaceText.toInt(&ok);
+    if (!ok || numPlace <= 0) {
+        QMessageBox::warning(this, "Numéro invalide", "Le numéro de place doit être un entier positif!");
+        ui->recherche->setFocus();
+        return;
+    }
+
+    // Perform the search
+    QSqlQueryModel *searchModel = Billet::searchByNumPlace(numPlace);
+
+    if (!searchModel) {
+        QMessageBox::critical(this, "Erreur", "Une erreur est survenue lors de la recherche!");
+        return;
+    }
+
+    if (searchModel->rowCount() == 0) {
+        QMessageBox::information(this, "Résultat", "Aucun billet trouvé pour le numéro de place " + QString::number(numPlace));
+        delete searchModel;
+        return;
+    }
+
+    // Display results in the table view
+    ui->tableView->setModel(searchModel);
+
+    // Optional: Adjust column widths
+    ui->tableView->resizeColumnsToContents();
+
+    // Connect model deletion to table view destruction
+    searchModel->setParent(ui->tableView);
+
+    // Show result count in status bar or label if you have one
+    // ui->statusLabel->setText(QString("%1 résultats trouvés").arg(searchModel->rowCount()));
+    ui->recherche->clear();
+}
+
+
+void gdialog::on_ref_clicked()
+{
+    QSqlQueryModel *model = Billet::afficher_billets();
+
+    if (model == nullptr) {
+        QMessageBox::critical(this, "Erreur", "Impossible de charger les billets!");
+        return;
+    }
+    ui->tableView->setModel(model);
+    ui->tableView->resizeColumnsToContents();
+    ui->tableView->setSortingEnabled(true);
+    model->setParent(ui->tableView);
+}
+
+
+void gdialog::on_sort_clicked()
+{
+    static bool ascending = true; // Toggle state
+
+    QSqlQueryModel *sortedModel = nullptr;
+
+    if (ascending) {
+        sortedModel = Billet::sortByNumPlaceAsc();
+        ui->sort->setText("Trier ▼"); // Down arrow for descending
+    } else {
+        sortedModel = Billet::sortByNumPlaceDesc();
+        ui->sort->setText("Trier ▲"); // Up arrow for ascending
+    }
+
+    ascending = !ascending; // Toggle state
+
+    if (sortedModel) {
+        ui->tableView->setModel(sortedModel);
+        ui->tableView->resizeColumnsToContents();
+        sortedModel->setParent(ui->tableView);
+    }
+}
+
+void gdialog::updateStatistics()
+{
+    // Clear previous chart if exists
+    if (chartView) {
+        ui->stat->layout()->removeWidget(chartView);
+        delete chartView;
+        chartView = nullptr;
+    }
+
+    // Create new chart by zone
+    chartView = createZoneStatChart();
+    if (!chartView) {
+        ui->stat->setText("Aucune donnée disponible par zone");
+        ui->stat->setStyleSheet("color: red; font-weight: bold;");
+        return;
+    }
+
+    // Configure layout
+    if (!ui->stat->layout()) {
+        QVBoxLayout *layout = new QVBoxLayout(ui->stat);
+        layout->setContentsMargins(0, 0, 0, 0);
+        ui->stat->setLayout(layout);
+    }
+    ui->stat->layout()->addWidget(chartView);
+}
+
+QChartView* gdialog::createZoneStatChart()
+{
+    // Get data from database
+    QMap<QString, int> zoneCounts;
+    QSqlQuery query;
+
+    if (!query.exec("SELECT zone, COUNT(*) FROM billets GROUP BY zone")) {
+        qDebug() << "Query error:" << query.lastError().text();
+        return nullptr;
+    }
+
+    while (query.next()) {
+        QString zone = query.value(0).toString();
+        int count = query.value(1).toInt();
+        zoneCounts[zone] = count;
+    }
+
+    if (zoneCounts.isEmpty()) {
+        return nullptr;
+    }
+
+    // Prepare data vectors
+    QStringList zones = zoneCounts.keys();
+    QVector<int> counts;
+    for (const QString &zone : zones) {
+        counts.append(zoneCounts.value(zone));
+    }
+
+    // Create chart with professional styling
+    QBarSeries *series = new QBarSeries();
+    QBarSet *set = new QBarSet("Billets par zone");
+
+    // Color palette
+    QVector<QColor> colors = {
+        QColor("#4285F4"), // Blue
+        QColor("#34A853"), // Green
+        QColor("#FBBC05"), // Yellow
+        QColor("#EA4335"), // Red
+        QColor("#673AB7")  // Purple
+    };
+
+    for (int i = 0; i < counts.size(); i++) {
+        *set << counts[i];
+        set->setColor(colors[i % colors.size()]);
+    }
+    series->append(set);
+
+    // Configure chart
+    QChart *chart = new QChart();
+    chart->addSeries(series);
+    chart->setTitle("Répartition des billets par zone");
+    chart->setAnimationOptions(QChart::SeriesAnimations);
+
+    // X-axis configuration
+    QBarCategoryAxis *axisX = new QBarCategoryAxis();
+    axisX->append(zones);
+    axisX->setTitleText("Zone");
+    axisX->setLabelsFont(QFont("Arial", 9));
+    axisX->setLabelsColor(QColor("#333333"));
+
+    // Y-axis configuration
+    int maxCount = *std::max_element(counts.begin(), counts.end());
+    QValueAxis *axisY = new QValueAxis();
+    axisY->setRange(0, maxCount * 1.1); // 10% padding
+    axisY->setTitleText("Nombre de billets");
+    axisY->setLabelFormat("%d");
+    axisY->setLabelsFont(QFont("Arial", 8));
+
+    // Add axes and labels
+    chart->addAxis(axisX, Qt::AlignBottom);
+    chart->addAxis(axisY, Qt::AlignLeft);
+    series->attachAxis(axisX);
+    series->attachAxis(axisY);
+
+    // Value labels on bars
+    for (int i = 0; i < counts.size(); i++) {
+        QGraphicsSimpleTextItem *label = new QGraphicsSimpleTextItem(QString::number(counts[i]), chart);
+        label->setPos(i + 0.3, counts[i] - 15);
+        label->setFont(QFont("Arial", 8, QFont::Bold));
+        label->setBrush(QBrush(Qt::black));
+    }
+
+    // Create and style chart view
+    QChartView *chartView = new QChartView(chart);
+    chartView->setRenderHint(QPainter::Antialiasing);
+
+    // Shadow effect
+    QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
+    effect->setBlurRadius(8);
+    effect->setOffset(2, 2);
+    chartView->setGraphicsEffect(effect);
+
+    return chartView;
+}
+
+
+
+void gdialog::on_tirageButton_clicked()
+{
+
+    Billet billet;
+
+    bool success = billet.tirageAuSort(this);
+
+    if (!success) {
+        qDebug() << "Tirage au sort failed";
+    }
+    on_display_clicked();
+}
+
+
+void gdialog::on_quit_clicked()
+{
+    QApplication::quit();
+}
+

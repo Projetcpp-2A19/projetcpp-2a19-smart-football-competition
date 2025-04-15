@@ -1,28 +1,51 @@
 #ifndef DIALOG_H
 #define DIALOG_H
-
-#include <QDialog>
+#include "connection.h"
+#include <QWidget>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QSqlError>
 #include <QMessageBox>
-#include "joueur.h"
-
-namespace Ui {
-class Dialog;
-}
-
-class Dialog : public QDialog
-{
-    Q_OBJECT
+#include <QTimer>
+#include <QEventLoop>
+#include <QVBoxLayout>
+#include <QLabel>
+#include <QPropertyAnimation>
+#include <QGraphicsOpacityEffect>
+#include <QDateTime>
+#include <QSqlQueryModel>
+class Billet {
+private:
+    QString nom_etab;
+    QString zone;
+    double prix;
+    QDateTime date;
+    int num_place;
 
 public:
-    explicit Dialog(QWidget *parent = nullptr);
-    ~Dialog();
+    Billet();
+    Billet(QString nom_etab, QString zone, double prix, QDateTime date, int num_place);
 
-private slots:
-    void on_pushButton_clicked();
+    bool ajouter_billet();
+    static QSqlQueryModel* afficher_billets();
+    static bool supprimer_billet(int id, QWidget *parent = nullptr);
+    static bool modifier_billet(int id, const QString& newNomEtab, const QString& newZone,
+                                double newPrix, const QDateTime& newDate, int newNumPlace,
+                                QWidget* parent = nullptr);
+    static bool billetExists(int id);
+    static QSqlQueryModel* searchByNumPlace(int num_place);
+    static QSqlQueryModel* sortByNumPlaceAsc();
+    static QSqlQueryModel* sortByNumPlaceDesc();
+    static QMap<QString, int> getTicketCountsByZone();
 
-private:
-    Ui::Dialog *ui;
-    Joueur Jtmp;
+    // Getters
+    QString getNomEtab() const { return nom_etab; }
+    QString getZone() const { return zone; }
+    double getPrix() const { return prix; }
+    QDateTime getDate() const { return date; }
+    int getNumPlace() const { return num_place; }
+
+    static bool tirageAuSort(QWidget* parent = nullptr);
 };
 
 #endif // DIALOG_H

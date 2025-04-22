@@ -8,7 +8,12 @@
 #include <QTableWidgetItem>
 #include <QMenu>
 #include <QAction>
+/*#include "aimodel.h"
 
+void MainWindow::on_actionAI_Model_triggered() {
+    AIModel *aiWindow = new AIModel(this);
+    aiWindow->show();
+}*/
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -21,68 +26,80 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->tableWidget->verticalHeader()->setVisible(false);
 
+    // Set max lengths
     ui->lineEdit_Nom->setMaxLength(20);
     ui->lineEdit_Origin->setMaxLength(20);
 
+    // Connect text changed signals
     connect(ui->lineEdit_Nom, &QLineEdit::textChanged, this, &MainWindow::on_lineEdit_Nom_textChanged);
     connect(ui->lineEdit_Origin, &QLineEdit::textChanged, this, &MainWindow::on_lineEdit_Origin_textChanged);
+    connect(ui->possessioninput, &QLineEdit::textChanged, this, [this](const QString &text) {
+        if (!text.isEmpty() && !text.endsWith('%')) {
+            ui->possessioninput->setText(text + "%");
+        }
+    });
 
+    // Setup validators
     QIntValidator *validatorW = new QIntValidator(this);
     QIntValidator *validatorL = new QIntValidator(this);
     QIntValidator *validatorD = new QIntValidator(this);
+    QRegularExpressionValidator *possessionValidator = new QRegularExpressionValidator(QRegularExpression("^\\d{1,3}%?$"), this);
 
     ui->lineEdit_W->setValidator(validatorW);
     ui->lineEdit_L->setValidator(validatorL);
     ui->lineEdit_D->setValidator(validatorD);
+    ui->possessioninput->setValidator(possessionValidator);
 
+    // Set validator ranges
     validatorW->setRange(0, 999);
     validatorL->setRange(0, 999);
     validatorD->setRange(0, 999);
 
     // Load images
-    QPixmap logo("C:/Users/rayen/Downloads/Screenshot_2025-01-26_014639-removebg-preview.png");
+    QPixmap logo(":/images/logo.png");
     ui->logoo->setPixmap(logo);
     ui->logoo->setScaledContents(true);
 
-    QPixmap home("C:/Users/rayen/Downloads/Screenshot_2025-02-13_021115-removebg-preview.png");
+    QPixmap home(":/images/home.png");
     ui->home->setPixmap(home);
     ui->home->setScaledContents(true);
 
-    QPixmap set("C:/Users/rayen/Downloads/Screenshot_2025-02-13_021120-removebg-preview.png");
+    QPixmap set(":/images/settings.png");
     ui->set->setPixmap(set);
     ui->set->setScaledContents(true);
 
-    QPixmap filter("C:/Users/rayen/Downloads/Screenshot_2025-02-12_212956-removebg-preview.png");
+    QPixmap filter(":/images/filter.png");
     ui->filter->setPixmap(filter);
     ui->filter->setScaledContents(true);
 
-    QPixmap pattern("C:/Users/rayen/Downloads/Screenshot_2025-02-12_212952-removebg-preview.png");
+    QPixmap pattern(":/images/pattern.png");
     ui->pattern->setPixmap(pattern);
     ui->pattern->setScaledContents(true);
 
-    QPixmap chart("C:/Users/rayen/Downloads/Screenshot_2025-02-12_215513-removebg-preview.png");
+    QPixmap chart(":/images/chart.png");
     ui->chart->setPixmap(chart);
     ui->chart->setScaledContents(true);
 
-    QPixmap first("C:/Users/rayen/Downloads/Screenshot_2025-02-12_220804-removebg-preview.png");
+    QPixmap first(":/images/first.png");
     ui->first->setPixmap(first);
     ui->first->setScaledContents(true);
 
-    QPixmap ysar("C:/Users/rayen/Downloads/Screenshot_2025-02-12_223231-removebg-preview.png");
+    QPixmap ysar(":/images/ysar.png");
     ui->ysar->setPixmap(ysar);
     ui->ysar->setScaledContents(true);
 
-    QPixmap ymin("C:/Users/rayen/Downloads/Screenshot_2025-02-12_223234-removebg-preview.png");
+    QPixmap ymin(":/images/ymin.png");
     ui->ymin->setPixmap(ymin);
     ui->ymin->setScaledContents(true);
 
+    // Connect table signals
     connect(ui->tableWidget, &QTableWidget::cellChanged, this, &MainWindow::on_tableWidget_cellChanged);
     ui->tableWidget->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tableWidget, &QTableWidget::customContextMenuRequested, this, &MainWindow::showContextMenu);
 
-    // Connect the page button to open the dialog
+    // Connect dialog button
     connect(ui->page, &QPushButton::clicked, this, [this]() {
-        dialog = new Dialog(this);
+        Dialog *dialog = new Dialog(this);
         dialog->exec();
     });
 }
@@ -141,39 +158,68 @@ void MainWindow::on_lineEdit_Origin_textChanged(const QString &text)
 
 bool MainWindow::validateInput()
 {
+    // Validate team name
     QString nom = ui->lineEdit_Nom->text();
     QRegularExpression nomRegex("^[A-Za-zÀ-ÖØ-öø-ÿ\\s]+$");
     if (!nomRegex.match(nom).hasMatch()) {
-        QMessageBox::warning(this, "Invalid Input", "Nom d'équipe should only contain letters and spaces.");
+        QMessageBox::warning(this, "Invalid Input", "Team name should only contain letters and spaces.");
         return false;
     }
 
+    // Validate origin
     QString origin = ui->lineEdit_Origin->text();
     QRegularExpression originRegex("^[A-Za-zÀ-ÖØ-öø-ÿ\\s]+$");
     if (!originRegex.match(origin).hasMatch()) {
-        QMessageBox::warning(this, "Invalid Input", "Origine should only contain letters and spaces.");
+        QMessageBox::warning(this, "Invalid Input", "Origin should only contain letters and spaces.");
         return false;
     }
 
+    // Validate rank
     bool isRangValid;
     int rang = ui->lineEdit_Rang->text().toInt(&isRangValid);
     if (!isRangValid || rang <= 0) {
-        QMessageBox::warning(this, "Invalid Input", "Rang should be a positive number.");
+        QMessageBox::warning(this, "Invalid Input", "Rank should be a positive number.");
         return false;
     }
 
+    // Validate W/L/D
     bool isWValid, isLValid, isDValid;
     int wins = ui->lineEdit_W->text().toInt(&isWValid);
     int losses = ui->lineEdit_L->text().toInt(&isLValid);
     int draws = ui->lineEdit_D->text().toInt(&isDValid);
 
     if (!isWValid || !isLValid || !isDValid || wins < 0 || losses < 0 || draws < 0) {
-        QMessageBox::warning(this, "Invalid Input", "W, L, D should be positive numbers.");
+        QMessageBox::warning(this, "Invalid Input", "Wins, Losses and Draws should be positive numbers.");
         return false;
     }
 
+    // Validate possession
+    QString possession = ui->possessioninput->text();
+    if (possession.isEmpty()) {
+        QMessageBox::warning(this, "Invalid Input", "Possession field cannot be empty.");
+        return false;
+    }
+
+    if (!possession.endsWith('%')) {
+        possession += "%";
+        ui->possessioninput->setText(possession);
+    }
+
+    QRegularExpression possessionRegex("^\\d{1,3}%$");
+    if (!possessionRegex.match(possession).hasMatch()) {
+        QMessageBox::warning(this, "Invalid Input", "Possession should be in format 'XX%' (0-100%).");
+        return false;
+    }
+
+    int percent = possession.left(possession.length()-1).toInt();
+    if (percent < 0 || percent > 100) {
+        QMessageBox::warning(this, "Invalid Input", "Possession should be between 0% and 100%.");
+        return false;
+    }
+
+    // Validate field lengths
     if (nom.length() > 20 || origin.length() > 20) {
-        QMessageBox::warning(this, "Invalid Input", "Nom d'équipe and Origine should be less than 20 characters.");
+        QMessageBox::warning(this, "Invalid Input", "Team name and Origin should be less than 20 characters.");
         return false;
     }
 
@@ -192,18 +238,21 @@ void MainWindow::on_buttonEnregistrer_clicked()
     int wins = ui->lineEdit_W->text().toInt();
     int losses = ui->lineEdit_L->text().toInt();
     int draws = ui->lineEdit_D->text().toInt();
+    QString possession = ui->possessioninput->text();
 
     int score = Equipes::calculateScore(wins, losses, draws);
-    Equipes equipe(0, nom, score, origin, rang);
+    Equipes equipe(0, nom, score, origin, rang, possession);
 
     if (equipe.create()) {
         populateTableWidget();
+        // Clear all fields
         ui->lineEdit_Nom->clear();
         ui->lineEdit_Origin->clear();
         ui->lineEdit_Rang->clear();
         ui->lineEdit_W->clear();
         ui->lineEdit_L->clear();
         ui->lineEdit_D->clear();
+        ui->possessioninput->clear();
         QMessageBox::information(this, "Success", "Team added successfully.");
     } else {
         QMessageBox::critical(this, "Error", "Failed to add team: " + equipe.getLastError());
@@ -229,15 +278,16 @@ void MainWindow::on_pushButton_modifier_clicked()
     int wins = ui->lineEdit_W->text().toInt();
     int losses = ui->lineEdit_L->text().toInt();
     int draws = ui->lineEdit_D->text().toInt();
+    QString possession = ui->possessioninput->text();
 
     int score = Equipes::calculateScore(wins, losses, draws);
-    Equipes equipe(id, nom, score, origin, rang);
+    Equipes equipe(id, nom, score, origin, rang, possession);
 
     if (equipe.update(id)) {
         populateTableWidget();
         QMessageBox::information(this, "Success", "Team updated successfully.");
     } else {
-        QMessageBox::critical(this, "Error", "Failed to update team.");
+        QMessageBox::critical(this, "Error", "Failed to update team: " + equipe.getLastError());
     }
 }
 
@@ -252,6 +302,7 @@ void MainWindow::on_tableWidget_cellChanged(int row, int column)
     case 1: field = "SCORE"; break;
     case 2: field = "ORIGINE"; break;
     case 3: field = "RANG"; break;
+    case 4: field = "POSSESSION"; break;
     default: return;
     }
 
@@ -261,7 +312,7 @@ void MainWindow::on_tableWidget_cellChanged(int row, int column)
     query.bindValue(":id", id);
 
     if (!query.exec()) {
-        QMessageBox::critical(this, "Error", "Failed to update the database.");
+        QMessageBox::critical(this, "Error", "Failed to update the database: " + query.lastError().text());
     }
 }
 
@@ -280,7 +331,16 @@ void MainWindow::showContextMenu(const QPoint &pos)
 
     menu.exec(ui->tableWidget->viewport()->mapToGlobal(pos));
 }
+void MainWindow::on_possessioninput_textChanged(const QString &text)
+{
+    // Auto-append % if not present and not empty
+    if (!text.isEmpty() && !text.endsWith('%')) {
+        ui->possessioninput->setText(text + "%");
 
+        // Move cursor to before the % for better UX
+        ui->possessioninput->setCursorPosition(text.length());
+    }
+}
 void MainWindow::deleteRow(int row)
 {
     int id = ui->tableWidget->verticalHeaderItem(row)->data(Qt::UserRole).toInt();
@@ -295,6 +355,6 @@ void MainWindow::deleteRow(int row)
         ui->tableWidget->removeRow(row);
         QMessageBox::information(this, "Success", "Team deleted successfully.");
     } else {
-        QMessageBox::critical(this, "Error", "Failed to delete team.");
+        QMessageBox::critical(this, "Error", "Failed to delete team: " + equipe.getLastError());
     }
 }

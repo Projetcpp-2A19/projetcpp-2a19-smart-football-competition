@@ -26,6 +26,7 @@ public:
 private slots:
     void on_lineEdit_Nom_textChanged(const QString &text);
     void on_lineEdit_Origin_textChanged(const QString &text);
+    void on_possessioninput_textChanged(const QString &text);
     void on_buttonEnregistrer_clicked();
     void on_pushButton_modifier_clicked();
     void on_tableWidget_cellChanged(int row, int column);
@@ -34,7 +35,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     Equipes Etmp;
-    Dialog *dialog;  // Dialog instance
+    Dialog *dialog;
 
     void populateTableWidget();
     void deleteRow(int row);

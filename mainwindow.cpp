@@ -26,6 +26,10 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow), match(new Match())
 {
     ui->setupUi(this);
+    serial = new QSerialPort(this);
+    serial->setPortName("COM3"); // Remplace par le bon port après test
+    serial->setBaudRate(QSerialPort::Baud9600);
+    serial->open(QIODevice::WriteOnly);
 
     // Load team names and set up validation
     loadTeamNames();
@@ -45,7 +49,7 @@ MainWindow::MainWindow(QWidget *parent)
     // Populate stadium choices
     QStringList stadiums = {
         "Veuillez sélectionner un stade.",
-        "Stade de France", "Camp Nou", "Wembley", "San Siro", "Old Trafford"
+        "Stade Hammadi Agrebi", "Stade Olympique de Sousse", "Stade Chedly Zouiten", "Stade Olympique de Sousse", "Stade Jendouba", "Stade Rades"
     };
     ui->stade->addItems(stadiums);
 
@@ -192,6 +196,41 @@ QString generateCommentary(const QString &teamName, const QString &score, const 
     return outcome;
 }
 
+void MainWindow::on_lsd_clicked() {
+    QModelIndex index = ui->tab_matches->currentIndex();
+    if (!index.isValid()) {
+        QMessageBox::warning(this, "Erreur", "Aucun match sélectionné.");
+        return;
+    }
+
+    int row = index.row();
+    QString team1 = ui->tab_matches->model()->index(row, 5).data().toString(); // NOM_EQUIPE1
+    QString team2 = ui->tab_matches->model()->index(row, 6).data().toString(); // NOM_EQUIPE2
+    QString score = ui->tab_matches->model()->index(row, 4).data().toString(); // SCORE
+
+    if (!score.contains("-")) {
+        QMessageBox::warning(this, "Erreur", "Score invalide ou vide.");
+        return;
+    }
+
+    QStringList scores = score.split("-");
+    if (scores.size() != 2) {
+        QMessageBox::warning(this, "Erreur", "Format du score incorrect.");
+        return;
+    }
+
+    QString formatted = QString("%1:%2;%3:%4\n")
+                            .arg(team1)
+                            .arg(scores[0])
+                            .arg(team2)
+                            .arg(scores[1]);
+
+    if (serial && serial->isOpen()) {
+        serial->write(formatted.toUtf8());
+    } else {
+        QMessageBox::warning(this, "Erreur", "Le port série n'est pas ouvert.");
+    }
+}
 
 // Slot to delete a match
 void MainWindow::on_pb_supprimer_clicked()
@@ -431,10 +470,29 @@ void MainWindow::on_stat_clicked()
 
     QPieSeries *series = new QPieSeries();
 
+    // List of clear/distinct colors
+    QList<QColor> colorList = {
+        QColor("#4CAF50"),  // green
+        QColor("#2196F3"),  // blue
+        QColor("#FFC107"),  // amber
+        QColor("#E91E63"),  // pink
+        QColor("#9C27B0"),  // purple
+        QColor("#FF5722"),  // deep orange
+        QColor("#03A9F4"),  // light blue
+        QColor("#8BC34A"),  // light green
+        QColor("#FF9800"),  // orange
+        QColor("#607D8B")   // blue grey
+    };
+
+    int colorIndex = 0;
     while (query.next()) {
         QString team = query.value("nom_equipe").toString();
         int count = query.value("total_matches").toInt();
-        series->append(team, count);
+        QPieSlice *slice = series->append(team, count);
+
+        // Set clear color
+        slice->setColor(colorList[colorIndex % colorList.size()]);
+        colorIndex++;
     }
 
     QChart *chart = new QChart();
@@ -466,7 +524,6 @@ void MainWindow::on_stat_clicked()
         delete w;
     }
 
-    // Add the chart view *below* any existing widgets (like the back button)
     layout->addWidget(chartView);
 
     // Check if the retour button already exists
@@ -479,21 +536,19 @@ void MainWindow::on_stat_clicked()
         }
     }
 
-    // If the retour button does not exist, create it
     if (!backButton) {
         backButton = new QPushButton("Retour à la page principale", page2);
-        backButton->setObjectName("retourButton");  // Set an object name to identify it
+        backButton->setObjectName("retourButton");
         layout->addWidget(backButton);
     }
 
-    // Connect the back button's clicked signal to switch to Page 1
     connect(backButton, &QPushButton::clicked, this, [=]() {
-        ui->stackedWidget->setCurrentIndex(0);  // Switch to Page 1 (index 0)
+        ui->stackedWidget->setCurrentIndex(0);
     });
 
-    // Switch to Page 2
     ui->stackedWidget->setCurrentIndex(1);
 }
+
 void MainWindow::sortMatchesBy(const QString &criteria)
 {
     QString orderBy;

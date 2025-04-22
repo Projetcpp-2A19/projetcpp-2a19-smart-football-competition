@@ -7,6 +7,8 @@
 #include <QMessageBox>
 #include <QDate>
 #include "match.h"  // Include the new Match class
+#include <QSerialPort>
+
 
 
 QT_BEGIN_NAMESPACE
@@ -36,12 +38,15 @@ private slots:
     void setupTeamComboValidation();
     void handleChatMessage();
     void goToChatbotPage();
+    void on_lsd_clicked();
 
 
 private:
     void searchMatchesBy(const QString &field, const QString &value);
     Ui::MainWindow *ui;
     Match *match;  // Pointer to the Match class
+    QSerialPort *serial;
+
 };
 int levenshteinDistance(const QString &s1, const QString &s2);
 

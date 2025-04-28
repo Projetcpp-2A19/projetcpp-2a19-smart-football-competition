@@ -103,6 +103,33 @@ public:
     QLineEdit *lineEdit_11;
     QLabel *label_photo;
     QTableWidget *tableNotesJoueurs;
+    QPushButton *pushButton_lock;
+    QWidget *page_controle;
+    QLabel *label_26;
+    QLabel *logo_3;
+    QLabel *label_53;
+    QLabel *label_55;
+    QLabel *label_54;
+    QPushButton *pushButton_retour_2;
+    QWidget *page_3;
+    QLabel *label_56;
+    QLabel *label_57;
+    QLabel *label_58;
+    QLabel *logo_7;
+    QLabel *label_59;
+    QPushButton *pushButton_retour_3;
+    QLabel *label_entree;
+    QLabel *label_60;
+    QLabel *label_27;
+    QWidget *page_4;
+    QLabel *label_93;
+    QLabel *label_94;
+    QLabel *logo_12;
+    QLabel *label_95;
+    QLabel *label_96;
+    QLabel *label_97;
+    QPushButton *pushButton_retour_4;
+    QLabel *label_28;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -189,7 +216,7 @@ public:
 "font: 14pt \"Haettenschweiler\";"));
         label_2 = new QLabel(page_acceuil);
         label_2->setObjectName("label_2");
-        label_2->setGeometry(QRect(205, -1, 661, 591));
+        label_2->setGeometry(QRect(190, -10, 661, 591));
         label_2->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 254, 242);"));
         label_5 = new QLabel(page_acceuil);
         label_5->setObjectName("label_5");
@@ -541,7 +568,7 @@ public:
 ""));
         logo_2 = new QLabel(page_profil);
         logo_2->setObjectName("logo_2");
-        logo_2->setGeometry(QRect(30, 20, 161, 141));
+        logo_2->setGeometry(QRect(30, 20, 161, 140));
         logo_2->setStyleSheet(QString::fromUtf8("\n"
 "image: url(:/pic/logo.png);"));
         logo_2->setPixmap(QPixmap(QString::fromUtf8("logo.png")));
@@ -871,12 +898,221 @@ public:
 "    background-color: #2E344C;\n"
 "    color: white;\n"
 "}"));
+        pushButton_lock = new QPushButton(page_profil);
+        pushButton_lock->setObjectName("pushButton_lock");
+        pushButton_lock->setGeometry(QRect(90, 510, 41, 41));
+        pushButton_lock->setStyleSheet(QString::fromUtf8("image: url(:/pic/unlock.png);"));
         stackedWidget->addWidget(page_profil);
+        page_controle = new QWidget();
+        page_controle->setObjectName("page_controle");
+        label_26 = new QLabel(page_controle);
+        label_26->setObjectName("label_26");
+        label_26->setGeometry(QRect(40, 20, 841, 541));
+        label_26->setStyleSheet(QString::fromUtf8("color: rgb(46, 52, 76);\n"
+"background-color: rgb(46, 52, 76);"));
+        logo_3 = new QLabel(page_controle);
+        logo_3->setObjectName("logo_3");
+        logo_3->setGeometry(QRect(370, 70, 191, 161));
+        logo_3->setStyleSheet(QString::fromUtf8("\n"
+"image: url(:/pic/logo.png);"));
+        logo_3->setPixmap(QPixmap(QString::fromUtf8("logo.png")));
+        logo_3->setScaledContents(true);
+        label_53 = new QLabel(page_controle);
+        label_53->setObjectName("label_53");
+        label_53->setGeometry(QRect(10, 0, 961, 591));
+        label_53->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 254, 242);"));
+        label_55 = new QLabel(page_controle);
+        label_55->setObjectName("label_55");
+        label_55->setGeometry(QRect(270, 290, 411, 131));
+        label_55->setStyleSheet(QString::fromUtf8("QLabel {\n"
+"    border-radius: 10px;\n"
+"    background-color: rgb(253, 246, 208);\n"
+"    font: 16pt \"Haettenschweiler\";  /* Augment\303\251 de 14pt \303\240 16pt */\n"
+"    color: rgb(46, 52, 76);\n"
+"    border: 2px solid #2E344C;\n"
+"    padding: 5px;\n"
+"    qproperty-alignment: AlignCenter;  /* Centre le texte horizontalement et verticalement */\n"
+"}\n"
+"QLabel {\n"
+"    border: 2px solid #2E344C;  /* Border color */\n"
+"    padding: 5px;               /* Optional: Adds space inside the label */\n"
+"}\n"
+"\n"
+""));
+        label_54 = new QLabel(page_controle);
+        label_54->setObjectName("label_54");
+        label_54->setGeometry(QRect(400, 330, 151, 51));
+        label_54->setStyleSheet(QString::fromUtf8("color: rgb(46, 52, 76);\n"
+"font: 20pt \"Haettenschweiler\";"));
+        pushButton_retour_2 = new QPushButton(page_controle);
+        pushButton_retour_2->setObjectName("pushButton_retour_2");
+        pushButton_retour_2->setGeometry(QRect(50, 30, 101, 41));
+        pushButton_retour_2->setStyleSheet(QString::fromUtf8("background-color: rgb(46, 52, 76);\n"
+"font: 12pt \"Haettenschweiler\";\n"
+"color: rgb(255, 254, 242);"));
+        stackedWidget->addWidget(page_controle);
+        label_53->raise();
+        label_26->raise();
+        logo_3->raise();
+        label_55->raise();
+        label_54->raise();
+        pushButton_retour_2->raise();
+        page_3 = new QWidget();
+        page_3->setObjectName("page_3");
+        label_56 = new QLabel(page_3);
+        label_56->setObjectName("label_56");
+        label_56->setGeometry(QRect(20, 10, 841, 541));
+        label_56->setStyleSheet(QString::fromUtf8("color: rgb(46, 52, 76);\n"
+"background-color: rgb(46, 52, 76);"));
+        label_57 = new QLabel(page_3);
+        label_57->setObjectName("label_57");
+        label_57->setGeometry(QRect(250, 180, 411, 351));
+        label_57->setStyleSheet(QString::fromUtf8("QLabel {\n"
+"    border-radius: 10px;\n"
+"    background-color: rgb(253, 246, 208);\n"
+"    font: 16pt \"Haettenschweiler\";  /* Augment\303\251 de 14pt \303\240 16pt */\n"
+"    color: rgb(46, 52, 76);\n"
+"    border: 2px solid #2E344C;\n"
+"    padding: 5px;\n"
+"    qproperty-alignment: AlignCenter;  /* Centre le texte horizontalement et verticalement */\n"
+"}\n"
+"QLabel {\n"
+"    border: 2px solid #2E344C;  /* Border color */\n"
+"    padding: 5px;               /* Optional: Adds space inside the label */\n"
+"}\n"
+"\n"
+""));
+        label_58 = new QLabel(page_3);
+        label_58->setObjectName("label_58");
+        label_58->setGeometry(QRect(10, 0, 961, 591));
+        label_58->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 254, 242);"));
+        logo_7 = new QLabel(page_3);
+        logo_7->setObjectName("logo_7");
+        logo_7->setGeometry(QRect(350, 10, 191, 161));
+        logo_7->setStyleSheet(QString::fromUtf8("\n"
+"image: url(:/pic/logo.png);"));
+        logo_7->setPixmap(QPixmap(QString::fromUtf8("logo.png")));
+        logo_7->setScaledContents(true);
+        label_59 = new QLabel(page_3);
+        label_59->setObjectName("label_59");
+        label_59->setGeometry(QRect(270, 200, 151, 51));
+        label_59->setStyleSheet(QString::fromUtf8("color: rgb(46, 52, 76);\n"
+"font: 20pt \"Haettenschweiler\";"));
+        pushButton_retour_3 = new QPushButton(page_3);
+        pushButton_retour_3->setObjectName("pushButton_retour_3");
+        pushButton_retour_3->setGeometry(QRect(30, 20, 101, 41));
+        pushButton_retour_3->setStyleSheet(QString::fromUtf8("background-color: rgb(46, 52, 76);\n"
+"font: 12pt \"Haettenschweiler\";\n"
+"color: rgb(255, 254, 242);"));
+        label_entree = new QLabel(page_3);
+        label_entree->setObjectName("label_entree");
+        label_entree->setGeometry(QRect(410, 460, 111, 41));
+        label_entree->setStyleSheet(QString::fromUtf8("QLabel {\n"
+"    /* Style du texte */\n"
+"    font: 16pt \"Haettenschweiler\";\n"
+"    color: rgb(46, 52, 76);  /* Couleur de texte bleu fonc\303\251 */\n"
+"    qproperty-alignment: AlignCenter;  /* Texte centr\303\251 */\n"
+"    \n"
+"    /* Arri\303\250re-plan */\n"
+"    background-color: white;  /* Fond blanc */\n"
+"    \n"
+"    /* Bordures */\n"
+"    border: 1.5px solid #2E344C;  /* Bordure bleu fonc\303\251 \303\251paissie (3px au lieu de 2px) */\n"
+"    border-radius: 10px;  /* Coins arrondis */\n"
+"    \n"
+"    /* Espacements */\n"
+"    padding: 8px 12px;  /* Plus d'espace \303\240 l'int\303\251rieur (8px haut/bas, 12px gauche/droite) */\n"
+"    margin: 2px;  /* Marge ext\303\251rieure l\303\251g\303\250re */\n"
+"}"));
+        label_60 = new QLabel(page_3);
+        label_60->setObjectName("label_60");
+        label_60->setGeometry(QRect(270, 450, 151, 51));
+        label_60->setStyleSheet(QString::fromUtf8("color: rgb(46, 52, 76);\n"
+"font: 16pt \"Haettenschweiler\";"));
+        label_27 = new QLabel(page_3);
+        label_27->setObjectName("label_27");
+        label_27->setGeometry(QRect(370, 280, 171, 141));
+        label_27->setStyleSheet(QString::fromUtf8("image: url(:/pic/correct.png);"));
+        stackedWidget->addWidget(page_3);
+        label_58->raise();
+        label_56->raise();
+        label_57->raise();
+        logo_7->raise();
+        label_59->raise();
+        pushButton_retour_3->raise();
+        label_entree->raise();
+        label_60->raise();
+        label_27->raise();
+        page_4 = new QWidget();
+        page_4->setObjectName("page_4");
+        label_93 = new QLabel(page_4);
+        label_93->setObjectName("label_93");
+        label_93->setGeometry(QRect(30, 30, 841, 541));
+        label_93->setStyleSheet(QString::fromUtf8("color: rgb(46, 52, 76);\n"
+"background-color: rgb(46, 52, 76);"));
+        label_94 = new QLabel(page_4);
+        label_94->setObjectName("label_94");
+        label_94->setGeometry(QRect(10, 0, 961, 591));
+        label_94->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 254, 242);"));
+        logo_12 = new QLabel(page_4);
+        logo_12->setObjectName("logo_12");
+        logo_12->setGeometry(QRect(360, 50, 191, 161));
+        logo_12->setStyleSheet(QString::fromUtf8("\n"
+"image: url(:/pic/logo.png);"));
+        logo_12->setPixmap(QPixmap(QString::fromUtf8("logo.png")));
+        logo_12->setScaledContents(true);
+        label_95 = new QLabel(page_4);
+        label_95->setObjectName("label_95");
+        label_95->setGeometry(QRect(370, 440, 151, 51));
+        label_95->setStyleSheet(QString::fromUtf8("color: rgb(46, 52, 76);\n"
+"font: 20pt \"Haettenschweiler\";"));
+        label_96 = new QLabel(page_4);
+        label_96->setObjectName("label_96");
+        label_96->setGeometry(QRect(270, 240, 411, 301));
+        label_96->setStyleSheet(QString::fromUtf8("QLabel {\n"
+"    border-radius: 10px;\n"
+"    background-color: rgb(253, 246, 208);\n"
+"    font: 16pt \"Haettenschweiler\";  /* Augment\303\251 de 14pt \303\240 16pt */\n"
+"    color: rgb(46, 52, 76);\n"
+"    border: 2px solid #2E344C;\n"
+"    padding: 5px;\n"
+"    qproperty-alignment: AlignCenter;  /* Centre le texte horizontalement et verticalement */\n"
+"}\n"
+"QLabel {\n"
+"    border: 2px solid #2E344C;  /* Border color */\n"
+"    padding: 5px;               /* Optional: Adds space inside the label */\n"
+"}\n"
+"\n"
+""));
+        label_97 = new QLabel(page_4);
+        label_97->setObjectName("label_97");
+        label_97->setGeometry(QRect(280, 250, 131, 51));
+        label_97->setStyleSheet(QString::fromUtf8("color: rgb(46, 52, 76);\n"
+"font: 20pt \"Haettenschweiler\";"));
+        pushButton_retour_4 = new QPushButton(page_4);
+        pushButton_retour_4->setObjectName("pushButton_retour_4");
+        pushButton_retour_4->setGeometry(QRect(40, 50, 101, 41));
+        pushButton_retour_4->setStyleSheet(QString::fromUtf8("background-color: rgb(46, 52, 76);\n"
+"font: 12pt \"Haettenschweiler\";\n"
+"color: rgb(255, 254, 242);"));
+        label_28 = new QLabel(page_4);
+        label_28->setObjectName("label_28");
+        label_28->setGeometry(QRect(370, 320, 211, 171));
+        label_28->setStyleSheet(QString::fromUtf8("image: url(:/pic/delete.png);"));
+        stackedWidget->addWidget(page_4);
+        label_94->raise();
+        label_93->raise();
+        logo_12->raise();
+        label_95->raise();
+        label_96->raise();
+        label_97->raise();
+        pushButton_retour_4->raise();
+        label_28->raise();
         MainWindow->setCentralWidget(centralwidget);
 
         retranslateUi(MainWindow);
 
-        stackedWidget->setCurrentIndex(1);
+        stackedWidget->setCurrentIndex(3);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -965,6 +1201,30 @@ public:
         pushButton_retour->setText(QCoreApplication::translate("MainWindow", "Retour", nullptr));
         lineEdit_11->setText(QCoreApplication::translate("MainWindow", "Derni\303\251re performances : ", nullptr));
         label_photo->setText(QString());
+        pushButton_lock->setText(QString());
+        label_26->setText(QCoreApplication::translate("MainWindow", "TextLabel", nullptr));
+        logo_3->setText(QString());
+        label_53->setText(QString());
+        label_55->setText(QString());
+        label_54->setText(QCoreApplication::translate("MainWindow", "Contr\303\264le d'acc\303\250s", nullptr));
+        pushButton_retour_2->setText(QCoreApplication::translate("MainWindow", "Retour", nullptr));
+        label_56->setText(QCoreApplication::translate("MainWindow", "TextLabel", nullptr));
+        label_57->setText(QString());
+        label_58->setText(QString());
+        logo_7->setText(QString());
+        label_59->setText(QCoreApplication::translate("MainWindow", " Acc\303\250s autoris\303\251 ", nullptr));
+        pushButton_retour_3->setText(QCoreApplication::translate("MainWindow", "Retour", nullptr));
+        label_entree->setText(QString());
+        label_60->setText(QCoreApplication::translate("MainWindow", "Nombre d'entr\303\251e :", nullptr));
+        label_27->setText(QString());
+        label_93->setText(QCoreApplication::translate("MainWindow", "TextLabel", nullptr));
+        label_94->setText(QString());
+        logo_12->setText(QString());
+        label_95->setText(QCoreApplication::translate("MainWindow", "autoris\303\251", nullptr));
+        label_96->setText(QString());
+        label_97->setText(QCoreApplication::translate("MainWindow", "Acc\303\250s refus\303\251", nullptr));
+        pushButton_retour_4->setText(QCoreApplication::translate("MainWindow", "Retour", nullptr));
+        label_28->setText(QString());
     } // retranslateUi
 
 };

@@ -25,6 +25,9 @@
 #include <QTabWidget>
 #include <QRandomGenerator>
 
+#include "arduino.h"
+#include <QSerialPort>
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -57,6 +60,14 @@ private slots:
 
     void on_comboBox_trie_currentIndexChanged(int index);
 
+    void on_pushButton_lock_clicked();
+
+    void on_pushButton_scan_clicked();
+
+    void readSerial();
+    void on_page_controle_entered();
+    void on_page_controle_left();
+
 private:
     Ui::MainWindow *ui;
     Joueur Jtmp;
@@ -64,6 +75,12 @@ private:
     void trierLignes(int colonne, bool croissant);
     QString m_photoTemp;
     int m_joueurId;
+
+    QByteArray data;
+    QSerialPort *serial;
+    bool rfidScanEnabled = false;
+
+    Arduino A;
 public:
     int getNextId();
     void remplirComboBoxEquipe();
@@ -74,6 +91,10 @@ public:
     void afficherPhotoJoueur(int idJoueur, QLabel* labelPhoto);
     double calculerNoteParMatch(int joueurId, int matchId);
     void afficherNotesDansTable(int idJoueur);
+    void incrementerEntrees(int joueurId);
+    void afficher_entree();
+    //void switch_page();
+
 };
 
 #endif // MAINWINDOW_H

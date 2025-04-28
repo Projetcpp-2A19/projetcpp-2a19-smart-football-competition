@@ -21,5 +21,13 @@ int main(int argc, char *argv[])
                     QObject::tr("connection failed.\n"), QMessageBox::Cancel);
     }
 
+    foreach (const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts()) {
+        qDebug() << "Port Name:" << serialPortInfo.portName();
+        qDebug() << "Description:" << serialPortInfo.description();
+        qDebug() << "Vendor ID:" << serialPortInfo.vendorIdentifier();
+        qDebug() << "Product ID:" << serialPortInfo.productIdentifier();
+        qDebug() << "--------------------------------";
+    }
+
     return a.exec();
 }

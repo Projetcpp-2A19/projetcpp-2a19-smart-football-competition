@@ -5,5 +5,8 @@
         <file>next.jpeg</file>
         <file>filtre.jpeg</file>
         <file>default.jpg</file>
+        <file>unlock.png</file>
+        <file>correct.png</file>
+        <file>delete.png</file>
     </qresource>
 </RCC>

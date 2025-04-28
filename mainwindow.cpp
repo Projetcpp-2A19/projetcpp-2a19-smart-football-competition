@@ -59,6 +59,46 @@ MainWindow::MainWindow(QWidget *parent)
     validatorPasse->setRange(0, 999);
     validatorCartonJ->setRange(0, 99);
     validatorCartonR->setRange(0, 99);
+
+    /*int ret = A.connect_arduino();
+    switch(ret){
+    case(0):
+        qDebug() << "Arduino is available and connected to :" << A.getarduino_port_name();
+        break;
+    case(1):
+        qDebug() << "Arduino is available but not connected to :" << A.getarduino_port_name();
+        break;
+    case(-1):
+        qDebug() << "Arduino is not available";
+    }
+    QObject::connect(A.getserial(), SIGNAL(readyRead()), this, SLOT(update_label()));
+*/
+    // Configurer le port série (à adapter selon votre configuration)
+    serial = new QSerialPort(this);
+    serial->setPortName("COM4"); // Remplacer par le bon port
+    serial->setBaudRate(QSerialPort::Baud9600);
+    serial->open(QIODevice::ReadOnly);
+
+    // Connecter le signal readyRead() à la fonction readSerial()
+    connect(serial, &QSerialPort::readyRead, this, &MainWindow::readSerial);
+
+    // Dans le constructeur de MainWindow
+    connect(ui->stackedWidget, &QStackedWidget::currentChanged, [this](int index) {
+        rfidScanEnabled = (index == 2);  // 1 = index de page_2
+        qDebug() << "RFID état:" << rfidScanEnabled;
+    });
+
+    connect(ui->pushButton_retour_2, &QPushButton::clicked, this, [this]() {
+        ui->stackedWidget->setCurrentIndex(0); // Retour à l'accueil
+    });
+
+    connect(ui->pushButton_retour_3, &QPushButton::clicked, this, [this]() {
+        ui->stackedWidget->setCurrentIndex(0); // Retour à l'accueil
+    });
+
+    connect(ui->pushButton_retour_4, &QPushButton::clicked, this, [this]() {
+        ui->stackedWidget->setCurrentIndex(0); // Retour à l'accueil
+    });
 }
 
 MainWindow::~MainWindow()
@@ -581,10 +621,7 @@ void MainWindow::on_pushButton_photo_clicked()
 
 void MainWindow::loadImageToDatabase(const QString &filePath)
 {
-    // [1] Vérification visuelle de l'ID
-    qDebug() << "ID joueur en cours :" << Jtmp.getId();
-
-    // [2] Vérification dans la base
+    // [1] Vérification dans la base
     QSqlQuery checkQuery;
     checkQuery.prepare("SELECT COUNT(*) FROM joueur WHERE id_joueur = ?");
     checkQuery.addBindValue(m_joueurId);
@@ -603,7 +640,7 @@ void MainWindow::loadImageToDatabase(const QString &filePath)
         return;
     }
 
-    // [3] Exécution de la mise à jour
+    // [2] Exécution de la mise à jour
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly)) {
         QMessageBox::warning(this, "Erreur", "Impossible d'ouvrir l'image");
@@ -623,7 +660,7 @@ void MainWindow::loadImageToDatabase(const QString &filePath)
         return;
     }
 
-    // [4] Vérification des lignes affectées
+    // [3] Vérification des lignes affectées
     int rowsAffected = updateQuery.numRowsAffected();
     qDebug() << "Lignes modifiées :" << rowsAffected;
 
@@ -734,7 +771,7 @@ void MainWindow::afficherNotesDansTable(int idJoueur)
         ui->tableNotesJoueurs->setItem(row, 0, new QTableWidgetItem(date.toString("dd/MM/yyyy")));
 
         QString adversaire = (nomEquipeJoueur == equipe1) ? equipe2 : equipe1;
-        adversaire += " " + score;
+        adversaire += " / " + score;
         ui->tableNotesJoueurs->setItem(row, 1, new QTableWidgetItem(adversaire));
 
         QTableWidgetItem* noteItem = new QTableWidgetItem(QString::number(note, 'f', 1));
@@ -858,4 +895,61 @@ double MainWindow::calculerNoteParMatch(int idJoueur, int matchId)
     // 9. Normalisation
     note = qBound(0.0, note, 10.0);
     return qRound(note * 10) / 10.0;
+}
+
+void MainWindow::on_pushButton_lock_clicked()
+{
+    ui->stackedWidget->setCurrentWidget(ui->page_controle);
+}
+
+void MainWindow::on_page_controle_entered() {  // À connecter via un signal
+    rfidScanEnabled = true;
+    qDebug() << "RFID activé";
+}
+
+void MainWindow::on_page_controle_left() {  // À connecter via un signal
+    rfidScanEnabled = false;
+    qDebug() << "RFID désactivé";
+}
+
+void MainWindow::readSerial() {
+    if (!rfidScanEnabled) return;
+
+    while (serial->canReadLine()) {
+        QString message = QString(serial->readLine()).trimmed();
+
+        if (message == "ACCES_AUTORISE") {
+            incrementerEntrees(m_joueurId);
+            afficher_entree(); // Met à jour l'affichage après incrémentation
+            ui->stackedWidget->setCurrentWidget(ui->page_3);
+        } else if (message == "ACCES_REFUSE") {
+            ui->stackedWidget->setCurrentWidget(ui->page_4);
+        }
+    }
+}
+
+void MainWindow::incrementerEntrees(int joueurId) {
+    QSqlQuery query;
+    query.prepare("UPDATE joueur SET nbr_entrees = nbr_entrees + 1 WHERE id_joueur = ?");
+    query.addBindValue(joueurId);
+
+    if (!query.exec()) {
+        qDebug() << "Erreur lors de l'incrémentation :" << query.lastError();
+    } else {
+        qDebug() << "Entrée +1 pour le joueur ID" << joueurId;
+    }
+}
+
+void MainWindow::afficher_entree() {
+    QSqlQuery query;
+    query.prepare("SELECT nbr_entrees FROM joueur WHERE id_joueur = ?");
+    query.addBindValue(m_joueurId); // Utilise l'ID du joueur actuel
+
+    if (query.exec() && query.next()) {
+        int nbr_entrees = query.value(0).toInt(); // Index 0 car on ne sélectionne qu'une colonne
+        ui->label_entree->setText(QString::number(nbr_entrees));
+    } else {
+        qDebug() << "Erreur lors de la récupération des entrées :" << query.lastError();
+        ui->label_entree->setText("Erreur");
+    }
 }

@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QtCharts/QChartView>
+#include "arduino.h"
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class gdialog;
@@ -42,5 +43,7 @@ private:
     Ui::gdialog *ui;
     QChartView* createZoneStatChart();
     QChartView *chartView;
+    Arduino *arduino;
+    void setupArduino();
 };
 #endif // GDIALOG_H

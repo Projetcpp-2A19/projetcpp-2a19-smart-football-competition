@@ -20,18 +20,37 @@
 gdialog::gdialog(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::gdialog),
-    chartView(nullptr)
+    chartView(nullptr),
+    arduino(new Arduino())
 {
     ui->setupUi(this);
+    setupArduino();
     //QTimer::singleShot(100, this, &gdialog::updateStatistics);
 }
 
 gdialog::~gdialog()
 {
+
+    if(arduino) {
+        arduino->close_arduino();
+        delete arduino;
+    }
     if (chartView) {
         delete chartView;
     }
     delete ui;
+}
+
+// arduino setup code
+void gdialog::setupArduino() {
+    int connectionStatus = arduino->connect_arduino();
+    if(connectionStatus != 0) {
+        QMessageBox::warning(this, "Arduino Error",
+                             "Failed to connect to Arduino!\n"
+                             "1. Check USB cable connection\n"
+                             "2. Verify Arduino is powered on\n"
+                             "3. Check port configuration");
+    }
 }
 
 void gdialog::on_add_clicked()
@@ -105,24 +124,41 @@ void gdialog::on_display_clicked()
     model->setParent(ui->tableView);
 }
 
+
+
 void gdialog::on_delete_2_clicked() {
     QString idText = ui->id->text().trimmed();
-    if (idText.isEmpty()) {
+
+    // Input validation (keep your existing checks)
+    if(idText.isEmpty()) {
         QMessageBox::warning(this, "Champ vide", "Veuillez entrer un ID à supprimer!");
         ui->id->setFocus();
         return;
     }
+
     bool ok;
     int id = idText.toInt(&ok);
-    if (!ok || id <= 0) {
+    if(!ok || id <= 0) {
         QMessageBox::warning(this, "ID invalide", "L'ID doit être un nombre positif!");
         ui->id->setFocus();
         return;
     }
-    if (Billet::supprimer_billet(id, this)) {
+
+    if(Billet::supprimer_billet(id, this)) {
+        // Activate buzzer if Arduino is connected
+        if(arduino && arduino->getserial()->isOpen()) {
+            // Turn on buzzer
+            arduino->write_to_arduino("1");
+
+            // Turn off buzzer after 1 second
+            QTimer::singleShot(1000, [this]() {
+                arduino->write_to_arduino("0");
+            });
+        }
+
         QMessageBox::information(this, "Succès", "Billet #" + QString::number(id) + " supprimé!");
         ui->id->clear();
-        on_display_clicked(); // referch your table
+        on_display_clicked();
     }
 }
 

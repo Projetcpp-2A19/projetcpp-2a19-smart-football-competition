@@ -1,4 +1,4 @@
-QT       += core gui sql printsupport widgets charts
+QT       += core gui sql printsupport widgets charts serialport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -12,12 +12,15 @@ SOURCES += \
     connection.cpp \
     dialog.cpp \
     main.cpp \
-    gdialog.cpp
+    gdialog.cpp\
+    arduino.cpp
 
 HEADERS += \
+    buzzer.h \
     connection.h \
     dialog.h \
-    gdialog.h
+    gdialog.h \
+    arduino.h
 
 FORMS += \
     gdialog.ui

@@ -14,6 +14,7 @@
 #include <QGraphicsOpacityEffect>
 #include <QDateTime>
 #include <QSqlQueryModel>
+#include "buzzer.h"
 class Billet {
 private:
     QString nom_etab;

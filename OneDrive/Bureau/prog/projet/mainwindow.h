@@ -2,18 +2,16 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "dialog.h"
-#include "equipes.h"
-#include <QRegularExpressionValidator>
+#include <QtSql/QSqlDatabase>
+#include <QtSql/QSqlQueryModel>
 #include <QSqlQuery>
-#include <QMenu>
-#include <QAction>
+#include <QTableWidget>
+#include <QPushButton>
+#include <QSerialPort>
 
-QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
 }
-QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
 {
@@ -24,22 +22,23 @@ public:
     ~MainWindow();
 
 private slots:
+    void populateTableWidget();
+    void onDeleteButtonClicked();  // Slot for delete button click
+    void readArduinoData();        // Slot to read from Arduino
+    void on_tableWidget_cellChanged(int row, int column);
+    void on_buttonEnregistrer_clicked();
     void on_lineEdit_Nom_textChanged(const QString &text);
     void on_lineEdit_Origin_textChanged(const QString &text);
-    void on_possessioninput_textChanged(const QString &text);
-    void on_buttonEnregistrer_clicked();
-    void on_pushButton_modifier_clicked();
-    void on_tableWidget_cellChanged(int row, int column);
     void showContextMenu(const QPoint &pos);
+    void deleteRow(int row);
 
 private:
-    Ui::MainWindow *ui;
-    Equipes Etmp;
-    Dialog *dialog;
-
-    void populateTableWidget();
-    void deleteRow(int row);
     bool validateInput();
+    Ui::MainWindow *ui;
+    QSqlDatabase db;
+    QTableWidget *tableWidget;
+    QPushButton *deleteButton;
+    QSerialPort *arduino;
 };
 
 #endif // MAINWINDOW_H

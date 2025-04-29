@@ -14,12 +14,13 @@ private:
     int Score;           // Score
     QString Origine;     // Origin
     int Rang;            // Rank
+    QString Possession;  // New field
     QString lastError;   // error message
 
 public:
     // Constructors and Destructor
     Equipes();
-    Equipes(int id, QString nom, int score, QString origine, int rang);
+    Equipes(int id, QString nom, int score, QString origine, int rang, QString possession);
     ~Equipes();
 
     // Getters
@@ -28,7 +29,8 @@ public:
     int getScore() { return Score; }
     QString getOrigine() { return Origine; }
     int getRang() { return Rang; }
-    QString getLastError() const; // Method to get the last error message
+    QString getPossession() { return Possession; }
+    QString getLastError() const;
 
     // Setters
     void setId(int id) { ID_Equipe = id; }
@@ -36,6 +38,7 @@ public:
     void setScore(int score) { Score = score; }
     void setOrigine(QString origine) { Origine = origine; }
     void setRang(int rang) { Rang = rang; }
+    void setPossession(QString possession) { Possession = possession; }
 
     // Database operations
     bool create();                      // Create

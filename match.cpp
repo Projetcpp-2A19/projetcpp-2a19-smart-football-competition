@@ -72,7 +72,7 @@ QSqlQueryModel* Match::afficher()
     QSqlQueryModel* model = new QSqlQueryModel();
     QSqlQuery query;
 
-    query.prepare("SELECT ID_MATCH, TO_CHAR(DATE_MATCH, 'YYYY-MM-DD') AS DATE_MATCH, HEURE_MATCH, STADE, SCORE, NOM_EQUIPE1, NOM_EQUIPE2 FROM MATCHES");
+    query.prepare("SELECT ID_MATCH, TO_CHAR(DATE_MATCH, 'YYYY-MM-DD') AS DATE_MATCH, HEURE_MATCH, STADE, SCORE, NOM_EQUIPE1, NOM_EQUIPE2, STATUT FROM MATCHES");
     if (!query.exec()) {
         qDebug() << "Query execution failed: " << query.lastError().text();  // Log any SQL errors
         return nullptr;  // Return nullptr if the query fails
@@ -82,12 +82,13 @@ QSqlQueryModel* Match::afficher()
 
     // Set the headers if the query is successful
     model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
-    model->setHeaderData(1, Qt::Horizontal, QObject::tr("DATE"));
-    model->setHeaderData(2, Qt::Horizontal, QObject::tr("HEURE"));
-    model->setHeaderData(3, Qt::Horizontal, QObject::tr("STADE"));
-    model->setHeaderData(4, Qt::Horizontal, QObject::tr("SCORE"));
-    model->setHeaderData(5, Qt::Horizontal, QObject::tr("HOME"));
-    model->setHeaderData(6, Qt::Horizontal, QObject::tr("AWAY"));
+    model->setHeaderData(1, Qt::Horizontal, QObject::tr("Date"));
+    model->setHeaderData(2, Qt::Horizontal, QObject::tr("Heure"));
+    model->setHeaderData(3, Qt::Horizontal, QObject::tr("Stade"));
+    model->setHeaderData(4, Qt::Horizontal, QObject::tr("Score"));
+    model->setHeaderData(5, Qt::Horizontal, QObject::tr("Equipe 1"));
+    model->setHeaderData(6, Qt::Horizontal, QObject::tr("Equipe 2"));
+    model->setHeaderData(7, Qt::Horizontal, QObject::tr("Statut"));
 
     return model;
 }

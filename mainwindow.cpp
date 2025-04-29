@@ -19,6 +19,10 @@
 #include <QLayout>
 #include <QLayoutItem>
 #include <QInputDialog>
+#include <QTimer>
+#include <QSqlError>
+
+
 
 
 
@@ -27,9 +31,19 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     serial = new QSerialPort(this);
-    serial->setPortName("COM3"); // Remplace par le bon port après test
+    serial->setPortName("COM7"); // 🔁 Replace with working port
     serial->setBaudRate(QSerialPort::Baud9600);
-    serial->open(QIODevice::WriteOnly);
+
+    if (serial->open(QIODevice::WriteOnly)) {
+        qDebug() << "✅ Serial port opened successfully!";
+    } else {
+        qDebug() << "❌ Failed to open serial port:" << serial->errorString();
+    }
+
+    // Timer to send scores every 1 second
+    QTimer *timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &MainWindow::sendScoreToArduino);
+    timer->start(1000); // 1000 ms = 1 second
 
     // Load team names and set up validation
     loadTeamNames();
@@ -195,27 +209,42 @@ QString generateCommentary(const QString &teamName, const QString &score, const 
 
     return outcome;
 }
+void MainWindow::sendScoreToArduino()
+{
+    qDebug() << "Trying to send score to Arduino...";
 
-void MainWindow::on_lsd_clicked() {
-    QModelIndex index = ui->tab_matches->currentIndex();
-    if (!index.isValid()) {
-        QMessageBox::warning(this, "Erreur", "Aucun match sélectionné.");
+    if (!serial || !serial->isOpen()) {
+        qDebug() << "Serial not open!";
         return;
     }
 
-    int row = index.row();
-    QString team1 = ui->tab_matches->model()->index(row, 5).data().toString(); // NOM_EQUIPE1
-    QString team2 = ui->tab_matches->model()->index(row, 6).data().toString(); // NOM_EQUIPE2
-    QString score = ui->tab_matches->model()->index(row, 4).data().toString(); // SCORE
+    QSqlQuery query;
+    query.prepare("SELECT SCORE, NOM_EQUIPE1, NOM_EQUIPE2 FROM MATCHES WHERE STATUT = 'en cours'");
+
+    if (!query.exec()) {
+        qDebug() << "Query execution failed:" << query.lastError().text();
+        return;
+    }
+
+    if (!query.next()) {
+        qDebug() << "No active match found with STATUT = 'en cours'";
+        return;
+    }
+
+    QString score = query.value("SCORE").toString();
+    QString team1 = query.value("NOM_EQUIPE1").toString();
+    QString team2 = query.value("NOM_EQUIPE2").toString();
+
+    qDebug() << "Match found:" << team1 << "vs" << team2 << "Score:" << score;
 
     if (!score.contains("-")) {
-        QMessageBox::warning(this, "Erreur", "Score invalide ou vide.");
+        qDebug() << "Invalid score format (missing '-'):" << score;
         return;
     }
 
     QStringList scores = score.split("-");
     if (scores.size() != 2) {
-        QMessageBox::warning(this, "Erreur", "Format du score incorrect.");
+        qDebug() << "Score splitting failed:" << scores;
         return;
     }
 
@@ -225,12 +254,10 @@ void MainWindow::on_lsd_clicked() {
                             .arg(team2)
                             .arg(scores[1]);
 
-    if (serial && serial->isOpen()) {
-        serial->write(formatted.toUtf8());
-    } else {
-        QMessageBox::warning(this, "Erreur", "Le port série n'est pas ouvert.");
-    }
+    serial->write(formatted.toUtf8());
+    qDebug() << "Sent to Arduino:" << formatted;
 }
+
 
 // Slot to delete a match
 void MainWindow::on_pb_supprimer_clicked()
@@ -447,6 +474,10 @@ void MainWindow::displayTable()
         qDebug() << "Failed to get model data!";
     } else {
         qDebug() << "Model data fetched successfully.";
+        // Ensure all columns are visible
+        for (int i = 0; i < model->columnCount(); ++i) {
+            ui->tab_matches->setColumnHidden(i, false);
+        }
     }
     ui->tab_matches->setModel(model);
 }

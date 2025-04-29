@@ -397,15 +397,14 @@ QDateEdit::drop-down {
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(253, 246, 208);
-border-radius: 15px;
+       <string notr="true">
 QLabel {
-border-radius: 10px; /* Adjust the value for roundness / background-color: rgb(253, 246, 208); / Optional background color*/}
+    border-radius: 10px; /* Adjust the value for roundness */
+   background-color: rgb(253, 246, 208); /* Optional background color */
+}
 QLabel {
-border: 2px solid #2E344C;
-padding: 5px;
-border: none;
-/* Optional: Adds space inside the label */
+    border: 2px solid #2E344C;  /* Border color */
+    padding: 5px;               /* Optional: Adds space inside the label */
 }</string>
       </property>
       <property name="text">
@@ -628,27 +627,6 @@ font-weight: bold;</string>
        <string>ChatBot</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="lsd">
-      <property name="geometry">
-       <rect>
-        <x>460</x>
-        <y>320</y>
-        <width>41</width>
-        <height>29</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(46, 52, 76);
-font: 12pt &quot;Haettenschweiler&quot;;
-color: rgb(255, 254, 242);
- border-radius: 10px;
-    border: none;
-font-weight: bold;</string>
-      </property>
-      <property name="text">
-       <string>LSD</string>
-      </property>
-     </widget>
      <zorder>label_4</zorder>
      <zorder>tab_matches</zorder>
      <zorder>pb_ajouter</zorder>
@@ -675,7 +653,6 @@ font-weight: bold;</string>
      <zorder>nom_equipe1_combo</zorder>
      <zorder>nom_equipe2_combo</zorder>
      <zorder>chatbot_button</zorder>
-     <zorder>lsd</zorder>
     </widget>
     <widget class="QWidget" name="page_2"/>
     <widget class="QWidget" name="page">

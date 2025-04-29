@@ -17,6 +17,7 @@ public:
     QString getScore();
     QString getNomEquipe1();
     QString getNomEquipe2();
+    QString statut;
 
     void setIdMatch(int);
     void setDateMatch(QDate);

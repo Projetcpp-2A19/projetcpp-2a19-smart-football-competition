@@ -1,41 +1,71 @@
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 
-LiquidCrystal_I2C lcd(0x27, 16, 2);  // Adresse I2C de ton écran LCD (à ajuster si besoin)
+// LCD at address 0x27, 16 columns, 2 rows
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+String inputString = "";
+bool stringComplete = false;
 
 void setup() {
   Serial.begin(9600);
-  lcd.begin(16, 2);  // ✅ 16 columns, 2 rows
+  lcd.init();
   lcd.backlight();
   lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.print("En attente Qt...");
+  lcd.print("Waiting...");
 }
 
 void loop() {
-  if (Serial.available()) {
-    String data = Serial.readStringUntil('\n');
+  if (stringComplete) {
+    Serial.println("Received: " + inputString);
 
-    // Format attendu : Real:2;Barca:1
-    int sep1 = data.indexOf(':');
-    int sep2 = data.indexOf(';');
-    int sep3 = data.indexOf(':', sep2);
+    inputString.trim(); // Clean whitespace
 
-    if (sep1 != -1 && sep2 != -1 && sep3 != -1) {
-      String team1 = data.substring(0, sep1);
-      String score1 = data.substring(sep1 + 1, sep2);
-      String team2 = data.substring(sep2 + 1, sep3);
-      String score2 = data.substring(sep3 + 1);
+    lcd.clear();
 
-      lcd.clear();
-      lcd.setCursor(0, 0);
-      lcd.print(team1 + ":" + score1);
-      lcd.setCursor(0, 1);
-      lcd.print(team2 + ":" + score2);
+    int separatorIndex = inputString.indexOf(';');
+
+    if (separatorIndex > 0) {
+      String team1Part = inputString.substring(0, separatorIndex);
+      String team2Part = inputString.substring(separatorIndex + 1);
+
+      int colonIndex1 = team1Part.indexOf(':');
+      int colonIndex2 = team2Part.indexOf(':');
+
+      if (colonIndex1 > 0 && colonIndex2 > 0) {
+        String name1 = team1Part.substring(0, colonIndex1);
+        String score1 = team1Part.substring(colonIndex1 + 1);
+
+        String name2 = team2Part.substring(0, colonIndex2);
+        String score2 = team2Part.substring(colonIndex2 + 1);
+
+        // Shorten names
+        name1 = name1.substring(0, min(name1.length(), 6));
+        name2 = name2.substring(0, min(name2.length(), 6));
+
+        // Clean first line
+        lcd.setCursor(0, 0);
+        lcd.print("                "); // 16 spaces to clear
+        lcd.setCursor(0, 0);
+        lcd.print(name1 + " " + score1 + "-" + score2 + " " + name2);
+      } else {
+        lcd.print("Bad Format");
+      }
     } else {
-      lcd.clear();
-      lcd.setCursor(0, 0);
-      lcd.print("Format Invalide");
+      lcd.print("Bad Format");
+    }
+
+    inputString = "";
+    stringComplete = false;
+  }
+}
+
+void serialEvent() {
+  while (Serial.available()) {
+    char inChar = (char)Serial.read();
+    if (inChar == '\n' || inChar == '\r') {
+      stringComplete = true;
+    } else {
+      inputString += inChar;
     }
   }
 }

@@ -38,7 +38,7 @@ private slots:
     void setupTeamComboValidation();
     void handleChatMessage();
     void goToChatbotPage();
-    void on_lsd_clicked();
+    void sendScoreToArduino();
 
 
 private:

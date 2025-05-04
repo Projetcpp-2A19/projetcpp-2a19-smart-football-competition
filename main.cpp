@@ -2,24 +2,27 @@
 #include <QApplication>
 #include <QMessageBox>
 #include "connection.h"
-#include <dialog2.h>
+#include <QDebug>
+#include <QDialog>
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow w;
+
+    // Test database connection
     Connection c;
-    bool test=c.createconnect();
-    Dialog2 d;
+    bool test = c.createConnection();
+    qDebug() << "Database connection test:" << test;
 
-    if(test){
+    MainWindow w;
+
+    if (test) {
         w.show();
-        QMessageBox::information(nullptr, QObject::tr("database is open"),
-                    QObject::tr("connection successful.\n"), QMessageBox::Cancel);
-
-    }
-    else{
-        QMessageBox::critical(nullptr, QObject::tr("database is not open"),
-                    QObject::tr("connection failed.\n"), QMessageBox::Cancel);
+        qDebug() << "Main window shown";
+    } else {
+        QMessageBox::critical(nullptr, "Database Error",
+                              "Failed to connect to database.\nCheck your connection settings.");
+        return 1; // Exit with error code
     }
 
     return a.exec();

@@ -35,7 +35,7 @@ bool Joueur::ajouter() {
     // Récupérer le prochain id_joueur disponible
     query.prepare("SELECT MAX(id_joueur) FROM joueur");
     if (!query.exec() || !query.next()) {
-        qDebug() << "Erreur lors de la récupération du prochain ID :" << query.lastError().text();
+        //qDebug() << "Erreur lors de la récupération du prochain ID :" << query.lastError().text();
         return false;
     }
     int nextId = query.value(0).toInt() + 1; // Incrémente l'id maximum

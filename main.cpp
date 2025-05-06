@@ -2,32 +2,25 @@
 #include <QApplication>
 #include <QMessageBox>
 #include "connection.h"
-#include <dialog2.h>
+#include <QDebug>
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
     Connection c;
-    bool test=c.createconnect();
+    if (!c.createconnect()) {
+        qDebug() << "Database connection failed!";
+        QMessageBox::critical(nullptr, QObject::tr("Database Error"),
+                              QObject::tr("Connection failed. Click OK to exit."), QMessageBox::Ok);
+        return -1;  // Exit the program if the connection fails
+    }
+
+    qDebug() << "Database connection successful!";
+
     MainWindow w;
-
-    if(test){
-        w.show();
-        QMessageBox::information(nullptr, QObject::tr("database is open"),
-                    QObject::tr("connection successful.\n"), QMessageBox::Cancel);
-
-    }
-    else{
-        QMessageBox::critical(nullptr, QObject::tr("database is not open"),
-                    QObject::tr("connection failed.\n"), QMessageBox::Cancel);
-    }
-
-    foreach (const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts()) {
-        qDebug() << "Port Name:" << serialPortInfo.portName();
-        qDebug() << "Description:" << serialPortInfo.description();
-        qDebug() << "Vendor ID:" << serialPortInfo.vendorIdentifier();
-        qDebug() << "Product ID:" << serialPortInfo.productIdentifier();
-        qDebug() << "--------------------------------";
-    }
+    w.show();
 
     return a.exec();
 }
+

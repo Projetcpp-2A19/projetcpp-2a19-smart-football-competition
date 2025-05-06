@@ -1,12 +1,15 @@
 <RCC>
     <qresource prefix="/pic">
         <file>logo.png</file>
+    </qresource>
+    <qresource prefix="/"/>
+    <qresource prefix="/pi">
         <file>back.jpeg</file>
-        <file>next.jpeg</file>
-        <file>filtre.jpeg</file>
-        <file>default.jpg</file>
-        <file>unlock.png</file>
         <file>correct.png</file>
+        <file>default.jpg</file>
         <file>delete.png</file>
+        <file>filtre.jpeg</file>
+        <file>next.jpeg</file>
+        <file>unlock.png</file>
     </qresource>
 </RCC>

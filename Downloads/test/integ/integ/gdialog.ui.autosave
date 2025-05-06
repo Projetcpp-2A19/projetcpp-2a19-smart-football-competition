@@ -1,0 +1,758 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>gdialog</class>
+ <widget class="QDialog" name="gdialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1500</width>
+    <height>700</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QLineEdit" name="num_place">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>550</y>
+     <width>341</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border-radius: 10px;
+border: none;
+background-color: rgb(255, 255, 255);
+border-color: rgb(46, 52, 68);
+
+</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="modif">
+   <property name="geometry">
+    <rect>
+     <x>520</x>
+     <y>610</y>
+     <width>161</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(46, 52, 76);
+font: 12pt &quot;Haettenschweiler&quot;;
+color: rgb(255, 254, 242);
+ border-radius: 10px;
+    border: none;
+font-weight: bold;</string>
+   </property>
+   <property name="text">
+    <string>Modifier</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="zone_3">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>240</y>
+     <width>101</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(46, 52, 76);
+font: 14pt &quot;Haettenschweiler&quot;;</string>
+   </property>
+   <property name="text">
+    <string>zone</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_11">
+   <property name="geometry">
+    <rect>
+     <x>82</x>
+     <y>508</y>
+     <width>61</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>PushButton</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="add">
+   <property name="geometry">
+    <rect>
+     <x>320</x>
+     <y>610</y>
+     <width>181</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(46, 52, 76);
+font: 12pt &quot;Haettenschweiler&quot;;
+color: rgb(255, 254, 242);
+ border-radius: 10px;
+    border: none;
+font-weight: bold;</string>
+   </property>
+   <property name="text">
+    <string>Ajouter</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="nom_stade">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>200</y>
+     <width>341</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border-radius: 10px;
+border: none;
+background-color: rgb(255, 255, 255);
+border-color: rgb(46, 52, 68);
+
+</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="date">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>400</y>
+     <width>101</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(46, 52, 76);
+font: 14pt &quot;Haettenschweiler&quot;;</string>
+   </property>
+   <property name="text">
+    <string>Date</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="nom_stade_3">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>170</y>
+     <width>101</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(46, 52, 76);
+font: 14pt &quot;Haettenschweiler&quot;;</string>
+   </property>
+   <property name="text">
+    <string>nom_stade</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>320</y>
+     <width>111</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(46, 52, 76);
+font: 14pt &quot;Haettenschweiler&quot;;</string>
+   </property>
+   <property name="text">
+    <string>prix_billet</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="num_place_3">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>500</y>
+     <width>111</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(46, 52, 76);
+font: 14pt &quot;Haettenschweiler&quot;;</string>
+   </property>
+   <property name="text">
+    <string>num_place</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="set">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>510</y>
+     <width>31</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QTableView" name="tableView">
+   <property name="geometry">
+    <rect>
+     <x>730</x>
+     <y>120</y>
+     <width>731</width>
+     <height>341</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QTableWidget {
+    background-color: #FDF6D0;
+    color: #2E344C;
+    gridline-color: #2E344C;
+    border: 2px solid #2E344C;
+    border-radius: 10px;
+}
+
+QHeaderView::section {
+    background-color: #2E344C;
+    color: #FDF6D0;
+    padding: 5px;
+    border: 1px solid #2E344C;
+}
+
+QTableWidget QTableCornerButton::section {
+    background-color: #2E344C;
+}
+
+QTableWidget::item {
+    padding: 5px;
+    border: 1px solid #2E344C;
+}
+
+QTableWidget::item:selected {
+    background-color: #2E344C;
+    color: #FDF6D0;
+}
+ui-&gt;tab-&gt;setStyleSheet(
+    &quot;QTableWidget {&quot;
+    &quot;   width: 600px;&quot;   // Set the width of the table
+    &quot;   height: 300px;&quot;  // Set the height of the table
+    &quot;}&quot;
+);</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="zone">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>280</y>
+     <width>341</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border-radius: 10px;
+border: none;
+background-color: rgb(255, 255, 255);
+border-color: rgb(46, 52, 68);
+
+</string>
+   </property>
+  </widget>
+  <widget class="QDateTimeEdit" name="Date">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>450</y>
+     <width>341</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(46, 52, 76);
+font: 12pt &quot;Haettenschweiler&quot;;
+color: rgb(255, 254, 242);
+ border-radius: 10px;
+    border: none;
+font-weight: bold;</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="ref">
+   <property name="geometry">
+    <rect>
+     <x>1460</x>
+     <y>120</y>
+     <width>21</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(46, 52, 76);
+font: 12pt &quot;Haettenschweiler&quot;;
+color: rgb(255, 254, 242);</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::SystemReboot">
+     <normaloff>../billets</normaloff>../billets</iconset>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="prix_billet">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>360</y>
+     <width>341</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border-radius: 10px;
+border: none;
+background-color: rgb(255, 255, 255);
+border-color: rgb(46, 52, 68);
+
+</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_3">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>300</y>
+     <width>141</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(46, 52, 76);
+background-color: rgb(253, 246, 208);
+
+font: 12pt &quot;Haettenschweiler&quot;;
+
+</string>
+   </property>
+   <property name="text">
+    <string>Billets</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>0</y>
+     <width>241</width>
+     <height>691</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(46, 52, 76);
+background-color: rgb(46, 52, 76);</string>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_5">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>420</y>
+     <width>141</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(46, 52, 76);
+background-color: rgb(253, 246, 208);
+
+font: 12pt &quot;Haettenschweiler&quot;;
+
+</string>
+   </property>
+   <property name="text">
+    <string>Supporter</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="logo">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>20</y>
+     <width>161</width>
+     <height>141</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">
+image: url(:/pic/logo.png);</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap>../joueur/logo.png</pixmap>
+   </property>
+   <property name="scaledContents">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_4">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>360</y>
+     <width>141</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(46, 52, 76);
+background-color: rgb(253, 246, 208);
+
+font: 12pt &quot;Haettenschweiler&quot;;
+
+</string>
+   </property>
+   <property name="text">
+    <string>Joueus</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>180</y>
+     <width>141</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(46, 52, 76);
+background-color: rgb(253, 246, 208);
+
+font: 12pt &quot;Haettenschweiler&quot;;
+
+</string>
+   </property>
+   <property name="text">
+    <string>Equipes</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_2">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>240</y>
+     <width>141</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(46, 52, 76);
+background-color: rgb(253, 246, 208);
+
+font: 12pt &quot;Haettenschweiler&quot;;
+
+</string>
+   </property>
+   <property name="text">
+    <string>Matchs</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>70</y>
+     <width>431</width>
+     <height>601</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">
+QLabel {
+    border-radius: 10px; /* Adjust the value for roundness */
+   background-color: rgb(253, 246, 208); /* Optional background color */
+}
+QLabel {
+    border: 2px solid #2E344C;  /* Border color */
+    padding: 5px;               /* Optional: Adds space inside the label */
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="nom_stade_4">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>80</y>
+     <width>101</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(46, 52, 76);
+font: 14pt &quot;Haettenschweiler&quot;;</string>
+   </property>
+   <property name="text">
+    <string>ID</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_5">
+   <property name="geometry">
+    <rect>
+     <x>320</x>
+     <y>10</y>
+     <width>301</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel {
+    border-radius: 10px; /* Adjust the value for roundness */
+   background-color: rgb(253, 246, 208); /* Optional background color */
+font: 14pt &quot;Haettenschweiler&quot;;
+color: rgb(46, 52, 76);
+}
+QLabel {
+    border: 2px solid #2E344C;  /* Border color */
+    padding: 5px;               /* Optional: Adds space inside the label */
+}
+</string>
+   </property>
+   <property name="text">
+    <string>           Ajouter un Billets</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="delete_2">
+   <property name="geometry">
+    <rect>
+     <x>960</x>
+     <y>630</y>
+     <width>191</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(46, 52, 76);
+font: 12pt &quot;Haettenschweiler&quot;;
+color: rgb(255, 254, 242);
+ border-radius: 10px;
+    border: none;
+font-weight: bold;</string>
+   </property>
+   <property name="text">
+    <string>Supprimer</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="sort">
+   <property name="geometry">
+    <rect>
+     <x>1010</x>
+     <y>70</y>
+     <width>201</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(46, 52, 76);
+font: 12pt &quot;Haettenschweiler&quot;;
+color: rgb(255, 254, 242);
+ border-radius: 10px;
+    border: none;
+font-weight: bold;</string>
+   </property>
+   <property name="text">
+    <string>Trier par nombre de places</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="export_2">
+   <property name="geometry">
+    <rect>
+     <x>1250</x>
+     <y>70</y>
+     <width>181</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(46, 52, 76);
+font: 12pt &quot;Haettenschweiler&quot;;
+color: rgb(255, 254, 242);
+ border-radius: 10px;
+    border: none;
+font-weight: bold;</string>
+   </property>
+   <property name="text">
+    <string>PDF</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="recherche">
+   <property name="geometry">
+    <rect>
+     <x>790</x>
+     <y>10</y>
+     <width>341</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid #2e344c;
+border-radius: 15px;
+background:rgb(254, 246, 209);</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="placeholderText">
+    <string>Recherche par nombre de place</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="search">
+   <property name="geometry">
+    <rect>
+     <x>1150</x>
+     <y>10</y>
+     <width>251</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(46, 52, 76);
+font: 12pt &quot;Haettenschweiler&quot;;
+color: rgb(255, 254, 242);
+ border-radius: 10px;
+    border: none;
+font-weight: bold;</string>
+   </property>
+   <property name="text">
+    <string>Recherche par nombre de place</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="tirageButton">
+   <property name="geometry">
+    <rect>
+     <x>810</x>
+     <y>70</y>
+     <width>161</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(46, 52, 76);
+font: 12pt &quot;Haettenschweiler&quot;;
+color: rgb(255, 254, 242);
+ border-radius: 10px;
+    border: none;
+font-weight: bold;</string>
+   </property>
+   <property name="text">
+    <string>Tirage au Sort</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="id">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>130</y>
+     <width>341</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border-radius: 10px;
+border: none;
+background-color: rgb(255, 255, 255);
+border-color: rgb(46, 52, 68);
+
+</string>
+   </property>
+   <property name="placeholderText">
+    <string>ID</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="stat" native="true">
+   <property name="geometry">
+    <rect>
+     <x>760</x>
+     <y>470</y>
+     <width>681</width>
+     <height>141</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="test">
+   <property name="geometry">
+    <rect>
+     <x>730</x>
+     <y>70</y>
+     <width>41</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(46, 52, 76);
+font: 12pt &quot;Haettenschweiler&quot;;
+color: rgb(255, 254, 242);
+ border-radius: 10px;
+    border: none;
+font-weight: bold;</string>
+   </property>
+   <property name="text">
+    <string>A</string>
+   </property>
+  </widget>
+  <zorder>delete_2</zorder>
+  <zorder>sort</zorder>
+  <zorder>export_2</zorder>
+  <zorder>recherche</zorder>
+  <zorder>search</zorder>
+  <zorder>tirageButton</zorder>
+  <zorder>set</zorder>
+  <zorder>pushButton_11</zorder>
+  <zorder>label_4</zorder>
+  <zorder>label</zorder>
+  <zorder>pushButton_2</zorder>
+  <zorder>pushButton_5</zorder>
+  <zorder>pushButton_4</zorder>
+  <zorder>logo</zorder>
+  <zorder>pushButton</zorder>
+  <zorder>pushButton_3</zorder>
+  <zorder>num_place</zorder>
+  <zorder>modif</zorder>
+  <zorder>zone_3</zorder>
+  <zorder>add</zorder>
+  <zorder>nom_stade</zorder>
+  <zorder>date</zorder>
+  <zorder>nom_stade_3</zorder>
+  <zorder>label_</zorder>
+  <zorder>num_place_3</zorder>
+  <zorder>tableView</zorder>
+  <zorder>zone</zorder>
+  <zorder>Date</zorder>
+  <zorder>ref</zorder>
+  <zorder>prix_billet</zorder>
+  <zorder>nom_stade_4</zorder>
+  <zorder>label_5</zorder>
+  <zorder>id</zorder>
+  <zorder>stat</zorder>
+  <zorder>test</zorder>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
